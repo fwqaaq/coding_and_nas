@@ -25,8 +25,8 @@ const aBlob = new Blob( array, options )
 ```
 
 * **array**是由:`ArrayBuffer`, `ArrayBufferView`, `Blob`, `DOMString` 等对象构成的 Array ,或者其他类似对象的混合体,它将会被放进 Blob
-* **options**施一公可选的`BlobPropertyBag`字典:
-  1. `type`,默认值为 "",为**数组内容的MIME类型**
+* **options**使用可选的`BlobPropertyBag`字典:
+  1. `type`,默认值为"",为**数组内容的MIME类型**
   2. `endings`,默认值为"transparent",用于指定包含行结束符\n的字符串如何被写入
      * `"native"`,代表行结束符会被更改为适合宿主操作系统文件系统的换行符
      * `"transparent"`,代表会保持blob中保存的结束符不变
@@ -89,7 +89,7 @@ blob.text().then(res => console.log(res))
 var file = document.getElementById('fileItem').files[0];
 ```
 
->常情况下,`File`对象是来自用户在一个<input>元素上选择文件后返回的 `FileList` 对象
+>常情况下,`File`对象是来自用户在一个\<input>元素上选择文件后返回的 `FileList` 对象
 
 * 由于`File`对象是特殊类型的`Blob`,且可以用在任意的`Blob`类型的`context`中
 * File对象同样是构造函数(`new File()`).除了继承了Blob的方法属性以外,还有以下方法
@@ -97,8 +97,14 @@ var file = document.getElementById('fileItem').files[0];
 >属性
 
 1. `file.lastModified`:返回所引用文件最后修改日期, 为自 1970年1月1日0:00 以来的毫秒数
-2. `file.lastModified`返回当前文件的最后修改日期,如果无法获取到文件的最后修改日期,则使用当前日期来替代
-3. `file.name`:返回文件的名称.由于安全原因,返回的值并不包含文件路径.
+2. `file.name`:返回文件的名称.由于安全原因,返回的值并不包含文件路径.
+3. `flie.type`:引用文件的名字
+4. `file.size`:返回文件的大小
+5. `file.type`:返回文件的MIME类型
+
+>方法
+
+* `slice()`:继承了blob对象的方法
 
 ### FileReader()
 
@@ -118,7 +124,7 @@ var file = document.getElementById('fileItem').files[0];
    | LOADING | 1   | 数据正在被加载       |
    | DONE    | 2   | 已完成全部的读取请求 |
 
-3. `FileReader.result`:只读.该属性仅在读取操作完成才有效,数据格式的使用后的方法来启动读取操作.
+3. `FileReader.result`:只读(**字符串**或者`ArrayBuffer`).该属性仅在读取操作完成才有效,数据格式的使用后的方法来启动读取操作.
 
 >FileReader接口的事件
 
@@ -133,12 +139,10 @@ var file = document.getElementById('fileItem').files[0];
 
 > FileReader接口有4个方法,其中3个用来读取文件,另一个用来中断读取.无论读取成功或失败,方法并不会返回读取结果,这一结果存储在result属性中
 
-| 方法名            | 参数      | 描述                                                                                                         |
-| ----------------- | --------- | ------------------------------------------------------------------------------------------------------------ |
-| readAsArrayBuffer | file/blob | 读取指定Blob  或文件的内容.完成后`readyState`变为Done,并且触发`loadend`.`result`以`ArrayBufer`返回文件的数据 |
-| readAsText        | file/blob | `result`以文本字符串的形式返回文件内容.其余与上个属性相同                                                    |
-| readAsDataURL     | file/blob | `result`以url的形式返回文件的数据(文件的数据会以base64的编码表示).其余与上个属性相同                         |
-| abort             | (none)    | 终端读取操作                                                                                                 |
+* `readAsArrayBuffer(file/blob)`:读取指定Blob或文件的内容.完成后`readyState`变为Done,并且触发`loadend`.`result`以`ArrayBufer`返回文件的数据
+* `readAsText(file/blob)`:`result`以文本字符串的形式返回文件内容.其余与上个属性相同
+* `readAsDataURL(file/blob)`:`result`以url的形式返回文件的数据(文件的数据会以base64的编码表示).其余与上个属性相同
+* `abort()`:终端读取操作
 
 ```html
 <body>
@@ -158,3 +162,7 @@ document.getElementById("input").onchange = function (e) {
 }
 </script>
 ```
+
+>`FileReaderSync`是FileReader的同步版本,只有当整个文件都加载到内存中才会读取
+
+* `FileReaderSync`只在工作者线程中可用,因为如果整个文件加载事件过长,则会影响全局
