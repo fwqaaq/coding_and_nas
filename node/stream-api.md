@@ -261,7 +261,7 @@ pass.resume();     // 必须调用才能使流触发 'data'.
    ```
 
    * 如果已经到达流的末尾,则调用`stream.read()`将返回null并触发`end`事件.如果从未读取任何数据,则也是如此
-   * 例如,在以下示例中,foo.txt 是一个空文件:
+   * 例如,在以下示例中,foo.txt是一个空文件:
   
    ```js
    const fs = require('node:fs');
