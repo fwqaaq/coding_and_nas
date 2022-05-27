@@ -43,7 +43,7 @@
       * 如果未包含(**默认情况下**),则传递的控制器将为 `ReadableStreamDefaultController`
    5. `autoAllocateChunkSize?`:对于字节流,开发人员可以使用正整数值设置autoAllocateChunkSize以打开流的自动分配功能
       * 启用此功能后,流实现将自动分配一个具有给定整数大小的`ArrayBuffer`,并调用底层源代码,就好像消费者正在使用BYOB阅读器一样
-* `queueingStrategy?`:一个可选择定义流的排队策略的对象。这需要两个参数：
+* `queueingStrategy?`:一个可选择定义流的排队策略的对象.这需要两个参数：
    1. `highWaterMark`:非负整数.这定义了在应用背压之前可以包含在内部队列中的块的总数
    2. `size(chunk)`:包含参数chunk的方法.这表示每个块使用的大小(**以字节为单位**).
 
@@ -107,3 +107,67 @@ console.log(readableStream.locked)
 * 为了仍然可以读这些数据块并且而不是完全摆脱流,你应该使用`ReadableStreamDefaultController.close()`
 
 * `reason`:取消原因.
+
+>`pipeThrough(transformStream, options?)`:提供了一种链式的方式,将当前流通过转换流或者任何其他可写/可读流进行管道传输
+
+* `transformStream`: 一个由可读流和可写流组成的`TransformStream`(或者结构为 `{writable, readable}` 的对象),他们共同工作将一些数据转化为另一些数据.
+  * `writable`写入的数据在某些状态下可以被`readable`读取.例如,`TextDecoder`从中写入字节并读取字符,而视频解码器写入编码后的字节并从中读取未压缩的视频帧.
+* `options`:管道至`writable`应该被使用的选项.可用选项是:
+   1. `preventClose`:如果设置为`true`,源`ReadableStream`关闭将不再导致目标`WritableStream`关闭.一旦进程完成,该方法将返回一个兑现的`promise`,除非在关闭目标时遇到错误,在这种情况下下,它将因为该错误被拒绝.
+   2. `preventAbort`:如果设置为`true`,目标`WritableStream`的错误将不再取消源`ReadableStream`.该方法将会返回一个因源错误而被拒绝的`promise`,或者任何在中止目标期间的错误.
+   3. `preventCancel`:如果设置为`true`,目标`WritableStream`的错误将不在取消源`ReadableStream`.在这种情况下,该方法将会返回一个因源错误而被拒绝的`promise`,或者任何在中止目标期间的错误.此外,如果目标可读流开始关闭或者正在关闭,源可写流将不再被关闭.在这种情况下,方法将返回一个拒绝并带有错误的`promise`,或者任何在中止目标期间的错误,来表明管道关闭失败.
+   4. `signal`:如果设置一个 `AbortSignal` 对象,然后可以通过相应的`AbortController`中止正在进行的管道操作
+
+>`pipeTo(destination, options?)`:通过管道将当前的`ReadableStream`输出到给定的`WritableStream`当管道成功完成时返回一个成功状态的promise
+
+* `destination`: 充当`ReadableStream`最终目标的`WriteableStream`
+* `options`:和`pipeThrough`的options一样
+
+## ReadableStreamDefaultReader
+
+>Streams API的`ReadableStreamDefaultReader`的接口,表示一个可被用于读取来自网络提供的流数据(例如 fetch 请求)
+
+### ReadableStreamDefaultReader构造函数
+
+>`new ReadableStreamDefaultReader(stream)`:创造并且返回一个ReadableStreamDefaultReader实例对象
+
+* <sapn style="background:red">注意:通常你不需要手动构造,你只需要使用`ReadableStream.getReader()`方法</sapn>
+
+```js
+//消费
+(
+  async function(){
+    while(true){
+      const { done, value} = await readableStreamDefaultReader.read()
+      if(done){
+        break
+      }else{
+        console.log(value)
+      }
+    }
+  }
+)()
+```
+
+* `stream`:一个将要被读取的`readableStream`
+
+### ReadableStreamDefaultReader属性
+
+>`closed`:**只读**.在流关闭时,返回一个兑现的promise,或者在流抛出错误或者 reader 的所被释放时拒绝
+
+```js
+reader.closed.then(() => {
+  console.log('reader closed');
+})
+```
+
+### ReadableStreamDefaultReader方法
+
+* `cancel(reason?)`:如果reader是激活状态,`cancel()`方法的行为和关联流`ReadableStream.cancel()`的行为相同
+* `read()`:返回一个对流内部对流中下一个块的使用权的promise.promise的状态取决于流的状态
+  * 如果一个块可用,则 promise 将使用 `{ value: theChunk, done: false }` 形式的对象来兑现
+  * 如果流关闭,则 promise 将使用 `{ value: undefined, done: true }` 形式的对象来兑现
+  * 如果流发生错误,promise 将因相关错误被拒绝
+* `releaseLock()`:没有参数,也没有返回值.释放 reader 对流的锁定
+  * 如果释放锁时关联流出错,reader 随后会以同样的方式发生错误
+  * reader的所在仍有到处理的读取请求时无法释放,即`reade()`返回的promise尚未完成
