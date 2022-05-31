@@ -19,6 +19,8 @@
 
 ## Canvas
 
+* [webgpu](./Canvas/webgpu.md)
+
 ## 表单
 
 1. [表单基础](./form/表单基础.md)

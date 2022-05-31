@@ -142,7 +142,7 @@ var file = document.getElementById('fileItem').files[0];
 * `readAsArrayBuffer(file/blob)`:读取指定Blob或文件的内容.完成后`readyState`变为Done,并且触发`loadend`.`result`以`ArrayBufer`返回文件的数据
 * `readAsText(file/blob)`:`result`以文本字符串的形式返回文件内容.其余与上个属性相同
 * `readAsDataURL(file/blob)`:`result`以url的形式返回文件的数据(文件的数据会以base64的编码表示).其余与上个属性相同
-* `abort()`:终端读取操作
+* `abort()`:中断读取操作
 
 ```html
 <body>
