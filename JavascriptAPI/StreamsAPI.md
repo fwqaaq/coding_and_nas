@@ -39,7 +39,7 @@
    3. `cancel(reason)?`:如果应用程序标识该流将被取消(例如调用`ReadableStream.cancel()`),则将调用此方法,该方法由开发人员定义.
       * 该方法应该做任何必要的事情来释放对流的访问
       * 如果这个过程是异步的,它可以返回一个promise,表明成功或者失败
-   4. `type?`:该睡醒控制正在处理的可读类型的流.如果她包含一个设置为`bytes`的值,则传递的控制器对象僵尸一个`ReadableByteStreamController`,能够处理BYOB(带你自己的缓冲区)/字节流
+   4. `type?`:该睡醒控制正在处理的可读类型的流.如果她包含一个设置为`bytes`的值,则传递的控制器对象将是一个`ReadableByteStreamController`,能够处理BYOB(带你自己的缓冲区)/字节流
       * 如果未包含(**默认情况下**),则传递的控制器将为 `ReadableStreamDefaultController`
    5. `autoAllocateChunkSize?`:对于字节流,开发人员可以使用正整数值设置autoAllocateChunkSize以打开流的自动分配功能
       * 启用此功能后,流实现将自动分配一个具有给定整数大小的`ArrayBuffer`,并调用底层源代码,就好像消费者正在使用BYOB阅读器一样
@@ -68,11 +68,11 @@ async function* ints() {
 }
 
 const readableStream = new ReadableStream({
-  async start(contriller) {
+  async start(controller) {
     for await (const i of ints()) {
-      await contriller.enqueue(i)
+      await controller.enqueue(i)
     }
-    await contriller.close()
+    await controller.close()
   }
 })
 ```

@@ -13,6 +13,7 @@
 
 >浏览器原生对javascript的支持
 
+* [TypedArray](./JavascriptAPI/TypedArray.md)
 * [blob](./JavascriptAPI/blob.md)
 * [drag](./JavascriptAPI/drag.md)
 * [video](./JavascriptAPI/video.md)

@@ -75,24 +75,46 @@ blob.text().then(res => console.log(res))
 </script>
 ```
 
-### File()
+## File
 
->首先了解`Filelist`,此类型是由HTML\<input type="file">元素的属性返回
+>File对象是特殊类型的`Blob`,且可以用在人气的Blob类型的 context中.
+
+* 例如`FileReader`,`URL.createObjectURL()`,`createImageBitmap()`及`XMLHttpRequest.send()` 都能处理 Blob 和 File
+
+### FileList
+
+>首先了解`Filelist`,此类型是HTML\<input type="file">元素返回`File`对象的集合.不过该类型的对象也有可能来自用户的拖放操作(DataTransfer)
+
+* 并且如果`input`元素拥有`multiple`属性,则可以使用它来选择多个文件
+
+* File对象:文件列表会放在在files数组中.所哟与`type="file"`的`<input>`元素都有一个files属性,用来存储用户选择的文件
 
 ```html
 <input id="fileItem" type="file">
 ```
 
-* File对象:文件列表会放在在files数组中
+* 获取FileList对象中的第一个文件(**File对象**)
 
 ```js
-var file = document.getElementById('fileItem').files[0];
+const file = document.getElementById("filelist");
+file.onchange = function (e) {
+  console.log(file.files[0])
+}
 ```
 
->常情况下,`File`对象是来自用户在一个\<input>元素上选择文件后返回的 `FileList` 对象
+### File对象
 
-* 由于`File`对象是特殊类型的`Blob`,且可以用在任意的`Blob`类型的`context`中
-* File对象同样是构造函数(`new File()`).除了继承了Blob的方法属性以外,还有以下方法
+* File对象同样可以使用构造函数(`new File()`)创造新的对象实例
+
+```js
+const myFile = new File(bits, name[, options]);
+```
+
+1. `bits`:一个包含`ArrayBuffer`,`ArrayBufferView`,`Blob`,或者 `DOMString` 对象的数组
+2. `name`:表示文件名称或者文件路径
+3. `options?`
+   * `type: DOMString`,表示将要放到文件中的内容的**MIME类型**.**默认值为 ""** .
+   * `lastModified: 数值`,表示文件最后修改时间的 Unix 时间戳(毫秒).**默认值为 Date.now()**.
 
 >属性
 
