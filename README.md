@@ -21,6 +21,7 @@
 ## Canvas
 
 * [webgpu](./Canvas/webgpu.md)
+* [动态更改gpu](./Canvas/webgpu.md)
 
 ## 表单
 
