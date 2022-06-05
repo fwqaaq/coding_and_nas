@@ -113,14 +113,14 @@ console.log(readableStream.locked)
 * `transformStream`: 一个由可读流和可写流组成的`TransformStream`(或者结构为 `{writable, readable}` 的对象),他们共同工作将一些数据转化为另一些数据.
   * `writable`写入的数据在某些状态下可以被`readable`读取.例如,`TextDecoder`从中写入字节并读取字符,而视频解码器写入编码后的字节并从中读取未压缩的视频帧.
 * `options`:管道至`writable`应该被使用的选项.可用选项是:
-   1. `preventClose`:如果设置为`true`,源`ReadableStream`关闭将不再导致目标`WritableStream`关闭.一旦进程完成,该方法将返回一个兑现的`promise`,除非在关闭目标时遇到错误,在这种情况下下,它将因为该错误被拒绝.
-   2. `preventAbort`:如果设置为`true`,目标`WritableStream`的错误将不再取消源`ReadableStream`.该方法将会返回一个因源错误而被拒绝的`promise`,或者任何在中止目标期间的错误.
-   3. `preventCancel`:如果设置为`true`,目标`WritableStream`的错误将不在取消源`ReadableStream`.在这种情况下,该方法将会返回一个因源错误而被拒绝的`promise`,或者任何在中止目标期间的错误.此外,如果目标可读流开始关闭或者正在关闭,源可写流将不再被关闭.在这种情况下,方法将返回一个拒绝并带有错误的`promise`,或者任何在中止目标期间的错误,来表明管道关闭失败.
-   4. `signal`:如果设置一个 `AbortSignal` 对象,然后可以通过相应的`AbortController`中止正在进行的管道操作
+   1. `preventClose`:如果设置为 `true`,源 `ReadableStream` 的关闭将不再导致目标 `WritableStream` 关闭.一旦此过程完成,该方法返回的 promise 将被兑现；除非在关闭目标流时遇到错误,在这种情况下,它将因为该错误被拒绝.
+   2. `preventAbort`:如果设置为 `true`,源 `ReadableStream` 中的错误将不再中止目标 `WritableStream`.该方法返回的 promise 将因源流的错误或者任何在中止目地流期间的错误而被拒绝.
+   3. `preventCancel`:如果设置为 `true`,目标 `WritableStream` 的错误将不再取消源 `ReadableStream`.在这种情况下,该方法返回的 promise 将因源流的错误或者在取消源流期间发生的任何错误而被拒绝.此外,如果目标可写流开始关闭或者正在关闭,则源可读流将不再被取消.在这种情况下,方法返回的 promise 也将被拒绝,其错误为连接到一个已关闭的流或者在取消源流期间发生的任何错误.
+   4. `signal`:用于设置一个`AbortSignal`对象,然后可以通过相应的`AbortController`中止正在进行的传输操作.
 
 >`pipeTo(destination, options?)`:通过管道将当前的`ReadableStream`输出到给定的`WritableStream`当管道成功完成时返回一个成功状态的promise
 
-* `destination`: 充当`ReadableStream`最终目标的`WriteableStream`
+* `destination`:充当`ReadableStream`最终目标的`WriteableStream`
 * `options`:和`pipeThrough`的options一样
 
 ## ReadableStreamDefaultReader
