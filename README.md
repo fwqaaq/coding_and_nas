@@ -14,6 +14,10 @@
 >浏览器原生对javascript的支持
 
 * [TypedArray](./JavascriptAPI/TypedArray.md)
+* [StreamsAPI](./JavascriptAPI/StreamsAPI.md)
+  * [ReadableStream](./JavascriptAPI/StreamsAPI.md#readablestream)
+    * [ReadableStreamDefaultReader](./JavascriptAPI/StreamsAPI.md#readablestreamdefaultreader)
+  * [WritableStream](./JavascriptAPI/WritableStream.md)
 * [blob](./JavascriptAPI/blob.md)
 * [drag](./JavascriptAPI/drag.md)
 * [video](./JavascriptAPI/video.md)
