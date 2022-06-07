@@ -5,6 +5,14 @@
 * 大块数据可能不会一次性都可以用.网络请求的响应就是一个典型的例子.网络负载以连续信息包形式交付,流式处理可以让应用在数据一到达就能使用
 * 大块数据可能需要分小部分处理.视频处理,数据压缩,图像编码和JSON解析都是可以分成小部分处理
 
+## Backpressure
+
+>Backpressure(背压)指单个流或者一个`pipe chain`调节读/写速度的过程.当链中后面的一个流仍然忙碌时,尚未准备好接受更多的`chunks`时.它会通过链向上游的流发送一个信号,告诉上游的转换流(或原始源)适当地减慢传输速度.这样就不会在任何地方遇到瓶颈
+
+* 可读流中使用 Backpressure 技术,可以通过controller的`ReadableStreamDefaultController.desiredSize`属性
+  * 如果该值太低或为负数,ReadableStream 可以告诉它的底层源停止往流中装载数据,然后我们沿着 `stream chain`进行背压
+  * 可读流在经历背压后,如果**消费者**再次想要接收数据,我们可以在构造可读流时提供`pull`方法来告诉底层源恢复往流中装载数据
+
 ## 理解流
 
 1. **可读流**:可以通过某个公共接口读取数据块的流.数据在内部从底层源进入流然后由消费者(`consumer`)进行处理
@@ -53,10 +61,10 @@
 
 * 该实例会在`pull`或者`start`期间自动创建
 
-* 属性:`desiredSize`:返回填充满流的内部队列所需要的大小,如果队列过满,可能是负数
-* 方法: 并且 如果源对象不是`ReadableStreamDefaultController`则抛出TypeError错误.
+* **属性**:`desiredSize`:返回填充满流的内部队列所需要的大小,如果队列过满,可能是负数
+* **方法**: 并且 如果源对象不是`ReadableStreamDefaultController`则抛出TypeError错误.
   * `close()`:关闭关联的流.读取器将仍然可以从流中读取任何先前排队的块,但是一旦读取这些块,流将被关闭
-    * 如果你想完全的摆脱流并且抱起任何排队的块,你可以使用`ReadableStream.cancel()` 或者`ReadableStreamDefaultReader.cancel()`
+    * 如果你想完全的丢弃这个流并且丢弃任何入队的数据块,你可以使用`ReadableStream.cancel()` 或者`ReadableStreamDefaultReader.cancel()`
   * `enqueue()`:将给定的块送入关联的流
   * `error()`:导致任何未来与关联流交互都会出错
 
