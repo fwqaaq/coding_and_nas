@@ -46,3 +46,7 @@
    * [x] 滚轮事件(WheelEvent):使用鼠标滚轮或者类似设备触发
    * [x] [键盘事件(InputEvent)](./DOMEvent/键盘事件.md#键盘事件):在文档中输入文本时触发
    * [ ] 合成事件(CompositionEvent):使用某种IME(输入法编辑器)输入字符时触发
+
+## Performance
+
+* [RAIL模型](./Performance/RAIL模型.md)

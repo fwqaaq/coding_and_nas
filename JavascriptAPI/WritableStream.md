@@ -1,10 +1,12 @@
-# WritableStream
+# Writable
+
+## WritableStream
 
 > **`WritableStream`** 接口为将流数据写入目的地(称为 sink)提供了一个标准的抽象.该对象带有内置的背压和队列.
 
 * `WritableStream`是一个可转移对象.
 
-## 构造函数
+### 构造函数
 
 ```js
 new WritableStream(underlyingSink?, queuingStrategy?)
@@ -35,3 +37,33 @@ new WritableStream(underlyingSink?, queuingStrategy?)
 
 * `highWaterMark`:非负整数 - 这定义了在应用背压之前可以包含在内部队列中的块的总数
 * `size(chunk)`:包含参数chunk的方法 - 这表示每个块使用的大小(以字节为单位)
+
+### 属性
+
+> `locked`:WritableStream接口的只读属性返回一个布尔值,表示 WritableStream 是否锁定到一个 writer
+
+```js
+const writableStream = new WritableStream({
+  write(chunk) {...},
+  close() {...},
+  abort(err) {...}
+}, queuingStrategy);
+
+...
+
+const writer = writableStream.getWriter();
+writableStream.locked
+```
+
+### 方法
+
+>`abort(reason)`:中止流,表示生产者不能再向流写入数据(会立刻返回一个错误状态),并丢弃所有已入队的数据.
+
+* `reason`:错误原因的字符串.
+* **返回值**:返回一个`promise`,会在成功的时候用给定的`reason`参数兑现.
+
+>`getWriter()`:方法返回一个新的`WritableStreamDefaultWriter`实例并且将流锁定到该实例
+
+* **返回值**:一个`WritableStreamDefaultWriter`对象实例
+
+## WritableStreamDefaultWriter
