@@ -66,4 +66,11 @@ writableStream.locked
 
 * **返回值**:一个`WritableStreamDefaultWriter`对象实例
 
-## WritableStreamDefaultWriter
+### WritableStreamDefaultController
+
+>**`WritableStreamDefaultController`** 接口表示一个允许控制`WritableStream`状态的控制器.当构造 `WritableStream`时,会为底层的 sink 提供一个相应的`WritableStreamDefaultController`实例以进行操作
+
+* 无构造函数,也没有任何属性.
+
+* 方法:`error(message)`,很少被使用,通常他从底层 sink 的其中一个方法返回被拒绝的 promise 足以.但是,在响应与底层 sink 交互的正常生命周期之后的事件时,使用error()突然关闭流很可能会很有用
+  * message表示你希望的以后交互失败的错误
