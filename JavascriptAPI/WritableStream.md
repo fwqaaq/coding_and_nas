@@ -73,4 +73,4 @@ writableStream.locked
 * 无构造函数,也没有任何属性.
 
 * 方法:`error(message)`,很少被使用,通常他从底层 sink 的其中一个方法返回被拒绝的 promise 足以.但是,在响应与底层 sink 交互的正常生命周期之后的事件时,使用error()突然关闭流很可能会很有用
-  * message表示你希望的以后交互失败的错误
+  * `message`:表示你希望的以后交互失败的错误
