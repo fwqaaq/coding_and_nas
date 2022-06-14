@@ -72,5 +72,40 @@ writableStream.locked
 
 * 无构造函数,也没有任何属性.
 
-* 方法:`error(message)`,很少被使用,通常他从底层 sink 的其中一个方法返回被拒绝的 promise 足以.但是,在响应与底层 sink 交互的正常生命周期之后的事件时,使用error()突然关闭流很可能会很有用
+* 方法:`error(message)`,很少被使用,通常他从底层 sink 的其中一个方法返回被拒绝的 promise 足矣.但是,在响应与底层 sink 交互的正常生命周期之后的事件时,使用error()突然关闭流很可能会很有用
   * `message`:表示你希望的以后交互失败的错误
+
+## WritableStreamDefaultWriter
+
+> `WritableStreamDefaultWriter`接口是由`WritableStream.getWriter()`返回的对象,并且一旦创建就会将`writer`自动锁定到`WritableStream`,确保没有其他流可以写入底层`sink`
+
+### WritableStreamDefaultWriter构造函数
+
+> 通常不需要手动创建此构造函数;可以直接使用`WritableStream.getWriter()`方法
+
+* 语法:参数是一个`WritableStream`
+
+   ```js
+   new WritableStreamDefaultWriter(WritableStream)
+   ```
+
+* **返回值**:返回`WritableStreamDefaultWriter`对象的一个实例
+
+### WritableStreamDefaultWriter属性(只读)
+
+1. `closed`:允许你在编写当流结束时执行的代码.返回一个流关闭时兑现的`promise`,或者在抛出错误或者 writer 的锁释放时被拒绝
+2. `desiredSize`:返回填充流的内部队列所需要的大小
+   * **注意:**如果队列已满,可能是负数.如果流无法成功写入(由于出错中止排入),则该值为null,如果流已经关闭,则该值为 0.
+3. `ready`:返回一个`promise`,当流填充内部队列的所需大小从非正数变为整数时兑现,表明它不再使用**背压**
+
+### WritableStreamDefaultWriter方法
+
+1. `write(chunk)`:将传递的数据块写入`WritableStream`和它的底层sink,然后返回一个`promise`,promise的状态由写入操作是否成功来决定.
+   * `chunk`:要传递的二进制数据块
+2. `releaseLock()`:释放`writer()`对相应流的锁定.释放锁后,writer将不再处于锁定的状态.如果释放锁时关联的流出错,writer随后也会以同样的方式出错;此外,writer将关闭
+3. `close()`:用于关闭关联的可写流,在调用关闭行为之前,底层的 sink 将完成对所有先前写入的分块的处理.在此期间任何的进一步尝试都将失败,但是不会导致流出错
+   * **返回值:**一个`promise`,如果所有剩余的分块在关闭之前成功写入,则使用`undefined`对象,如果在此遇到任何问题,则拒绝并返回相关问题
+4. `abort(reason?)`:中止流,表示生产者不能再向流写入数据(会立刻返回一个错误状态),并丢弃所有已入队的数据
+   * 如果`writer`处于活动状态,则`abort()`的行为与关联流`WritableStream.abort()`的行为相同.如果不是,则返回一个被拒绝的promise
+   * `reason`:人类可读的中止原因
+   * **返回值:**一个promise,会在成功时用给定的 reason 参数兑现

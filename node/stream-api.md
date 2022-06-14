@@ -23,7 +23,7 @@ summary: node中的stream机制
 * 内部缓冲的数据屈居于传给流的构造函数`highWaterMark`选项.对于普通的流,`highWaterMark`选项指定字节的总数,对于在对象模式下操作的流`highWaterMark`指定对象的总数
 * 当实现调用`stream.push(chunk)`时,数据缓存在Readable流中.如果流的消费者没有调用`stream.read()`,则数据会一直留在内部队列,直到被消费
 * 当内部读取缓冲区的总大小达到`highWaterMark`指定的阈值,则流将暂时停止从底层资源读取数据,直到可以消费当前缓冲区的数据(流将停止调用内部用于填充读取缓冲区的`readable._read()`)
-* 当重复调用`writeable.write(chunk)`方法时,数据会缓存在`Writeable`中.虽然内部的写入缓冲区的总大小低于`highWaterMark`设置的阈值,淡对`writeable.write()`的调用将返回true.一旦内部缓冲区的大小达到活着超过`highWaterMark`,则返回false
+* 当重复调用`writeable.write(chunk)`方法时,数据会缓存在`Writeable`中.虽然内部的写入缓冲区的总大小低于`highWaterMark`设置的阈值,但对`writeable.write()`的调用将返回true.一旦内部缓冲区的大小达到活着超过`highWaterMark`,则返回false
 * `stream API`的一个关键目标,尤其是`stream.pipe()`方法,是将数据缓冲限制在可接受的水平,以便不同速度的来源和目标不会压倒可用内存
 * `highWaterMark`选项是阈值,而不是限制:它规定了流在停止请求更多数据之前缓冲的数据量.
   * 它通常不强制执行严格的内存限制.特定的流实现可能会选择实施更严格的限制,但这样做是可选的.
@@ -43,7 +43,7 @@ summary: node中的stream机制
 
 > 写入过程
 
-* 在数据流过来时,会直接写入到资源池.当写入速度表缓慢时或者暂停时,书记流会进入队列吃缓存起来
+* 在数据流过来时,会直接写入到资源池.当写入速度比较缓慢时或者暂停时,数据流会进入队列缓存起来
 
 ![ ](./stream-api/node-stream-writable.png)
 
@@ -214,7 +214,7 @@ summary: node中的stream机制
 * 具体来说,在任何给定的时间点,每个`Readable`都处于三种可能的状态之一:
   * `readable.readableFlowing === null`:暂时没有消费者过来.并且不会生成数据
     * 在此状态下为`data`事件绑定监听器、调用`readable.pipe()`方法,或调用`readable.resume()`方法会将`readable.readableFlowing`切换到`true`.`Readable`会开始主动接受数据
-  * `readable.readableFlowing === false`:* 调用`readable.pause()`、`readable.unpipe()`,或者接收背压都会导致`readable.readableFlowing`被设置为false,暂时停止事件的流动,但不会停止数据的生成
+  * `readable.readableFlowing === false`:调用`readable.pause()`、`readable.unpipe()`,或者接收背压都会导致`readable.readableFlowing`被设置为false,暂时停止事件的流动,但不会停止数据的生成
     * 在此状态下,为`'data'`事件绑定监听器不会将`readable.readableFlowing`切换到true.
   * `readable.readableFlowing === true`.流动模式
 
@@ -415,7 +415,7 @@ pass.resume();     // 必须调用才能使流触发 'data'.
 * `readable.readableDidRead`:返回是否已触发 'data'
 * `readable.readableEncoding`:给定 Readable流的属性encoding 的获取器.可以使用`readable.setEncoding()`方法设置 `encoding`属性
 * `readable.readableEnded`:当触发 'end' 事件时变为 true
-* `eadable.errored`:如果流因错误而被销毁,则返回`error`
+* `readable.errored`:如果流因错误而被销毁,则返回`error`
 * `readable.readableFlowing`:反映了 Readable 流的当前三种状态之一
 * `readable.readableHighWaterMark`:返回创建此 Readable 时传入的 highWaterMark 的值
 * `readable.readableLength`:此属性包含队列中准备读取的字节数(或对象数).该值提供有关 `highWaterMark`状态的内省数据
