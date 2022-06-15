@@ -131,6 +131,30 @@ console.log(readableStream.locked)
 * `destination`:充当`ReadableStream`最终目标的`WriteableStream`
 * `options`:和`pipeThrough`的options一样
 
+### ByteLengthQueuingStrategy
+
+>`ByteLengthQueuingStrategy`提供了一个排队策略，该排队策略提供了内置的字节长度并且可以在构造流的时候使用
+
+```js
+const queueingStrategy = new ByteLengthQueuingStrategy({ highWaterMark: 1 });
+const readableStream = new ReadableStream({
+  start(controller) {
+    ...
+  },
+  pull(controller) {
+    ...
+  },
+  cancel(err) {
+    console.log("stream error:", err);
+  }
+}, queueingStrategy);
+var size = queueingStrategy.size(chunk);
+```
+
+1. 构造函数:`new ByteLengthQueuingStrategy(highWaterMark)`
+    * `highWaterMark`:一个包含`highWaterMark`属性的对象.这个属性是一个非负整数,定义了在应用背压之前内部队列包含的分块的总数.
+2. `size(chunk)`:该属性始终返回给定块的的`byteLength`属性(表示给定块的字节长度)
+
 ## ReadableStreamDefaultReader
 
 >Streams API的`ReadableStreamDefaultReader`的接口,表示一个可被用于读取来自网络提供的流数据(例如 fetch 请求)

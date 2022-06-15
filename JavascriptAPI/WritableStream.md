@@ -75,6 +75,31 @@ writableStream.locked
 * 方法:`error(message)`,很少被使用,通常他从底层 sink 的其中一个方法返回被拒绝的 promise 足矣.但是,在响应与底层 sink 交互的正常生命周期之后的事件时,使用error()突然关闭流很可能会很有用
   * `message`:表示你希望的以后交互失败的错误
 
+### CountQueuingStrategy
+
+>该接口提供了一个计数策略,该计数策略内置了对分块队列的计数并且可以在构造流的时候使用
+
+1. 构造函数:`new CountQueuingStrategy(highWaterMark)`
+   * `highWaterMark`:一个包含`highWaterMark`属性的对象.这个属性是一个非负整数,定义了在应用背压之前内部队列包含的分块的总数.
+2. `size()`:该属性始终返回`1`(分块),因此队列的总大小是队列中所有分块的计数.
+
+```js
+const queuingStrategy = new CountQueuingStrategy({ highWaterMark: 1 });
+const writableStream = new WritableStream({
+  // Implement the sink
+  write(chunk) {
+    ...
+  },
+  close() {
+    ...
+  },
+  abort(err) {
+    console.log("Sink error:", err);
+  }
+}, queuingStrategy);
+var size = queuingStrategy.size();
+```
+
 ## WritableStreamDefaultWriter
 
 > `WritableStreamDefaultWriter`接口是由`WritableStream.getWriter()`返回的对象,并且一旦创建就会将`writer`自动锁定到`WritableStream`,确保没有其他流可以写入底层`sink`
