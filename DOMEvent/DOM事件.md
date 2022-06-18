@@ -103,7 +103,7 @@ document.dispatchEvent(ev);
    p.dispatchEvent(click);
    ```
 
-  * p元素会发出一个click事件.并且默认是捕获阶段触发.在div上的监听函数是冒泡阶段运行,因此改函数不会触发
+  * p元素会发出一个click事件.并且默认是捕获阶段触发.在div上的监听函数是冒泡阶段运行,因此该函数不会触发
     * 如果写成`div.addEventListener('click', callback, true)`函数在捕获阶段运行
     * 或者写成`const click = new Event("click",{bubbles:true})`函数会在冒泡阶段运行
   * 如果`div.dispatchEvent(click)`,无论是捕获阶段还是冒泡阶段,都会触发监听函数.因为div元素是事件的目标,不存在是否冒泡的问题
