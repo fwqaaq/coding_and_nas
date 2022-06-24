@@ -1,7 +1,7 @@
 # Fetch
 
 >能够执行XHR的所有任务,并且能够在Web工作者线程等现代Web工具中使用,提供拦截,重定向和修改通过fetch()生成的请求接口
->>**fetch() 方法的参数与 Request() 构造器是一样的**
+>>**fetch() 方法的参数与 Request():(RequestInit) 构造器是一样的**
 
 * `fetch`一定是异步的,天生支持promise,接收两个参数
   1. 第一个参数:源.是必须的(例如`https://www.baidu.com`),只传第一个参数,默认是get请求
