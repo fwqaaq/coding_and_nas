@@ -3,23 +3,32 @@
 >能够执行XHR的所有任务,并且能够在Web工作者线程等现代Web工具中使用,提供拦截,重定向和修改通过fetch()生成的请求接口
 >>**fetch() 方法的参数与 Request():(RequestInit) 构造器是一样的**
 
-* `fetch`一定是异步的,天生支持promise,接收两个参数
-  1. 第一个参数:源.是必须的(例如`https://www.baidu.com`),只传第一个参数,默认是get请求
-  2. 第二个参数是<span style="color:red">可选的</span>,是一个对象
-
-```js
-fetch("https://www.zhihu.com/roundtable/2021year",{method:'GET',mode:'no-cors'}).then(
-  response =>console.log(response)
-)
+```ts
+declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
 ```
 
-* mode:用于指定请求模式.以及客户端读取多少响应
-  1. cors:允许遵守CORS的跨域请求.(非简单跨域,需要预检)
-  2. no-cors:允许不需要发送预检请求的跨域请求.(同源请求或者简单跨域)
-  3. same-origin:任何跨域请求都不允许发送
+* `fetch`一定是异步的,天生支持promise,接收两个参数
+  1. 第一个参数:`RequestInfo(request对象)|URL`.URL是必须的(例如`https://www.baidu.com`),只传第一个参数,默认是get请求
+  2. 第二个参数是<span style="color:red">**RequestInit**可选的</span>,是一个对象
+     * `method?: string`:请求方法.默认值`GET`
+     * `body?:BodyInit | null`:请求的`body`信息.可能是一个 Blob、BufferSource、FormData、URLSearchParams 或者 USVString 对象(<span style="color:red">GET或者HEAD方法的请求不能包含</span>)
+     * `mode?: RequestMode`:请求的模式(是否使用`CORS`).`cors`**允许遵守CORS的跨域请求.(非简单跨域,需要预检)**,`navigate`,`no-cors`**允许不需要发送预检请求的跨域请求.(同源请求或者简单跨域)**,`same-origin`**任何跨域请求都不允许发送**
+     * `cache?: RequestCache`:请求的 cache 模式：`default`,`no-store`、`reload` 、`no-cache`、`force-cache`或者 `only-if-cached`
+     * `credentials?: RequestCredentials`: 请求的 credentials，如 `omit`、`same-origin` 或者 `include`
+     * `redirect?: RequestRedirect`.可用的 redirect 模式.`error`(如果产生重定向将自动终止并且抛出一个错误),`follow`(自动重定向),`manual`(手动重定向).默认是follow
+     * `referrer?: string`:一个`USVString`可以是`no-referrer`、`client`或一个URL.**默认是 client**
+     * `referrerPolicy?: ReferrerPolicy`:指定了 HTTP 头部 **referer** 字段的值.可能为以下值之一：`no-referrer`、 `no-referrer-when-downgrade`、`origin`、`origin-when-cross-origin`、`unsafe-url`
+     * `integrity?: string`:包括请求的[`subresource integrity`](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)值
+     * `keepalive?: boolean`:浏览器是否允许请求存在超出页面生命周期
+     * `signal?: AbortSignal | null`:用于支持通过`AbortController`中断进行中的fetch()请求
+     * `headers?: HeadersInit`
+* 参考:<https://developer.mozilla.org/zh-CN/docs/Web/API/fetch>
 
->以上就不一一介绍
->>参考:<https://developer.mozilla.org/zh-CN/docs/Web/API/fetch>
+```js
+fetch("https://www.zhihu.com/roundtable/2021year").then(
+  response =>response.text()
+).then(console.log)
+```
 
 ## Headers对象
 
