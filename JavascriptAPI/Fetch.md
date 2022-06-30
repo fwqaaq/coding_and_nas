@@ -207,10 +207,10 @@ fetch(r,{method:"POST",body:"body"})
 
 ### Body
 
->Request对象继承了Body对象的属性和方法
+>Request和Response对象都继承了Body对象的属性和方法
 
 * 两个只读属性
-   1. `body`: 添加到请求体的内容
+   1. `body`: 添加到请求体的内容(实现为`ReadableStream`)
    2. `bodyUsed`: 布尔值.请求体中的内容是否已经被读取
 * 读取流的方法,返回的都是`promise`
    1. arrayBuffer(): Promise\<ArrayBuffer>
@@ -229,6 +229,41 @@ request.json().then(function(data) {
   // do something with the data sent in the request
 });
 ```
+
+* 使用 streams API 的主要原因是有效载荷的大小可能会导致网络延迟,另一方面是 StreamsAPI本身处理有效载荷方面是有优势的.
+* 除了以上的五个方法之外还有一些注意点
+
+1. 一次性流,Body混入是构建在`ReadableStream`之上的,所以主体流只能使用一次
+
+   ```js
+   fetch("https://foo.com").then(
+     response=>{
+       response.blob()//第一次调用会加锁
+       response.blob()//第二次再调用会出错
+       //可以使用bodyUsed测试是否加锁
+       console.log(response.bodyUsed)//true
+     }
+   )
+   ```
+
+2. 使用`ReadableStream`主体,js编程逻辑很多时候都会将访问网络作为原子操作,比如响应式同时创建和发送的,响应数据是以统一的格式一次性暴露出来的.
+   * 从TCP/IP的角度,传输的数据是以分块的形式抵达端点的.而且速度受到网速的限制.接收端点会为此分配内存,并将收到的块写入内存.Fetch API通过 ReadableStream 支持这些块到达时就实时读取和操作这些数据
+   * `ReadableStream` 接口暴露了 `getReader()` 方法,用于产生`ReadableStreamDefaultReader`,这个 reader 可以在数据到达时异步获取数据块
+
+   ```js
+   fetch("https://fetch.spec.whatwg.org").then(
+     res=>res.body
+   ).then(
+     async function(body){
+       let reader = body.getReader()
+       while (true) {
+         let {value,done} = await reader.read()
+         if (done) break
+         console.log(value)
+       }
+     }
+   )
+   ```
 
 ### Response对象
 
