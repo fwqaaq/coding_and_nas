@@ -14,7 +14,7 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
      * `body?:BodyInit | null`:请求的`body`信息.可能是一个 Blob、BufferSource、FormData、URLSearchParams 或者 USVString 对象(<span style="color:red">GET或者HEAD方法的请求不能包含</span>)
      * `mode?: RequestMode`:请求的模式(是否使用`CORS`).`cors`**允许遵守CORS的跨域请求.(非简单跨域,需要预检)**,`navigate`,`no-cors`**允许不需要发送预检请求的跨域请求.(同源请求或者简单跨域)**,`same-origin`**任何跨域请求都不允许发送**
      * `cache?: RequestCache`:请求的 cache 模式：`default`,`no-store`、`reload` 、`no-cache`、`force-cache`或者 `only-if-cached`
-     * `credentials?: RequestCredentials`: 请求的 credentials，如 `omit`、`same-origin` 或者 `include`
+     * `credentials?: RequestCredentials`: 请求的 credentials，如`omit`(不发送cookie)、`same-origin`(同源时发送cookie) 或者 `include`(无论同源还是跨域都发送)
      * `redirect?: RequestRedirect`.可用的 redirect 模式.`error`(如果产生重定向将自动终止并且抛出一个错误),`follow`(自动重定向),`manual`(手动重定向).默认是follow
      * `referrer?: string`:一个`USVString`可以是`no-referrer`、`client`或一个URL.**默认是 client**
      * `referrerPolicy?: ReferrerPolicy`:指定了 HTTP 头部 **referer** 字段的值.可能为以下值之一：`no-referrer`、 `no-referrer-when-downgrade`、`origin`、`origin-when-cross-origin`、`unsafe-url`
@@ -24,17 +24,103 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
      * `headers?: HeadersInit`
 * 参考:<https://developer.mozilla.org/zh-CN/docs/Web/API/fetch>
 
+## 基本用法
+
+>请求完成时,promise会兑现为一个`Response`对象
+
 ```js
-fetch("https://www.zhihu.com/roundtable/2021year").then(
-  response =>response.text()
-).then(console.log)
+//返回一个response对象
+fetch("./README.md").then(response => console.log(response))
 ```
+
+>读取响应:最简单的方式`text()`
+
+```js
+fetch("./README.md").then(response => response.text()).then(
+  text =>console.log(text)
+)
+```
+
+>处理状态码和请求失败
+
+* `status`:状态码,例如`200`,`404`等等
+* `statusText`:状态文本.例如`OK`,`Not Found`等等
+
+## 常见的请求模式
+
+>* 其中`body`支持的类型是`BodyInit`,`BodyInit`为`ReadableStream`或者`XMLHttpRequestBodyInit`
+>* XMLHttpRequestBodyInit支持的类型`Blob`,`BufferSource`,`FormData`,`URLSearchParams`,`string`
+
+1. 发送`json`数据
+
+   ```js
+   const paylod = JSON.stringify({foo:"bar"})
+   const headers = {"Content-type":"application/json"}
+   fetch("/login",{
+     method:"POST",
+     body:paylod,
+     headers
+   })
+   ```
+
+2. 在请求体中支持任意字符串值,只需要将上述请求头改成如下所示
+
+   ```js
+   const headers = {
+     "Content-type":"application/x-www-form-urlencoded;charset=UTF-8"
+   }
+   ```
+
+3. 发送文件
+
+   ```js
+   const imageFormData = new FormData()
+   const imageInput = document.querySelector("input[type='file']")
+   imageFormDate.append("image",imageInput.files[0])
+   fetch("/imgFile",{
+     method: "POST",
+     body: imageFormData
+   })
+   ```
+
+4. 加载`blob`文件
+
+   ```js
+   fetch("./0.jpg").then(response => response.blob()).then(
+      blob => {
+        const src = URL.createObjectURL(blob)
+        const img = new Image()
+        img.src = src
+        document.body.appendChild(img)
+      }
+    )
+   ```
+
+5. 跨域,需要包含`CORS`头保证浏览器收到响应
+   1. 服务端设置的响应头
+      * `Access-Control-Allow-Origin:<origin> | *` 表示允许的来源
+      * `Access-Control-Allow-Methods:<method>[, <method>]*` 表示允许的请求方法
+      * `Access-Control-Allow-Headers:<header-name>[, <header-name>]*` 表示允许的请求头
+      * `Access-Control-Allow-Credentials: true`表示是否允许发送Cookie.如果不包含应该去除,而不是写false
+        * 如果是`XMLHttpRequest`,需要将其`withCredentials`标志设置为true;如果是`fetch`,需要设置`credentials:include`,表明无论是同源或者跨域都会发送cookie
+        * <span style="color:red">此时`Access-Control-Allow-Origin`不能使用`*`,而应该是当前请求的源</span>
+6. 中断请求:`fetch API`可以通过`AbortController/AbortSignal`对请求中断
+   * `AbortController.abort()`会中断所有网络请求,适合希望停止传输大型负载的情况
+
+   ```js
+   const abortController = new AbortController()
+   fetch("ajax.zip",{signal:abortController.signal})
+   //10ms后中止
+   setTimeout(()=> abortController.abort(),10)
+   ```
 
 ## Headers对象
 
 > Headers对象是发送请求和入站响应头部的容器.并且都可以通过`Request.prototype.headers`修改属性
 
-* Headers和Map极其相似.都有`set()`,`has()`,`delete()`方法
+* Headers的类型`HeadersInit`(string[][] | Record\<string, string> | Headers),可以是几乎所有的键值对
+
+* Headers和Map极其相似.都有`set()`,`has()`,`delete()`,`get()`,`append()`,`entries()`,`keys()`,`values()`方法
 
 ```js
 let h = new Headers()
@@ -49,25 +135,8 @@ console.log(h.has("foo"))//true
 let r= new Request(url,init)
 ```
 
-> 与之前的fetch是一模一样的.如果init中没有设置的值,会使用默认值
-
-| 键             | 值                                       |
-| -------------- | ---------------------------------------- |
-| bodyUesd       | false                                    |
-| cache          | "default"                                |
-| credentials    | "same-origin"                            |
-| destination    | ""                                       |
-| headers        | Headers {}                               |
-| integrity      | ""                                       |
-| keepalive      | false                                    |
-| method         | "GET"                                    |
-| mode           | "cors"                                   |
-| redirect       | "follow"                                 |
-| referrer       | "about:client"                           |
-| referrerPolicy | ""                                       |
-| signal         | AbortSignal {aborted:false,onabort:null} |
-| url            | "\<current URL>"                         |
-
+> 与之前的fetch是一模一样的,其中init和`fetch`中的`RequestInit`是一样的.如果init中没有设置的值,会使用默认值
+>
 > 克隆Request对象:构造函数或者`clone()`
 
 * 使用构造函数第一个请求体会被标记为已使用
@@ -107,12 +176,58 @@ fetch(r)
 fetch(r)//TypeError
 ```
 
-* 并且fetch()的`init`同样可以覆盖Request的对象
+* 并且fetch()的`RequestInit`同样可以覆盖Request的对象
 
 ```js
 let r = new Request("http://www.baidu.com",{method:"POST"})
 fetch(r.clone())
 fetch(r,{method:"POST",body:"body"})
+```
+
+### Request自身的属性和方法
+
+>Request原型上的属性和方法(Request.prototype)
+
+| (只读属性)或者方法               | 描述                               |
+| -------------------------------- | ---------------------------------- |
+| cache: RequestCache              | RequestInit                        |
+| credentials: RequestCredentials; | RequestInit                        |
+| headers: Headers;                | RequestInit                        |
+| integrity: string;               | RequestInit                        |
+| keepalive: boolean;              | RequestInit                        |
+| method: string;                  | RequestInit                        |
+| mode: RequestMode;               | RequestInit                        |
+| redirect: RequestRedirect;       | RequestInit                        |
+| referrer: string;                | RequestInit                        |
+| referrerPolicy: ReferrerPolicy;  | RequestInit                        |
+| signal: AbortSignal;             | RequestInit                        |
+| url: string;                     | 路径                               |
+| destination: RequestDestination; | 返回一个描述被请求内容类型的字符串 |
+| clone(): Request;                | 深拷贝request                      |
+
+### Body
+
+>Request对象继承了Body对象的属性和方法
+
+* 两个只读属性
+   1. `body`: 添加到请求体的内容
+   2. `bodyUsed`: 布尔值.请求体中的内容是否已经被读取
+* 读取流的方法,返回的都是`promise`
+   1. arrayBuffer(): Promise\<ArrayBuffer>
+   2. blob(): Promise\<Blob>;
+   3. formData(): Promise\<FormData>;
+   4. json(): Promise\<any>;
+   5. text(): Promise\<string>;
+
+```js
+const obj = {hello: 'world'};
+const request = new Request('/myEndpoint', {
+  method: 'POST',
+  body: JSON.stringify(obj)
+});
+request.json().then(function(data) {
+  // do something with the data sent in the request
+});
 ```
 
 ### Response对象
@@ -138,6 +253,15 @@ fetch('https://foo.com').then(
   * type:"basic"
   * url:"https://foo.com"
 
+>如果想象克隆Response对象,可以使用`Request`对象的clone()方法
+
+```js
+const res = new Response(...)
+res.clone()
+```
+
+* 同时`Response`对象也继承`Body`对象,拥有`Body`属性所有的对象和方法
+
 > Response类有两个静态方法`Response.error()`和`Response.redirect()`
 
 * **Response.redirect()**:接收一个url和重定向状态码,返回重定向Response对象
@@ -146,9 +270,3 @@ fetch('https://foo.com').then(
 ```js
 Response.redirect("https://foo.com",301)
 ```
-
-### fetch跨域问题
-
->从不同源请求资源,响应要包含CORS头部才能保证浏览器收到响应.<span style="color:red">如果我们测试用的别人的接口,使用`mode:cors`是不会成功的</span>
-
-* 如果代码不需要服务器响应,可以设置`mode:'no-cors'`
