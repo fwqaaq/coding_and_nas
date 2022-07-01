@@ -46,6 +46,7 @@
    * [x] 鼠标事件(MouseEvent):鼠标在页面上执行某些操作触发
    * [x] 滚轮事件(WheelEvent):使用鼠标滚轮或者类似设备触发
    * [x] [键盘事件(InputEvent)](./DOMEvent/键盘事件.md#键盘事件):在文档中输入文本时触发
+   * [x] [进度事件(ProgressEvent)](./DOMEvent/进度事件.md):测量如HTTP等底层流程进度的事件
    * [ ] 合成事件(CompositionEvent):使用某种IME(输入法编辑器)输入字符时触发
 
 ## Performance
