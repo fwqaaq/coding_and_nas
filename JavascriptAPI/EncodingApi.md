@@ -166,3 +166,14 @@ const ReadableStreamDefault = decodedTextStream.getReader()
    console.log(decodeURIComponent('http%3A%2F%2Fwww.daidu.com%3Fbar%3D%23'))
    //http://www.daidu.com?bar=#
    ```
+
+## base64编码
+
+* `atob()`:如果传入字符串不是有效的 `base64` 字符串,比如其长度不是 4 的倍数,则抛出DOMException
+* `btob()`:该字符串包含非单字节的字符,则抛出DOMException
+  * 例如`new Blob(["✓"]).size`为3个字节
+
+```js
+let encodedData = window.btoa("Hello, world"); // 编码
+let decodedData = window.atob(encodedData);    // 解码
+```
