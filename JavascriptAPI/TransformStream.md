@@ -21,6 +21,15 @@ new TransformStream(transformer?, writableStrategy?, readableStrategy?)
   * `highWaterMark`:一个非负整数.它定义了在应用背压之前内部队列包含的分块的总数.
   * `size(chunk)`:一个包含参数 chunk 的方法.它表示用于每一个块的大小,以字节为单位
 
+>如果没有提供 transformer 参数,那么结果将是一个恒等流,它将所有写入可写端的分块转发到可读端,并且不做任何改变
+
+```js
+const writableStrategy = new ByteLengthQueuingStrategy({ highWaterMark: 1024 * 1024 });
+readableStream
+  .pipeThrough(new TransformStream(undefined, writableStrategy))
+  .pipeTo(writableStream);
+```
+
 ### TransformStreamDefaultController
 
 >Streams API 的 TransformStreamDefaultController 接口提供了操作关联的 ReadableStream 和 WritableStream 的方法

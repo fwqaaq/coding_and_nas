@@ -18,6 +18,8 @@
   * [ReadableStream](./JavascriptAPI/StreamsAPI.md#readablestream)
     * [ReadableStreamDefaultReader](./JavascriptAPI/StreamsAPI.md#readablestreamdefaultreader)
   * [WritableStream](./JavascriptAPI/WritableStream.md)
+    * [WritableStreamDefaultWriter](./JavascriptAPI/WritableStream.md#writablestreamdefaultwriter)
+  * [TransformStream](./JavascriptAPI/TransformStream.md)
 * [blob](./JavascriptAPI/blob.md)
 * [fetch](./JavascriptAPI/Fetch.md)
 * [drag](./JavascriptAPI/drag.md)
