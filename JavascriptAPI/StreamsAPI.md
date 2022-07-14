@@ -131,6 +131,8 @@ console.log(readableStream.locked)
 * `destination`:充当`ReadableStream`最终目标的`WriteableStream`
 * `options`:和`pipeThrough`的options一样
 
+>`tee()`:方法对当前的可读流进行**拷贝(tees)**,返回包含两个`ReadableStream`实例分支的数组
+
 ### ByteLengthQueuingStrategy
 
 >`ByteLengthQueuingStrategy`提供了一个排队策略，该排队策略提供了内置的字节长度并且可以在构造流的时候使用
