@@ -340,7 +340,7 @@ fetch("README.md").then(
 
 ### 中断 Fetch
 
->`AbortController`,表示一个控制器对象,允许你根据需要中止一个或者多个对象
+>`AbortController`是一个简单的对象,当 abort() 方法被调用时,会在自身的`signal`属性上生成**abort**事件(并将`signal.aborted`设置为 true)
 
 * 构造函数,创建一个新的`AbortController`实例
 
@@ -404,12 +404,19 @@ fetch("README.md").then(
 
 > 使用以上两个 API 中断请求
 
+* 使用此方法中断请求:<span style="color:red">DOMException: The user aborted a request.</span>
+
 ```js
 const controller = new AbortController()
-const { signal } = controller
-fetch('/foo', { signal }).then(...)
-signal.onabort = () => { ... }
-controller.abort()
+setTimeout(() => {
+  controller.abort()
+}, 10)
+fetch("README.md", { signal: controller.signal }).then(res =>
+  res.text()
+).then(data => console.log(data)).catch(err => console.log(err))
+
+//使用timeout
+fetch("README.md", { signal: AbortSignal.timeout(10) })
 ```
 
 * 使用`ReadableStream.cancel()`中断请求,并且丢弃所有数据
