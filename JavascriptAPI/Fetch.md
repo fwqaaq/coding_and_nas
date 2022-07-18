@@ -421,6 +421,7 @@ controller.abort()
    ```js
    let aborter = null;
    const abortHandler = (res) => {
+    // `res.body`不能再次获取流
      aborter = () => res.body.cancel();
      return res;
    };
@@ -437,6 +438,7 @@ controller.abort()
    ```js
    let aborter = null;
    const abortHandler = (res) => {
+    // `res.body.getReader()`不能再次获取 reader 读取器
      aborter = () => res.body.getReader().cancel();
      return res;
    };
