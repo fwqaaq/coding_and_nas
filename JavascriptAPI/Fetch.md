@@ -305,3 +305,178 @@ res.clone()
 ```js
 Response.redirect("https://foo.com",301)
 ```
+
+## 中断请求以及下载进度
+
+>实现下载进度,递归的读取`reader`
+
+* 这里需要使用`ReadableStream.tee()`来拷贝流,这样可以同时使用流获取下载进度和使用流读取数据
+
+```js
+const progress = (res) => {
+  const total = res.headers.get("content-length")
+  let count = 0
+  const [progressStream, dataStream] = res.body.tee()
+  const reader = progressStream.getReader()
+  const log = (reader) => {
+    reader.read().then(({ value, done }) => {
+      if (done) return console.log("done")
+      count += value.length
+      console.log(`Downloaded ${count} of ${total} (${(count / total * 100).toFixed(2)}%)`)
+      return log(reader)
+    })
+  }
+  log(reader)
+  return new Response(dataStream, { headers: res.headers })
+}
+fetch("README.md").then(
+  progress
+).then(
+  res => res.text()
+).then(
+  data => console.log(data)
+)
+```
+
+### 中断 Fetch
+
+>`AbortController`,表示一个控制器对象,允许你根据需要中止一个或者多个对象
+
+* 构造函数,创建一个新的`AbortController`实例
+
+  ```js
+  const controller = new AbortController()
+  ```
+
+* `abort()`方法:它可以在`DOM`请求完成之前中断它(例如 Fetch).
+
+   ```js
+    controller.abort()
+    ```
+
+* `signal`:只读属性.返回一个 `AbortSignal` 实例对象,根据需要联系或者中断 DOM 请求
+
+   ```js
+   controller.signal
+   ```
+
+> `AbortSignal`:接口表示一个信号对象(signal object),它允许您通过 AbortController 对象与 DOM 请求（如 Fetch）进行通信并在需要时将其中止。
+
+* `AbortSignal.aborted`:只读属性,返回一个布尔值,表示与 `DOM` 通讯的信号是(`true`)否(`false`)已被放弃
+
+    ```js
+    controller.signal.aborted
+    ```
+
+* `AbortSignal.reason`: 一旦信号中断,返回提供中断原因的 `JavaScript` 的值
+
+   ```js
+   let res = signal.aborted ? `Request aborted with reason: ${signal.reason}` : 'Request not aborted'
+   ```
+
+* **方法**:`AbortSignal.throwIfAborted()`:如果信号已中止,则抛出信号的中止原因;否则它什么也不做.
+
+   ```js
+   async function waitForCondition(func, targetValue, { signal } = {}) {
+     while (true) {
+       signal?.throwIfAborted();
+   
+       const result = await func();
+       if (result === targetValue) {
+         return;
+       }
+     }
+   }
+   ```
+
+* **静态方法**:`AbortSignal.timeout(time)`:方法返回一个 AbortSignal,它将在指定时间后自动中止
+
+   ```js
+   const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+   ```
+
+* 事件:`abort`:当信号被中止时触发
+
+   ```js
+   addEventListener('abort', event => { })
+   onabort = event => { }
+   ```
+
+> 使用以上两个 API 中断请求
+
+```js
+const controller = new AbortController()
+const { signal } = controller
+fetch('/foo', { signal }).then(...)
+signal.onabort = () => { ... }
+controller.abort()
+```
+
+* 使用`ReadableStream.cancel()`中断请求,并且丢弃所有数据
+
+1. 直接使用`ReadableStream.cancel()`取消源流
+   * 这时候`cancel`报一个错误.由于`res.text()`读取流时,reader已经锁定到该流,不能取消已经锁定的流
+   * <span style="color:red">Failed to execute 'cancel' on 'ReadableStream': Cannot cancel a locked stream</span>
+
+   ```js
+   let aborter = null;
+   const abortHandler = (res) => {
+     aborter = () => res.body.cancel();
+     return res;
+   };
+   fetch("README.txt").then(abortHandler).then(res => {
+     res.text()
+     aborter()
+   }).then(data => console.log(data)).catch(err => console.log(err))
+   ```
+
+2. 使用`ReadableStreamDefaultReader.cancel()`取消源流
+   * 这时候`cancel`报一个错误:由于已经使用`res.text()`锁定读取流,同一个流不能继续再加锁
+   * <span style="color:red">Failed to execute 'getReader' on 'ReadableStream': ReadableStreamDefaultReader constructor can only accept readable streams that are not yet locked to a reader</span>
+  
+   ```js
+   let aborter = null;
+   const abortHandler = (res) => {
+     aborter = () => res.body.getReader().cancel();
+     return res;
+   };
+   fetch("README.txt").then(abortHandler).then(res => {
+     res.text()
+     aborter()
+   }).then(data => console.log(data)).catch(err => console.log(err))
+   ```
+
+3. 只有重新构造一个`ReadableStream`
+
+   ```js
+   let aborter = null;
+   const abortHandler = (res) => {
+     const reader = res.body.getReader()
+     const stream = new ReadableStream({
+       start(controller) {
+         let aborted = false
+         const push = () => {
+           reader.read().then(({ value, done }) => {
+             if (done) {
+               if (!aborted) controller.close()
+               return
+             }
+             controller.enqueue(value)
+             push()
+           })
+         }
+         aborter = () => {
+           aborted = true
+           reader.cancel()
+           controller.error(new Error("中止 aborted"))
+         }
+         push()
+       }
+     })
+     return new Response(stream, { headers: res.headers })
+   };
+   fetch("README.txt").then(abortHandler).then(res => {
+     res.text()
+     aborter()
+   }).then(data => console.log(data)).catch(err => console.log(err))
+   ```
