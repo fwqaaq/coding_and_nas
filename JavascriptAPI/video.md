@@ -358,7 +358,11 @@ console.log(video.canPlayType('video/webm'))//maybe
    2. `Document.exitPictureInPicture()`将此文档中包含的视频(当前处于浮动状态)从画中画模式中取出,从而恢复屏幕的先前状态
       * 返回值一个Promise,一旦用户代理完成退出画中画模式,就会解析.如果发生错误,那么会调用promise处理
       * 语法:`exitPromise = document.exitPictureInPicture();`
-* 属性:`Document.pictureInPictureEnabled`.指示画中画模式是否可用.默认情况下,画中画模式可用
+* 属性:
+   1. `Document.pictureInPictureEnabled`.指示画中画模式是否可用.默认情况下,画中画模式可用
+   2. `Document.pictureInPictureElement`. 返回当前文档中以画中画模式呈现的`Element`,如果没有使用画中画模式,则返回 null
+   3. `HTMLVideoElement.autoPictureInPicture`:指示视频是否应该自动进入或离开画中画模式.
+   4. `HTMLVideoElement.disablePictureInPicture`:是否应该向用户建议画中画的功能,或者自动请求该功能
 
 * 事件:
   * `enterpictureinpicture`:当视频成功进入画中画模式时,将触发该事件.`enterpictureinpicture`此事件不可取消,也不会冒泡
@@ -380,6 +384,13 @@ video.addEventListener('enterpictureinpicture', function(event) {
   });
 });
 ```
+
+### 控制访问权限
+
+>使用 [`Feature Policy`](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Feature_Policy) 控制画中画的可用性
+
+* 特征策略允许 web 开发者在浏览器中选择启用,禁用和修改确切特征和 API 的行为.比如内容安全策略,但是它控制的是浏览器的特征非安全行为.
+* 控制安全策略:<https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Feature-Policy>
 
 ### 实现画中画
 
