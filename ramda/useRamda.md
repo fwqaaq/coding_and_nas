@@ -196,6 +196,18 @@
 
 ## Object
 
+* `assoc(prop, val, obj)`:浅拷贝,使用给定的值设置或者覆盖指定属性
+
+   ```js
+   R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
+   ```
+
+* `assocPath(readonly[], val, obj)`:浅拷贝,并且会将特定值放在该路径尾部
+
+   ```js
+   R.assocPath(['a', 'b', 'c'], 42, {a: 5}); //=> {a: {b: {c: 42}}}
+   ```
+
 * `pathOr(defaultValue, readonly[]?, obj?)`: 非空对象在给定的路径上存在值,则将该值返回;否则返回默认值
 
    ```js
