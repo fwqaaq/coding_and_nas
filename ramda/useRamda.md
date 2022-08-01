@@ -208,6 +208,55 @@
    R.assocPath(['a', 'b', 'c'], 42, {a: 5}); //=> {a: {b: {c: 42}}}
    ```
 
+* `clone(obj)`: 深拷贝一个对象
+
+   ```js
+   const objects = [{}, {}, {}];
+   R.clone(objects) === objects //=> false
+   ```
+
+* `dissoc(prop, obj)`: 返回不包含 `prop` 属性的新对象
+
+   ```js
+   R.dissoc('b', {a: 1, b: {d: 2}, c: 3}); //=> {a: 1, c: 3}
+   R.dissoc('b', {a: 1, d: {b: 2}, c: 3}); //=> {a: 1, d: {b: 2}, c: 3}
+   ```
+
+* `dissocPath([], obj)`: 浅拷贝对象, 忽略给定路径的属性.<span style="background-color:red">所有非原始值都是通过引用拷贝</span>
+
+   ```js
+   R.dissocPath(['d', 'b'], { a: 1, d: { b: 2 }, c: 3 })//{ a: 1, d: {}, c: 3 }
+   ```
+
+* `eqProps(prop, obj1, obj2)`: 两个对象对于指定属性是否具有相同属性的值.(**使用`R.equals`**)
+
+   ```js
+   const o1 = { a: 1, b: 2, c: 3, d: 4 };
+   const o2 = { a: 10, b: 20, c: 3, d: 40 };
+   R.eqProps('a', o1, o2); //=> false
+   R.eqProps('c', o1, o2); //=> true
+   ```
+
+* `evolve(transformation, obj)`: 通过浅拷贝创建一个对象, 每个属性会经过 `transformation` 映射.所有非原始值都是通过引用拷贝
+
+   ```js
+   const tomato = {firstName: '  Tomato ', data: {elapsed: 100, remaining: 1400}, id:123};
+   const transformations = {
+     firstName: R.trim,
+     lastName: R.trim, // Will not get invoked.
+     data: {elapsed: R.add(1), remaining: R.add(-1)}
+   };
+   R.evolve(transformations, tomato); //=> {firstName: 'Tomato', data: {elapsed: 101, remaining: 1399}, id:123}
+   ```
+
+* `forEachObjIndexed(fn(value, key, obj), obj)`: 使用 `fn` 遍历 obj 中的元素
+
+   ```js
+   const obj = {a: 1, b: 2, c: 3}
+   const printKeyConcatValue = (value, key) => console.log(key + ':' + value)
+   R.forEachObjIndexed(printKeyConcatValue, obj)//a:1 b:2 c:3
+   ```
+
 * `pathOr(defaultValue, readonly[]?, obj?)`: 非空对象在给定的路径上存在值,则将该值返回;否则返回默认值
 
    ```js
