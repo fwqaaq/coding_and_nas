@@ -25,6 +25,7 @@
 * [drag](./JavascriptAPI/drag.md)
 * [video](./JavascriptAPI/video.md)
 * [Date](./JavascriptAPI/Date.md)
+* [MediaSource](./JavascriptAPI/MediaSource.md)
 
 ## Canvas
 
