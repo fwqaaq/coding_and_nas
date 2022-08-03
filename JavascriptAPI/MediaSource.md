@@ -180,3 +180,22 @@ media.addSourceBuffer(mimeType)
    }
    mediaSource.removeSourceBuffer(mediaSource.sourceBuffers[0]);
    ```
+
+## SourceBufferList
+
+>`SourceBufferList` 表示的是 `SourceBuffer` 对象的集合
+
+* 使用 `MediaSource.sourceBuffers` 属性可以检索到附加到此 MediaSource 实例的 `SourceBuffer` 对象的集合
+
+### Properties
+
+>length:用于返回集合中 `SourceBuffer` 的数量
+
+```js
+SourceBufferList.length
+```
+
+### SourceBufferList Events
+
+* `addsourcebuffer`: 当一个 `SourceBuffer` 增加到列表时触发
+* `removesourcebuffer`: 当一个 `SourceBuffer` 从列表移除时触发
