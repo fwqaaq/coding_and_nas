@@ -159,8 +159,8 @@ const myFile = new File(bits, name[, options]);
 | onabort     | 中断                  |
 | onerror     | 出错                  |
 | onloadstart | 开始                  |
-| onprogress  | 正在读取              |
-| onload      | 成功读取              |
+| onprogress  | 正在读取 `Blob` 时触发              |
+| onload      | 成功读取             |
 | onloadend   | 读取完成,无论成功失败 |
 
 > FileReader接口有4个方法,其中3个用来读取文件,另一个用来中断读取.无论读取成功或失败,方法并不会返回读取结果,这一结果存储在result属性中
