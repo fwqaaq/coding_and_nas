@@ -26,6 +26,7 @@
 * [video](./JavascriptAPI/video.md)
 * [Date](./JavascriptAPI/Date.md)
 * [MediaSource](./JavascriptAPI/MediaSource.md)
+* [AbortController](./JavascriptAPI/AbortController.md)
 
 ## Canvas
 
