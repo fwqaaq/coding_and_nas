@@ -114,7 +114,7 @@ fetch("./README.md").then(response => response.text()).then(
    setTimeout(()=> abortController.abort(),10)
    ```
 
-## Headers对象
+## [Headers对象](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
 
 > Headers对象是发送请求和入站响应头部的容器.并且都可以通过`Request.prototype.headers`修改属性
 
@@ -339,85 +339,6 @@ fetch("README.md").then(
 ```
 
 ### 中断 Fetch
-
->`AbortController`是一个简单的对象,当 abort() 方法被调用时,会在自身的`signal`属性上生成**abort**事件(并将`signal.aborted`设置为 true)
-
-* 构造函数,创建一个新的`AbortController`实例
-
-  ```js
-  const controller = new AbortController()
-  ```
-
-* `abort()`方法:它可以在`DOM`请求完成之前中断它(例如 Fetch).
-
-   ```js
-    controller.abort()
-    ```
-
-* `signal`:只读属性.返回一个 `AbortSignal` 实例对象,根据需要联系或者中断 DOM 请求
-
-   ```js
-   controller.signal
-   ```
-
-> `AbortSignal`:接口表示一个信号对象(signal object),它允许您通过 AbortController 对象与 DOM 请求（如 Fetch）进行通信并在需要时将其中止。
-
-* `AbortSignal.aborted`:只读属性,返回一个布尔值,表示与 `DOM` 通讯的信号是(`true`)否(`false`)已被放弃
-
-    ```js
-    controller.signal.aborted
-    ```
-
-* `AbortSignal.reason`: 一旦信号中断,返回提供中断原因的 `JavaScript` 的值
-
-   ```js
-   let res = signal.aborted ? `Request aborted with reason: ${signal.reason}` : 'Request not aborted'
-   ```
-
-* **方法**:`AbortSignal.throwIfAborted()`:如果信号已中止,则抛出信号的中止原因;否则它什么也不做.
-
-   ```js
-   async function waitForCondition(func, targetValue, { signal } = {}) {
-     while (true) {
-       signal?.throwIfAborted();
-   
-       const result = await func();
-       if (result === targetValue) {
-         return;
-       }
-     }
-   }
-   ```
-
-* **静态方法**:`AbortSignal.timeout(time)`:方法返回一个 AbortSignal,它将在指定时间后自动中止
-
-   ```js
-   const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-   ```
-
-* 事件:`abort`:当信号被中止时触发
-
-   ```js
-   addEventListener('abort', event => { })
-   onabort = event => { }
-   ```
-
-> 使用以上两个 API 中断请求
-
-* 使用此方法中断请求:<span style="color:red">DOMException: The user aborted a request.</span>
-
-```js
-const controller = new AbortController()
-setTimeout(() => {
-  controller.abort()
-}, 10)
-fetch("README.md", { signal: controller.signal }).then(res =>
-  res.text()
-).then(data => console.log(data)).catch(err => console.log(err))
-
-//使用timeout
-fetch("README.md", { signal: AbortSignal.timeout(10) })
-```
 
 * 使用`ReadableStream.cancel()`中断请求,并且丢弃所有数据
 
