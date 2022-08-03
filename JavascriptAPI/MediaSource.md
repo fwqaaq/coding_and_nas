@@ -29,9 +29,9 @@
 
 >在 `Fragmented MP4` 文件中含有三个非常关键的 boxes：moov, moof 和 mdat.
 
-1. moov(movie metadata box):用于存放多媒体 `file-level` 的元信息.
-2. mdat(media data box):和普通 MP4 文件的 mdat 一样,用于存放媒体数据,**不同的是普通 MP4 文件只有一个 mdat box,而 Fragmented MP4 文件中,每个 fragment 都会有一个 mdat 类型的 box**.
-3. moof(movie fragment box):用于存放 fragment-level 的元信息.该类型的 box 在普通的 MP4 文件中是不存在的,**而在 Fragmented MP4 文件中,每个 fragment 都会有一个 moof 类型的 box**.
+1. **moov(movie metadata box)**:用于存放多媒体 `file-level` 的元信息.
+2. **mdat(media data box)**:和普通 MP4 文件的 mdat 一样,用于存放媒体数据,**不同的是普通 MP4 文件只有一个 mdat box,而 Fragmented MP4 文件中,每个 fragment 都会有一个 mdat 类型的 box**.
+3. **moof(movie fragment box)**:用于存放 fragment-level 的元信息.该类型的 box 在普通的 MP4 文件中是不存在的,**而在 Fragmented MP4 文件中,每个 fragment 都会有一个 moof 类型的 box**.
 
 * 并且每一个 `FMP4` 都是由一个 `moov` 和多个 `fragment` 组成的,每一个仅仅包含一个 `mdat` 类型的 box,一个 `moof` 类型的 box.  
 
@@ -164,6 +164,13 @@ media.addSourceBuffer(mimeType)
     )
   }
    ```
+
+* **注意**: 当流结束或者因编码错误调用 `outOfStream()` 方法时
+   1. `readyState` 属性会变成 `ended`
+   2. 将任务排队并在 `MediaSource` 中触发一个名为 `sourceended` 的事件
+   3. 如果没有设置错误
+      1. 持续时间更改算法:新的持续时间将是 `sourceBuffers` 中所有 `sourceBuffer` 对象的持续时间之和.例如, `media.duration` 设置成了 10s, 但是在调用 `endOfStream()` 仅仅是附着的 0~5s 的媒体片段, 那么持续更新时间将是 5s
+      2. 通知媒体元素他现在拥有的所有媒体数据
 
 >`removeSourceBuffer(sourceBuffer)`:该方法从与 `MediaSource` 关联的 `SourceBuffers` 列表中删除给定的 SourceBuffer
 
