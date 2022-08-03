@@ -261,7 +261,7 @@ container.addEventListener("drop", function (e) {
 
 >使用`mousedown`,`mousemove`,`mouseup`配合绝对定位`absolute`来进行拖拽
 
-![mouse](./drag/mouse.png)
+![mouse](./img/mouse.png)
 
 1. `mousedown`:这个阶段首先确定的就是鼠标相对于盒子内部的距离`ol = pageX-offsetLeft`
    * 不光是`pageX`,也可以使用`clientX`.在合适的情况下选择合适的属性
