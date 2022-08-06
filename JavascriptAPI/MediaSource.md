@@ -45,7 +45,7 @@
 
 ```js
 const mime = 'video/mp4; codecs="avc1.640033, mp4a.40.2"'
-MediaSource.isTypeSupported(mimeType)
+MediaSource.isTypeSupported(mime)
 ```
 
 * 返回一个布尔值,表示当前客户端的用户代理是否支持指定的 MIME 类型,是否它可以成功的为 MIME 类型创建 sourceBuffer 对象
@@ -187,7 +187,7 @@ media.addSourceBuffer(mimeType)
 
 * 使用 `MediaSource.sourceBuffers` 属性可以检索到附加到此 MediaSource 实例的 `SourceBuffer` 对象的集合
 
-### Properties
+### SourceBufferList Properties
 
 >length:用于返回集合中 `SourceBuffer` 的数量
 
@@ -199,3 +199,32 @@ SourceBufferList.length
 
 * `addsourcebuffer`: 当一个 `SourceBuffer` 增加到列表时触发
 * `removesourcebuffer`: 当一个 `SourceBuffer` 从列表移除时触发
+
+## sourceBuffer
+
+> `sourceBuffer` 是通过 `MediaSource` 对象传递给 `HTMLMediaElement` 对象并播放的一个媒体分块.它可以是一个或者多个.
+
+### sourceBuffer Properties
+
+> `mode`:该属性用来控制媒体片段加入 `sourceBuffer` 的顺序是任意的还有有严格顺序的
+
+* `segments`: 媒体片段的时间戳决定了片段的播放顺序.片段可以以任意的顺序附加到 `sourceBuffer` 对象中
+* `sequence`: 媒体片段播放的顺序由追加到 `sourceBuffer` 片段的顺序决定.并且会为遵守此顺序的片段自动生成片段时间戳
+
+* 注意:
+   1. mode 值最初是在使用 `mediaSource.addsourceBuffer()` 创建 `sourceBuffer` 时设置的.如果媒体片段上已经存在时间戳,则初始值是`segments`;如果没有,则初始值是 `sequence`.
+   2. 如果初始值是 `sequence` 时,这时尝试将 `mode` 属性值设置为 `segments`,则会抛出异常.但是你可以将 `segments` 更改为 `sequence`,这意味着播放顺序会被固定.
+   3. 如果将一个视频资源分别分片成`0~3`秒,这时候使用 `segments` 模式,由于他们的 `timestampOffset` 都是从 0 开始,并且 `segments`模式下加载都是无顺序的,资源会产生竞争.播放会是乱序,并且时长只会在分片的时长(3s)
+
+   ```js
+    if (media.sourceBuffers.length === 0) {
+      sourceBuffer = media.addSourceBuffer(mime)
+      sourceBuffer.mode = "sequence"
+    }
+    const buffer1 = await fetch('part1.webm')
+    const data1 = await buffer1.arrayBuffer()
+    sourceBuffer.appendBuffer(data1)
+    const buffer2 = await fetch('part2.webm')
+    const data2 = await buffer2.arrayBuffer()
+    sourceBuffer.appendBuffer(data2)
+   ```
