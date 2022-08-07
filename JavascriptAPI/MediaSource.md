@@ -228,3 +228,37 @@ SourceBufferList.length
     const data2 = await buffer2.arrayBuffer()
     sourceBuffer.appendBuffer(data2)
    ```
+
+> `updating`:该属性用来检测 `sourceBuffer` 对象是否正在更新,即当前是否有 `SourceBuffer.appendBuffer()`,`SourceBuffer.remove()`
+
+* 如果正在更新,则返回 `true`
+
+>`timestampOffset`,该属性控制应用于随后附加到 SourceBuffer 的媒体片段内的时间戳偏移量
+
+* `timestampOffset` 的初始值是 0
+
+### Medthods
+
+>`attendBuffer(source)`,该方法将 ArrayBuffer、TypedArray 或 DataView 中的媒体片段数据添加到 SourceBuffer 对象中
+
+...
+
+### SourceBuffer Events
+
+> `abort`:当 `SourceBuffer.appendBuffer()` 结束时通过调用 SourceBuffer.abort() 触发
+
+`SourceBuffer.updating` 从 true 改变为 false
+
+>`error`:在 `SourceBuffer.appendBuffer()` 期间发生错误时触发
+
+`SourceBuffer.updating` 从 true 改变为 false
+
+> `update`: 在 SourceBuffer.appendBuffer() 完成时触发
+
+`SourceBuffer.updating` 从 true 改变为 false.这个事件在 **updateend** 之前触发.
+
+>`updateend`: 在 SourceBuffer.appendBuffer() 结束后触发
+
+这个事件在 **update** 后触发
+
+>`updatestart`:当 `SourceBuffer.updating` 从 false 改变为 true 时触发
