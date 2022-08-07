@@ -239,7 +239,13 @@ SourceBufferList.length
 
 ### Medthods
 
->`attendBuffer(source)`,该方法将 ArrayBuffer、TypedArray 或 DataView 中的媒体片段数据添加到 SourceBuffer 对象中
+>`appendBuffer(source)`
+
+* 该方法将 ArrayBuffer、TypedArray 或 DataView 中的媒体片段数据添加到 SourceBuffer 对象中
+
+> `remove(start, end)`
+
+* 移除指定时间范围的 `SourceBuffer`.只有在 `updating` 的属性为 false 时才能调用该方法,否则会调用 `abort()` 方法
 
 ...
 
