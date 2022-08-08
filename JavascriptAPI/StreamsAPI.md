@@ -205,3 +205,22 @@ reader.closed.then(() => {
 * `releaseLock()`:没有参数,也没有返回值.释放 reader 对流的锁定
   * 如果释放锁时关联流出错,reader 随后会以同样的方式发生错误
   * reader的所在仍有到处理的读取请求时无法释放,即`reade()`返回的promise尚未完成
+
+## 示例
+
+### 流式的读取异步迭代器
+
+```js
+function iteratorToStream(iterator) {
+  return new ReadableStream({
+    async pull(controller) {
+      const { value, done } = await iterator.next()
+      if (done) {
+        controller.close()
+      } else {
+        controller.enqueue(value)
+      }
+    }
+  })
+}
+```
