@@ -8,7 +8,8 @@
 3. [event](./node/node-event.md)
 4. [process](node/process.md)
 5. [child_process](node/child_process.md)
-6. [websocket](node/websocket.md)
+6. [websocket](node/ws/websocket.md)
+7. [http](node/http/http.md)
 
 ## JavaScript API
 
