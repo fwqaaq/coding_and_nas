@@ -67,6 +67,16 @@
    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
    ```
 
+>`AbortSignal.abort(reason?)`:该方法返回一个已经设置为 `aborted` 的 `AbortSignal`
+
+* 为以下片段的简写
+
+   ```js
+   const controller = new AbortController();
+   controller.abort();
+   return controller.signal;
+   ```
+
 ### **事件**
 
 >`abort`:当信号被中止时触发
