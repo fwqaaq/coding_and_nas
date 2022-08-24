@@ -288,7 +288,18 @@ fetch('https://foo.com').then(
   * type:"basic"
   * url:"https://foo.com"
 
->如果想象克隆Response对象,可以使用`Request`对象的clone()方法
+#### 构造函数
+
+```js
+new Response()
+new Response(body)
+new Response(body, options)
+```
+
+* 其中 body 为响应体，它可以是 `string`,`URLSearchParams`,`Blob`,`ArrayBuffer`,`TypedArray`,`DataView`,`FormData`,`ReadableStream` 其中任意一个
+* options 是一个对象：它包含 `status`(状态，例如 200),`statusText`(状态文本，例如 ok),`headers`(头部信息)
+
+>如果想要克隆Response对象,可以使用`Request`对象的clone()方法
 
 ```js
 const res = new Response(...)
