@@ -14,7 +14,7 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
      * `body?:BodyInit | null`:请求的`body`信息.可能是一个 Blob、BufferSource、FormData、URLSearchParams 或者 USVString 对象(<span style="color:red">GET或者HEAD方法的请求不能包含</span>)
      * `mode?: RequestMode`:请求的模式(是否使用`CORS`).`cors`**允许遵守CORS的跨域请求.(非简单跨域,需要预检)**,`navigate`,`no-cors`**允许不需要发送预检请求的跨域请求.(同源请求或者简单跨域)**,`same-origin`**任何跨域请求都不允许发送**
      * `cache?: RequestCache`:请求的 cache 模式：`default`,`no-store`、`reload` 、`no-cache`、`force-cache`或者 `only-if-cached`
-     * `credentials?: RequestCredentials`: 请求的 credentials，如`omit`(不发送cookie)、`same-origin`(同源时发送cookie) 或者 `include`(无论同源还是跨域都发送)
+     * `credentials?: RequestCredentials`: 请求的 credentials,如`omit`(不发送cookie)、`same-origin`(同源时发送cookie) 或者 `include`(无论同源还是跨域都发送)
      * `redirect?: RequestRedirect`.可用的 redirect 模式.`error`(如果产生重定向将自动终止并且抛出一个错误),`follow`(自动重定向),`manual`(手动重定向).默认是follow
      * `referrer?: string`:一个`USVString`可以是`no-referrer`、`client`或一个URL.**默认是 client**
      * `referrerPolicy?: ReferrerPolicy`:指定了 HTTP 头部 **referer** 字段的值.可能为以下值之一：`no-referrer`、 `no-referrer-when-downgrade`、`origin`、`origin-when-cross-origin`、`unsafe-url`
@@ -296,8 +296,8 @@ new Response(body)
 new Response(body, options)
 ```
 
-* 其中 body 为响应体，它可以是 `string`,`URLSearchParams`,`Blob`,`ArrayBuffer`,`TypedArray`,`DataView`,`FormData`,`ReadableStream` 其中任意一个
-* options 是一个对象：它包含 `status`(状态，例如 200),`statusText`(状态文本，例如 ok),`headers`(头部信息)
+* 其中 body 为响应体,它可以是 `string`,`URLSearchParams`,`Blob`,`ArrayBuffer`,`TypedArray`,`DataView`,`FormData`,`ReadableStream` 其中任意一个
+* options 是一个对象：它包含 `status`(状态,例如 200),`statusText`(状态文本,例如 ok),`headers`(头部信息)
 
 >如果想要克隆Response对象,可以使用`Request`对象的clone()方法
 
@@ -421,3 +421,77 @@ fetch("README.md").then(
      aborter()
    }).then(data => console.log(data)).catch(err => console.log(err))
    ```
+
+## [FetchEvent](https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent)
+
+>此事件类型为 `fetch`,并且只在 [service worker 全局作用域](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope)中。构造函数的形式一般不常用。
+
+### FetchEvent Properties
+
+* 比较重要的属性是 `request`,此属性是一个 `Request` 对象,并且该属性不能为空,如果是构造函数,需要初始化它的参数对象。
+
+### FetchEvent Methods
+
+>respondWith(Response|Promise(Response)):此方法会阻止浏览器的默认响应,而由自己提供
+
+参考:<https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent/respondWith>
+
+>waitUntil(promise): 该方法会通知浏览器传入的 promise 任务一直在进行中,仍然没有完成
+
+参考:<https://developer.mozilla.org/en-US/docs/Web/API/ExtendableEvent/waitUntil>
+
+### Http
+
+> 使用 Deno 写一个简单的 HTTP 静态服务器(浏览器原生提供的,依附于 FetchEvent)
+
+```ts
+const conn = Deno.listen({ hostname: '0.0.0.0', port: 80 })
+const decoder = new TextDecoder('utf-8')
+const httpConn = Deno.serveHttp(await conn.accept())
+```
+
+1. 首先监听一个端口, `Deno.listen` 接受一个 `listenOptions` 对象,同时返回一个 `Listener` 对象,该对象继承 `AsyncIterator`
+2. `conn.accept` 等待并返回 `Conn`(远程服务器连接对象)
+3. `serverHttp` 会等待客户端请求,如果有请求它会返回一个 `HttpConn` 对象,该对象是使用异步生成器包装的 `Request` 请求(`AsyncIterator<Request>`),所以它也继承 `AsyncIterator`
+
+```ts
+for await (const req of httpConn) {
+  const url = new URL(req.request.url)
+  if (url.pathname === '/favicon.ico') continue
+  const path = url.pathname === '/' ? '/index.html' : url.pathname
+  const ext = path.split('.').pop()
+  console.log(ext)
+  const file = await Deno.readFile(`.${path}`)
+  let res: Response | null = null
+  switch (ext) {
+    case 'html':
+      res = resBuilder(file, 'text/html')
+      break
+    case 'css':
+      res = resBuilder(file, 'text/css')
+      break
+    case 'js':
+      res = resBuilder(file, 'text/javascript')
+      break
+    case 'png':
+      res = resBuilder(file, 'image/png')
+      break
+    case 'jpg':
+      res = resBuilder(file, 'image/jpg')
+      break
+    case 'ico':
+      res = resBuilder(file, 'image/ico')
+      break
+  }
+  req.respondWith(res!)
+}
+
+function resBuilder(data: Uint8Array, contentType: string) {
+  return new Response(decoder.decode(data), {
+    headers: new Headers({ 'content-type': contentType }),
+    // headers: new Headers().set('content-type', contentType)!,
+  })
+}
+```
+
+* 注意: `headers: new Headers().set('content-type', contentType)!` 添加请求头时不能这样添加,不会更改 `content-type` 的内容
