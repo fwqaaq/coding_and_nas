@@ -58,7 +58,3 @@
 ## Performance
 
 * [RAIL模型](./Performance/RAIL模型.md)
-
-## ramda
-
-* [使用Ramda](./ramda/useRamda.md)
