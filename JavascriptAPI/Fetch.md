@@ -349,6 +349,37 @@ fetch("README.md").then(
 )
 ```
 
+* 同时我们也可以自己构造一个 readableStream 去读取流
+
+```js
+fetch('test.md')
+  .then((res) => {
+    const total = res.headers.get("content-length")
+    let count = 0
+    const reader = res.body.getReader();
+    return new ReadableStream({
+      start(controller) {
+        return pump();
+        function pump() {
+          return reader.read().then(({ done, value }) => {
+            if (done) {
+              controller.close();
+              return;
+            }
+            console.log(queue.size(value))
+            controller.enqueue(value);
+            console.log(`Download ${count += value.length} of ${total} ${(count / total * 100).toFixed(2)}%`)
+            return pump();
+          }, queue);
+        }
+      }
+    })
+  });
+const queue = new ByteLengthQueuingStrategy({
+  highWaterMark: 1
+})
+```
+
 ### 中断 Fetch
 
 * 使用`ReadableStream.cancel()`中断请求,并且丢弃所有数据

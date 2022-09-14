@@ -3,13 +3,11 @@
 ## node_modules
 
 1. [buffer](./node/Buffer.md)
-2. [stream](./node/stream.md)
-   * [stream-api](./node/stream-api.md)
-3. [event](./node/node-event.md)
-4. [process](node/process.md)
-5. [child_process](node/child_process.md)
-6. [websocket](node/ws/websocket.md)
-7. [http](node/http/http.md)
+2. [event](./node/node-event.md)
+3. [process](node/process.md)
+4. [child_process](node/child_process.md)
+5. [websocket](node/ws/websocket.md)
+6. [http](node/http/http.md)
 
 ## JavaScript API
 

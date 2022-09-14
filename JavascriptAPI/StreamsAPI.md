@@ -52,8 +52,8 @@
    5. `autoAllocateChunkSize?`:对于字节流,开发人员可以使用正整数值设置autoAllocateChunkSize以打开流的自动分配功能
       * 启用此功能后,流实现将自动分配一个具有给定整数大小的`ArrayBuffer`,并调用底层源代码,就好像消费者正在使用BYOB阅读器一样
 * `queueingStrategy?`:一个可选择定义流的排队策略的对象.这需要两个参数：
-   1. `highWaterMark`:非负整数.这定义了在应用背压之前可以包含在内部队列中的块的总数
-   2. `size(chunk)`:包含参数chunk的方法.这表示每个块使用的大小(**以字节为单位**).
+   1. `highWaterMark`:非负整数.这定义了在应用背压之前可以包含在内部队列中的分块的总数
+   2. `size(chunk)`:包含参数分块的方法.这表示每个分块使用的大小(**以字节为单位**).
 
 > ReadableStreamDefaultController
 
@@ -150,7 +150,7 @@ const readableStream = new ReadableStream({
     console.log("stream error:", err);
   }
 }, queueingStrategy);
-var size = queueingStrategy.size(chunk);
+const size = queueingStrategy.size(chunk);
 ```
 
 1. 构造函数:`new ByteLengthQueuingStrategy(highWaterMark)`
