@@ -54,13 +54,35 @@ console.log({} + []); // "[object Object]"
 
 `{}` 和 `[]` 都没有 `[@@toPrimitive]()` 方法。`{}` 和 `[]` 都从 `Object.prototype.valueOf` 继承 `valueOf()`，其返回对象自身。**因为返回值是一个对象，因此它被忽略。**因此，调用 `toString()` 方法。`{}.toString()` 返回 `"[object Object]"`，而 `[].toString()` 返回 `""`，因此这个结果是它们的串联：`"[object Object]"`。
 
-## 强制数字类型转换
+## [强制数字类型转换](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number#number_强制转换)
 
 > 数字类型包括 number 类型和 BigInt 类型。强制数字类型转换与强制 number 类型转换几乎相同，只是 BigInt 会按原样返回，而不是引起 TypeError。
 
-* [一元加](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Unary_plus)，它总是强制 number 类型转换。
+* 对于 Number 则总是返回自己
+* `undefined` 变成了 `NaN`、`null` 变成了 `0`、`true` 变成了 `1`、`false` 变成了 `0`
+* 如果它们包含**数字字面量**，字符串通过解析它们来转换。如果解析失败，返回的结果为 `NaN`。与实际数字字面量相比，它们有一些细微的差别。
+  * 忽略前导和尾随空格/行终止符。
+  * 前导数值 `0` 不会导致该数值成为八进制文本（或在严格模式下被拒绝）。
+  * `+` 和 `-` 允许在字符串的开头指示其符号。（在实际代码中，它们“看起来像”文字的一部分，但实际上是单独的一元运算符。）然而，该标志只能出现一次，不得后跟空格。
+  * `Infinity` 和 `-Infinity` 被当作是字面量。在实际代码中，它们是全局变量。
+  * 空字符串或仅空格字符串转换为 `0`。
+  * 不允许使用数字分隔符。
+* BigInt 抛出 TypeError，以防止意外的强制隐式转换损失精度。
+* Symbol 抛出 TypeError。
+* 对象首先按顺序调用 `@@toPrimitive]()`（将 `"number"` 作为 hint）、`valueOf()` 和 `toString()` 方法将其转换为原始值。然后将生成的原始值转换为数值。
 
-## 强制字符串类型转换
+>有两种方法可以在 JavaScript 中实现几乎相同的效果。
+
+* [一元加](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Unary_plus)，它总是强制 number 类型转换。
+* `Number()` 函数：`Number(x)` 使用相同的算法转换 `x`，除了 BigInt 不会抛出 TypeError，而是返回它的 Number 值，并且可能损失精度。
+
+### 整数转换
+
+ 一些操作需要整数，最值得注意的是那些适用于数组/字符串索引、日期/时间组件和数值基数的整数。执行上述数值强制转换步骤后，结果被[截断](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc)为整数（通过丢弃分数部分）。如果数值为 ±Infinity，则按原样返回。如果数值是 `NaN` 或 `-0`，则返回为 `0`。因此，结果总是整数（不是 `-0`）或 ±Infinity。
+
+ 值得注意的是，当转换到整数时，`undefined` 和 `null` 都会变成 `0`，因为 `undefined` 被转换为 `NaN`，`NaN` 也变成了 `0`。
+
+## [强制字符串类型转换](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String#字符串强制转换)
 
 >首先，对象通过依次调用 `[@@toPrimitive]()`（hint 为 "string"）、toString() 和 valueOf() 方法将其转换为原始值。然后将生成的原始值转换为一个字符串。
 
