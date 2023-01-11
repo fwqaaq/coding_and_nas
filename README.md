@@ -32,6 +32,10 @@
 * [MediaSource](./JavascriptAPI/MediaSource.md)
 * [AbortController](./JavascriptAPI/AbortController.md)
 
+### 类型转换
+
+* [type_coercion](./JavascriptAPI/type_coercion.md)
+
 ## Canvas
 
 * [webgpu](./Canvas/webgpu.md)
