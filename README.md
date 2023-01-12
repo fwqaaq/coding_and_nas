@@ -12,6 +12,7 @@
 
 * [http](http/http.md)
 * [源和站](http/origin_and_site.md)
+* [websocket](http/websocket.md)
 
 ## JavaScript API
 
