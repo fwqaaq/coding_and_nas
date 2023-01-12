@@ -31,7 +31,7 @@ summary: node中的child_process模块
 | maxBuffer   | 标准输出,错误输出最大允许的数据量(单位为字节),如果超出的话,子进程就会被杀死.默认是`200*1024`(即200k) |
 | windowsHide | 默认值false.隐藏通常在`Windows`系统上创建的子进程控制台窗口                                          |
 
-### spawn(command[, args][, options])
+### spawn(command\[, args][, options])
 
 1. `command`:要执行的命令
 2. `args`:字符串参数列表
@@ -81,7 +81,7 @@ const subprocess = spawn(process.argv[0], ['child_program.js'], {
 subprocess.unref();
 ```
 
-### exec(command[, options][, callback])
+### exec(command\[, options][, callback])
 
 >创建一个shell,然后在shell里执行命令.执行完成后,将`stdout`,`stderr`作为参数传入回调方法
 
@@ -93,7 +93,7 @@ exec("echo 'hello world' >> a.txt", (error, stdout, stderr) => {
 });
 ```
 
-### child_process.execFile(file[, args][, options][, callback])
+### child_process.execFile(file\[, args][, options][, callback])
 
 > 跟exec类似,但是不会创建一个新的shell,options和exec一样
 
@@ -107,7 +107,7 @@ execFile("./a.sh", (error, stdout, stderr) => {
 });
 ```
 
-### child_process.fork(modulePath[, args][, options])
+### child_process.fork(modulePath\[, args][, options])
 
 1. `modulePath`:子进程运行的模块
 2. `args`:字符串参数列表
