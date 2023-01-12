@@ -12,17 +12,19 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
   2. 第二个参数是<span style="color:red">**RequestInit**可选的</span>,是一个对象
      * `method?: string`:请求方法.默认值`GET`
      * `body?:BodyInit | null`:请求的`body`信息.可能是一个 Blob、BufferSource、FormData、URLSearchParams 或者 USVString 对象(<span style="color:red">GET或者HEAD方法的请求不能包含</span>)
-     * `mode?: RequestMode`:请求的模式(是否使用`CORS`).`cors`**允许遵守CORS的跨域请求.(非简单跨域,需要预检)**,`navigate`,`no-cors`**允许不需要发送预检请求的跨域请求.(同源请求或者简单跨域)**,`same-origin`**任何跨域请求都不允许发送**
+     * `mode?: RequestMode`:请求的模式(是否使用 `CORS`).`cors` **允许遵守CORS的跨源请求(非简单跨域,需要预检)**。`navigate`、`no-cors`**允许不需要发送预检请求的跨源请求.(同源请求或者简单跨源)**,`same-origin`**任何跨源请求都不允许发送**
      * `cache?: RequestCache`:请求的 cache 模式：`default`,`no-store`、`reload` 、`no-cache`、`force-cache`或者 `only-if-cached`
      * `credentials?: RequestCredentials`: 请求的 credentials,如`omit`(不发送cookie)、`same-origin`(同源时发送cookie) 或者 `include`(无论同源还是跨域都发送)
      * `redirect?: RequestRedirect`.可用的 redirect 模式.`error`(如果产生重定向将自动终止并且抛出一个错误),`follow`(自动重定向),`manual`(手动重定向).默认是follow
-     * `referrer?: string`:一个`USVString`可以是`no-referrer`、`client`或一个URL.**默认是 client**
+     * `referrer?: string`:一个`USVString`可以是 `no-referrer`、`client` 或一个URL.**默认是 client**
      * `referrerPolicy?: ReferrerPolicy`:指定了 HTTP 头部 **referer** 字段的值.可能为以下值之一：`no-referrer`、 `no-referrer-when-downgrade`、`origin`、`origin-when-cross-origin`、`unsafe-url`
-     * `integrity?: string`:包括请求的[`subresource integrity`](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)值
+     * `integrity?: string`:包括请求的 [`subresource integrity`](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity)值
      * `keepalive?: boolean`:浏览器是否允许请求存在超出页面生命周期
-     * `signal?: AbortSignal | null`:用于支持通过`AbortController`中断进行中的fetch()请求
+     * `signal?: AbortSignal | null`:用于支持通过 `AbortController` 中断进行中的 fetch() 请求
      * `headers?: HeadersInit`
 * 参考:<https://developer.mozilla.org/zh-CN/docs/Web/API/fetch>
+
+注意: <span>如果，在浏览器网页中向其他源发起请求，那么必定不是同源，需要使用 `mode: "no-cors"`</span>
 
 ## 基本用法
 
