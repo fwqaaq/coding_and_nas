@@ -24,7 +24,7 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
      * `headers?: HeadersInit`
 * 参考:<https://developer.mozilla.org/zh-CN/docs/Web/API/fetch>
 
-注意: <span>如果，在浏览器网页中向其他源发起请求，那么必定不是同源，需要使用 `mode: "no-cors"`</span>
+注意: <span>如果，在浏览器网页中向其他源发起请求，那么必定不是同源，需要使用 `mode: "no-cors"`</span>. `cors` 参数是表示后台必须支持跨源，而 no-cors 一般用于简单请求（图片等静态资源），但是会表明你的数据是 `opaque`，没有访问权限。
 
 ## 基本用法
 
