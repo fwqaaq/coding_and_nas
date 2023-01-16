@@ -41,7 +41,7 @@
    1. `start(controller)`:当对象被构造是立刻调用的方法.此方法的内容由开发人员定义.用于访问六,并执行其他任何必须的设置流的功能.
       * 如果这个过程是异步完成的,它可以返回一个promise,表明成功或者失败
       * 这个方法的`controller`是一个[ReadableStreamDefaultController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultController)或者[ReadableByteStreamController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableByteStreamController)具体取决于`type`属性的值
-   2. `pull(controller)?`:由开发人员定义.当流的内部队列不满时,会重复调用这个方法,直到队列补满.
+   2. `pull(controller)?`:由开发人员定义.当流的内部队列不满时,会重复调用这个方法,直到队列补满。<span style="color: red">一般用于控制流</span>
       * 如果`pull()`返回一个promise,那么它将不会再被调用,直到promise完成或者失败,该流将会出现错误
       * controller参数和start一样
    3. `cancel(reason)?`:如果应用程序标识该流将被取消(例如调用`ReadableStream.cancel()`),则将调用此方法,该方法由开发人员定义.
