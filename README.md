@@ -65,3 +65,7 @@
 ## Performance
 
 * [RAIL模型](./Performance/RAIL模型.md)
+
+## 一些示例
+
+[fetch 请求的进度示例](./JavascriptAPI/fetch/index_basic.html)
