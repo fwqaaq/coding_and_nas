@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,
+    body {
+      padding: 0%;
+      margin: 0%;
+      height: 100%;
+    }
+
+    body {
+      text-align: center;
+      font-size: 16px;
+      padding: 1rem 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+    }
+
+    #img {
+      width: 500px;
+      max-width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div id="status"></div>
+    <div id="progress"></div>
+    <img id="img" alt="">
+    <button onclick="window.location.reload()">reload</button>
+  </main>
+  <script src="index_basic.mjs"></script>
+</body>
+
+</html>
