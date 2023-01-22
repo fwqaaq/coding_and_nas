@@ -66,6 +66,10 @@
 
 * [RAIL模型](./Performance/RAIL模型.md)
 
+## nas
+
+* [网关设置](./nas_and_network/网关设置.md)
+
 ## 一些示例
 
 [fetch 请求的进度示例](./JavascriptAPI/fetch/index_basic.html)
