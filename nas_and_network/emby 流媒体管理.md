@@ -9,7 +9,7 @@
       * 所以 bt 容器的 download 文件夹应该挂载到 /movies/bt
       * 而 nastools 容器的 files 文件夹应该挂载到 /movies 整个文件夹以用于处理下载文件
 
-![[nas_and_network/emby 流媒体管理/media.png]]
+![media](./emby%20流媒体管理/media.png)
 
 ## bt 设置
 
@@ -25,16 +25,16 @@
 
 * 首先是 TMDB 的设置，这是最重要的。到该网站申请到它的 API：<https://www.themoviedb.org/settings/api>
 
-![[TMDB.png]]
+![TMDB](./emby%20流媒体管理/TMDB.png)
 
 * 如果推荐中有内容出现，就说明设置成功
 
 ### 目录设置
 
 1. 媒体库设置
-   * ![[media_package.png]]
+   * ![media_package](./emby%20流媒体管理/media_package.png)
 2. 目录同步，bt 中下载的目录都要和媒体库目录硬连接
-   * ![[sync_file.png]]
+   * ![sync_file](./emby%20流媒体管理/sync_file.png)
 3. 然后是 qb 下载器和 emby 服务器关联的设置，很简单。
    * 其中 emby 服务器有 api key，这在 api 密钥中自己创建
 
