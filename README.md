@@ -71,6 +71,7 @@
 * [网关设置](./nas_and_network/网关设置.md)
 * [emby 设置](./nas_and_network/emby%20流媒体管理.md)
 * [ADGuard Home](./nas_and_network/Adguard_home.md)
+* [开启 IPv6](./nas_and_network/IPv6.md)
 
 ## 一些示例
 
