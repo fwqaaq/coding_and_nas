@@ -26,9 +26,16 @@
 > 这里是作为主路由。merlingClash 最大的问题就是 IPv6 的 DNS 记录，对于访问只有 IPv6 的网站，不能建立连接。
 
 * 开启 IPv6，开启 IPv6 后会出现的问题（[开启 IPv6](https://mcreadme.gitbook.io/mc/Advanced/udp)），由于使用的是代理，如果代理的 ssl 证书有问题，在控制台会有一系列的警告（和 ssl 证书相关的）
-* 关于下发的 IPv6 DNS 服务器，实际上并不能解析只有 IPv6 的网站，所以需要手动指定公共的 DNS，可能是我的华硕路由器太老，并不能指定 IPv6 的 DNS。可以指定以下的 DNS 服务器
+
+> 未开启 merlingClash IPv6 的情况
+
+* 关于下发的 IPv6 DNS 服务器，<span color="red">实际上如果对方的网址只有 IPv6，并且没有开启 merlingClash IPv6 时，不会返回 AAAA 记录，</span>所以需要手动指定公共的 DNS，可能是我的华硕路由器太老，并不能指定 IPv6 的 DNS。可以指定以下的 DNS 服务器
 
 | 服务商     | DNS                                          |
 | ---------- | -------------------------------------------- |
 | Cloudflare | 2606:4700:4700::1111 、2606:4700:4700::1001  |
 | Google     | 2001:4860:4860::8888 、 2001:4860:4860::8844 |
+
+* 但是这会出现一个问题，IPv6 一般会优先访问，这样还是会造成网络卡顿的情况。参考：<https://ipw.cn/doc/ipv6/user/ipv4_ipv6_prefix_precedence.html#_3-调整网络前缀优先级-让-ipv4-访问优先>
+
+注意：<sapn style="color:red">下发的 DNS 服务器不要有 IPv6 的</sapn>
