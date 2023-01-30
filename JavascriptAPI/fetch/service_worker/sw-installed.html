@@ -1,0 +1,118 @@
+<html>
+
+<head>
+  <meta charset="utf8">
+  <title>Basic Service Worker Progress Indicator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+
+    body {
+      text-align: center;
+      font-size: 16px;
+      padding: 0 0 1rem 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+    }
+
+    .image {
+      margin: 0 auto 1.5rem auto;
+      display: inline-block;
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px 0 #ccc;
+    }
+
+    .image:before {
+      display: block;
+      content: "";
+      width: 100%;
+      padding-top: 52.5%;
+      /* 40:21 aspect ratio */
+    }
+
+    .image img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .notice {
+      display: none;
+      color: #f00;
+      margin-bottom: 1em;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto 2rem auto;
+    }
+
+    @media (min-width: 700px) {
+      main {
+        margin-top: 3rem;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <main>
+    <div class="image"><img id="img" onerror="status('Error loading image.  See console for details.')"
+        onload="status('Done')" /></div>
+    <div id="status">&nbsp;</div>
+    <h1 id="progress">&nbsp;</h1>
+    <div class="notice" id="new-service-worker-installed">Service Worker updated. Please reload.</div>
+    <button onclick="window.location.reload()">Reload</button>
+  </main>
+  <script>
+    const elStatus = document.getElementById('status');
+    const elProgress = document.getElementById('progress');
+    const elImg = document.getElementById('img');
+
+    navigator.serviceWorker.addEventListener('message', event => progress(event.data));
+    loadImage();
+
+    navigator.serviceWorker.register('sw-simple.js')
+      .then(reg => {
+        reg.onupdatefound = function () {
+          const newSw = reg.installing;
+          newSw.onstatechange = function () {
+            if (newSw.state === 'installed') {
+              document.getElementById('new-service-worker-installed').style.display = 'block';
+            }
+          };
+        };
+      })
+
+    function loadImage() {
+      status('loading inline <code>&lt;img&gt;</code>');
+      elImg.src = 'https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+    }
+
+    function progress({ loaded, total }) {
+      elProgress.innerHTML = Math.round(loaded / total * 100) + '%';
+    }
+
+    function status(text) {
+      elStatus.innerHTML = text;
+    }
+  </script>
+</body>
+
+</html>

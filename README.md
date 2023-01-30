@@ -76,4 +76,5 @@
 
 ## 一些示例
 
-[fetch 请求的进度示例](./JavascriptAPI/fetch/index_basic.html)
+* [fetch 请求的进度示例](./JavascriptAPI/fetch/index_basic.html)
+* [在 service worker 中使用 fetch](./JavascriptAPI/fetch/service_worker/index.html)

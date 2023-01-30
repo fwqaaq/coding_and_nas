@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,
+    body {
+      margin: 0%;
+      padding: 0%;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div id="status"> Installing Service Worker ...</div>
+  </main>
+</body>
+<script>
+  navigator.serviceWorker.register('./sw-simple.js').then(
+    reg => {
+      if (reg.installing) {
+        const sw = reg.installing || reg.waiting
+        sw.onstatechange = function () {
+          if (sw.state === 'installed') {
+            onward()
+          }
+        }
+      } else if (reg.active) {
+        status('Service Worker is installed and bot functioning as intended')
+      }
+    }
+  ).catch(error => status(error))
+
+  function onward() {
+    setTimeout(function () {
+      window.location.reload()
+    }, 2000)
+  }
+
+  const elStatus = document.getElementById('status')
+
+  function status(text) {
+    elStatus.innerHTML = text
+  }
+</script>
+
+</html>
