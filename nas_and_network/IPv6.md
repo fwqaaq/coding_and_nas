@@ -2,7 +2,7 @@
 
 >主路由进行 PPPoE 桥接之后，由主路由开启 IPv6，这样每个设备默认会分配到一个公网 IP 地址。
 
-[PPPoE 模式下 IPv6 的设置](./Ipv6/IPv6.png)
+![PPPoE 模式下 IPv6 的设置](./Ipv6/IPv6.png)
 
 开启 IPv6 代理后，会出现一系列的兼容问题，建议不要开启。<sapn style="color:red">IPv6 建议用于国内直连。</sapn>
 
@@ -39,3 +39,11 @@
 * 但是这会出现一个问题，IPv6 一般会优先访问，这样还是会造成网络卡顿的情况。参考：<https://ipw.cn/doc/ipv6/user/ipv4_ipv6_prefix_precedence.html#_3-调整网络前缀优先级-让-ipv4-访问优先>
 
 注意：<sapn style="color:red">下发的 DNS 服务器不要有 IPv6 的</sapn>
+
+## 群晖 docker 中设置 IPv6
+
+> 群晖 docker 网络默认是不开启 IPv6 的，这里我们需要手动设置桥接模式
+
+![ ](./Ipv6/docker_IPv6.png)
+
+* 其中 IPv6 的网络和 IPv4 一样，都是通过子网进行映射

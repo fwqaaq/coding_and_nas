@@ -72,6 +72,7 @@
 * [emby 设置](./nas_and_network/emby%20流媒体管理.md)
 * [ADGuard Home](./nas_and_network/Adguard_home.md)
 * [开启 IPv6](./nas_and_network/IPv6.md)
+  * [开启 docker IPv6](./nas_and_network/IPv6.md#群晖-docker-中设置-ipv6)
 
 ## 一些示例
 
