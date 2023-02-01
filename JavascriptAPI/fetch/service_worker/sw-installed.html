@@ -84,6 +84,8 @@
     const elProgress = document.getElementById('progress');
     const elImg = document.getElementById('img');
 
+    // service worker 传递消息之后，并不会立刻触发 message 事件，而是达到一定数量之后才会触发，
+    // message 事件也会调用同样的次数
     navigator.serviceWorker.addEventListener('message', event => progress(event.data));
     loadImage();
 

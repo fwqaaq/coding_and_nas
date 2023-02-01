@@ -207,7 +207,7 @@ fetch(r,{method:"POST",body:"body"})
 | destination: RequestDestination; | 返回一个描述被请求内容类型的字符串 |
 | clone(): Request;                | 深拷贝request                      |
 
-### Body
+## Body
 
 >Request和Response对象都继承了Body对象的属性和方法
 
@@ -267,7 +267,7 @@ request.json().then(function(data) {
    )
    ```
 
-### Response对象
+## Response对象
 
 >产生`Response`对象主要方式是调用`fetch()`,他会返回一个promise,这个`Response`对象代表实际HTTP的响应
 
@@ -290,7 +290,16 @@ fetch('https://foo.com').then(
   * type:"basic"
   * url:"https://foo.com"
 
-#### 构造函数
+> `type` 是一种响应的类型。它可能是以下某种值：
+
+* `basic`: 标准值，同源响应，暴露出了“Set-Cookie”之外的所有标头。
+* `cors`：从有效的跨源请求接收到响应。[某些标头和主体](https://fetch.spec.whatwg.org/#concept-filtered-response-cors)可以被访问。
+* `error`：网络错误。响应的状态为 0，标头为空且不可变。这是从 `Response.error()` 中获得的响应的类型。
+  * error 不会暴露给脚本，它会直接被 Promise 给拒绝
+* `opaque`：对跨源资源的“no-cors”请求的响应。[严格限制](https://fetch.spec.whatwg.org/#concept-filtered-response-opaque)。
+* `opaqueredirect`：fetch 请求是通过 `redirect: "manual"` 发出的。响应的状态是 0，标头是空的，主体是 null，trailer 是空的。
+
+### 构造函数
 
 ```js
 new Response()

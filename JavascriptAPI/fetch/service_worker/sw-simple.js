@@ -3,13 +3,17 @@ self.addEventListener('install', () => {
 })
 
 self.addEventListener('fetch', event => {
+  // 如果在 localhost 中，这里的 scope 作用域是：http://127.0.0.1:5501/JavascriptAPI/fetch/service_worker/
   const scope = self.registration.scope;
+  // request.url 是当前的请求页面：http://127.0.0.1:5501/JavascriptAPI/fetch/service_worker/index.html
   if (event.request.url === scope || event.request.url === scope + 'index.html') {
     const newUrl = scope + 'sw-installed.html';
-    console.log('respondWith', newUrl);
+    // 将新的页面给请求响应
     event.respondWith(fetch(newUrl))
   } else {
-    console.log('VER', 2, event.request.url)
+    // 如果 reques.url 变成图像的 url，则会从该分支 https://audio.fwqaq.us/banner/wlop.png
+    // 其中 event.request.url 还会有一些 chrome-extension 的请求
+    if (event.request.url.includes("chrome-extension")) return
     event.respondWith(fetchWithProgressMonitor(event))
   }
 })
@@ -33,24 +37,24 @@ function respondWithProgressMonitor(clientId, response) {
   }
 
   const contentLength = response.headers.get('content-length')
+  // chrome-extension 请求协议是没有 content-length 的
   if (contentLength === null) {
-    // don't track download progress if we can't compare against a total size
+    // 这里是没有得到总大小的情况
     console.warn('Response size header unavailable. Cannot measure progress');
     return response;
   }
 
   let loaded = 0;
-  debugReadIterations = 0; // direct correlation to server's response buffer size
+  debugReadIterations = 0; // 该大小与服务器的缓冲区大小有关
   const total = parseInt(contentLength, 10);
   const reader = response.body.getReader();
 
   return new Response(
     new ReadableStream({
       start(controller) {
-        // get client to post message. Awaiting resolution first read() progress
-        // is sent for progress indicator accuracy
+        // 让客户端发布消息。等待第一次解析 read() 进度
+        // 使用 read() 发送进度
         let client;
-        console.log(clients)
         clients.get(clientId).then(c => {
           client = c;
           read();
@@ -60,26 +64,21 @@ function respondWithProgressMonitor(clientId, response) {
           debugReadIterations++;
           reader.read().then(({ done, value }) => {
             if (done) {
-              console.log('read()', debugReadIterations);
+              // 关闭 readablestream
               controller.close();
               return;
             }
-
             controller.enqueue(value);
             loaded += value.byteLength;
-            // console.log('    SW', Math.round(loaded/total*100)+'%');
             dispatchProgress({ client, loaded, total });
             read();
           })
             .catch(error => {
-              // error only typically occurs if network fails mid-download
               console.error('error in read()', error);
               controller.error(error)
             });
         }
       },
-
-      // Firefox excutes this on page stop, Chrome does not
       cancel(reason) {
         console.log('cancel()', reason);
       }
@@ -88,5 +87,6 @@ function respondWithProgressMonitor(clientId, response) {
 }
 
 function dispatchProgress({ client, loaded, total }) {
+  // 不会立即调用
   client.postMessage({ loaded, total })
 }
