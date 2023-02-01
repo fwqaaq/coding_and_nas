@@ -24,10 +24,28 @@
       justify-content: space-between;
     }
 
+    .image {
+      width: 100%;
+      max-width: 500px;
+      margin: 1.5rem auto;
+      box-shadow: 0 0 10px 0 #ccc;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image::before {
+      display: block;
+      content: "";
+      padding-top: 50%;
+    }
+
     #img {
-      width: 500px;
-      max-width: 100%;
-      margin-bottom: 1rem;
+      position: absolute;
+      width: 100%;
+      top: 0%;
+      bottom: 0%;
+      left: 0%;
+      right: 0%;
     }
 
     button {
@@ -41,7 +59,9 @@
   <main>
     <div id="status"></div>
     <div id="progress"></div>
-    <img id="img" alt="">
+    <div class="image">
+      <img id="img" alt="">
+    </div>
     <button onclick="window.location.reload()">reload</button>
   </main>
   <script src="index_basic.mjs"></script>

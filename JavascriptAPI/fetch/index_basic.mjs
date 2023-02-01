@@ -6,7 +6,7 @@ function status(text) {
 
 status("downloading with fetch ...")
 
-fetch('https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500').then(
+fetch('https://audio.fwqaq.us/banner/wlop.png').then(
   response => {
     if (!response.ok) {
       throw new Error(`${response.status}: ${response.statusText}`)
