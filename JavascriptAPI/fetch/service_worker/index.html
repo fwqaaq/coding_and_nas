@@ -31,9 +31,12 @@
   navigator.serviceWorker.register('./sw-simple.js').then(
     reg => {
       if (reg.installing) {
+        // 如果 service worker 已经安装完成，则使用 reg.waiting 返回
         const sw = reg.installing || reg.waiting
+        // service worker 的 state 更改时，触发
         sw.onstatechange = function () {
           if (sw.state === 'installed') {
+            // 如果一直处于等待的状态，将刷新页面
             onward()
           }
         }

@@ -80,38 +80,41 @@
     <button onclick="window.location.reload()">Reload</button>
   </main>
   <script>
-    const elStatus = document.getElementById('status');
-    const elProgress = document.getElementById('progress');
-    const elImg = document.getElementById('img');
+    const elStatus = document.getElementById('status')
+    const elProgress = document.getElementById('progress')
+    const elImg = document.getElementById('img')
 
     // service worker 传递消息之后，并不会立刻触发 message 事件，而是达到一定数量之后才会触发，
     // message 事件也会调用同样的次数
-    navigator.serviceWorker.addEventListener('message', event => progress(event.data));
-    loadImage();
+    navigator.serviceWorker.addEventListener('message', event => progress(event.data))
+    loadImage()
 
     navigator.serviceWorker.register('sw-simple.js')
       .then(reg => {
+        // 获取新的 service worker 时，触发该事件
         reg.onupdatefound = function () {
-          const newSw = reg.installing;
+          // console.log("new SW")
+          const newSw = reg.installing
           newSw.onstatechange = function () {
+            // 一直处于等待状态
             if (newSw.state === 'installed') {
-              document.getElementById('new-service-worker-installed').style.display = 'block';
+              document.getElementById('new-service-worker-installed').style.display = 'block'
             }
-          };
-        };
+          }
+        }
       })
 
     function loadImage() {
-      status('loading inline <code>&lt;img&gt;</code>');
-      elImg.src = 'https://audio.fwqaq.us/banner/wlop.png';
+      status('loading inline <code>&lt;img&gt;</code>')
+      elImg.src = 'https://audio.fwqaq.us/banner/wlop.png'
     }
 
     function progress({ loaded, total }) {
-      elProgress.innerHTML = Math.round(loaded / total * 100) + '%';
+      elProgress.innerHTML = Math.round(loaded / total * 100) + '%'
     }
 
     function status(text) {
-      elStatus.innerHTML = text;
+      elStatus.innerHTML = text
     }
   </script>
 </body>
