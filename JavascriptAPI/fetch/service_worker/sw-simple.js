@@ -88,6 +88,6 @@ function respondWithProgressMonitor(clientId, response) {
 }
 
 function dispatchProgress({ client, loaded, total }) {
-  // 不会立即调用
+  // 不会立即调用 postMessage(message, tranferables?)
   client.postMessage({ loaded, total })
 }
