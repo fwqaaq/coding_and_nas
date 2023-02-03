@@ -32,6 +32,7 @@
 * [Date](./JavascriptAPI/Date.md)
 * [MediaSource](./JavascriptAPI/MediaSource.md)
 * [AbortController](./JavascriptAPI/AbortController.md)
+* [worker](./JavascriptAPI/worker.md)
 
 ### 类型转换
 
