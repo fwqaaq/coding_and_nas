@@ -58,3 +58,13 @@
 ![ ](./Ipv6/docker_IPv6.png)
 
 * 其中 IPv6 的网络和 IPv4 一样，都是通过子网进行映射
+
+## WIFI Calling
+
+> 国内对于 ultra mobile 的域名会进行 DNS 无染，但是即使是用 google、cloudflare 的公共 dns 服务器也是有问题的。
+
+* 但是，IPv6 的阿里云公共 DNS 是完全可以解析的，不仅仅是对 WIFI Calling，而且对国外，如 Youtube 的域名都是可以解析，而且很快：`2400:3200::1`
+* 不过 ultra mobile 至今未支持 IPv6。所以使用**域名劫持**还是得对应 IPv4
+* 可以在该网站：<https://dnschecker.org> 查找一下域名对应的 IPv4
+  * ss.epdg.epc.geo.mnc260.mcc310.pub.3gppnetwork.org
+  * epdg.epc.mnc260.mcc310.pub.3gppnetwork.org

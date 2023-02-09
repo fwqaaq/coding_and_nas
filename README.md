@@ -74,6 +74,7 @@
 * [ADGuard Home](./nas_and_network/Adguard_home.md)
 * [开启 IPv6](./nas_and_network/IPv6.md)
   * [开启 docker IPv6](./nas_and_network/IPv6.md#群晖-docker-中设置-ipv6)
+  * [阿里云公共 IPv6 DNS 对 WIFI Calling 的支持](./nas_and_network/IPv6.md#wifi-calling)
 
 ## 一些示例
 
