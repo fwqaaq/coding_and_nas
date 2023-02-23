@@ -10,6 +10,34 @@
 
 该站点只支持 ipv6：<http://6.ipw.cn>
 
+## IPv6 的 nat
+
+> 当 IPv6 的网关还是使用 nat 分发 IPv6 的内网地址时，与外部 IPv6 网站的通信则会判定本站是 IPv4 协议栈。
+
+在使用 dig 查询某网站的 aaaa 记录时，可能出现 IPv4 到 IPv6 地址的映射。例如 `::ffff:198.18.0.72`:
+
+```bash
+$dig aaaa 6.ipw.cn
+; <<>> DiG 9.10.6 <<>> aaaa 6.ipw.cn
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 20501
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;6.ipw.cn.    IN  AAAA
+
+;; ANSWER SECTION:
+6.ipw.cn.   1 IN  AAAA  ::ffff:198.18.0.72
+
+;; Query time: 0 msec
+;; SERVER: 198.18.0.2#53(198.18.0.2)
+;; WHEN: Thu Feb 23 18:15:49 CST 2023
+;; MSG SIZE  rcvd: 54
+```
+
+当 IPv6 启用的设备向 IPv4 地址发送数据包时，IPv6 栈通过在前面加上 `::ffff:` 的前缀，将 IPv4 地址映射为 IPv6 地址。这允许数据包通过 IPv6 网络发送到 IPv4 设备。<sapn style="color:red">如果使用 IPv6 协议，但是经过 nat 之后，其它设备分配到 IPv6 的子网地址，则默认的协议栈是 IPv4.</sapn>
+
 ## OpenClash
 
 > 这里只说明做其为旁路由的情况。
