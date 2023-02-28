@@ -18,8 +18,8 @@
 > 站点是 Top-level domains (TLDs)与它之前的域部分的组合
 
 * 假设 URL 是 <https://www.example.com:443/foo> ，则“站点”为 example.com
-* 但是，对于 .co.jp 或 .github.io 等域，仅使用 .jp 或 .io 的 TLD 不足以识别“站点”。同时，无法通过算法确定特定 TLD 的可注册域的级别。这就是创建“有效 TLD”(eTLD) 列表的原因。
-* 完整站点名称为 eTLD+1。例如，假设 URL 为 <https://my-project.github.io>，则 eTLD 为 .github.io，而 eTLD+1 则为 my-project.github.io，这就是一个“站点”。换句话说，eTLD+1 是有效的 TLD 加上它前面的域部分。
+* 但是，对于 `.co.jp` 或 `.github.io` 等域，仅使用 `.jp` 或 `.io` 的 TLD 不足以识别“站点”。同时，无法通过算法确定特定 TLD 的可注册域的级别。这就是创建“有效 TLD”(eTLD) 列表的原因。
+* 完整站点名称为 eTLD+1。例如，假设 URL 为 <https://my-project.github.io>，则 eTLD 为 `.github.io`，而 eTLD+1 则为 `my-project.github.io`，这就是一个“站点”。换句话说，eTLD+1 是有效的 TLD 加上它前面的域部分。
 
 | 源 A                          | 源 B                            | 源 A 和源 B 是否“同站”/“跨站”的解释 |
 | ----------------------------- | ------------------------------- | ----------------------------------- |
@@ -32,22 +32,29 @@
 
 ## origin
 
-> origin: 指 scheme、主机名（或者也可以称是域名）以及端口的组合。
+> origin: 指 scheme、主机名（或者也可以称是域名）以及端口的组合。准确的说，它应该叫做跨源资源共享。浏览器本身会限制源加载除自己资源以外的源的资源（只要端口、协议、域名不同都不是同一个源）
 
 当方案、主机名和端口均相同的组合的网站视为“同源”，否则视为“跨源”。
 
 ### [CORS（Cross-Origin Resource Sharing）](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)
 
->准确的说，它应该叫做跨源资源共享。浏览器本身会限制源加载除自己资源以外的源的资源（只要端口、协议、域名不同都不是同一个源）
+>与**简单请求**不同，“需预检的请求”要求必须首先使用 `OPTIONS` 方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。服务器必须响应 `Access-Control-Allow-Credentials: true` 才可以表明请求中可以携带凭据（cookie）
 
-* 例如 XMLHttpRequest 或者 Fetch 都要遵循CORS。但是有些简单请求并不会触发 CROS 预检请求。使用 GET、HEAD、POST 方法之一，并且只能修改下列标头（Accept、Accept- Language、Content-Language、Content-Type、Range），并且 `Content-Type` 只能是 `text/plain`、`multipart/form-data`、`application/x-www-form-urlencoded` 三者之一，并且请求中不能使用 **`ReadableStream`** 对象。并且使用 **Access-Control-Allow-Origin: ***、**Origin** 标头来控制。
-* 但是当预检请求中需要包含凭据（览器发起跨源请求的时候，是不会主动带上 cookie 的，如果一个请求需要 cookie，需要开发者设置以下选项）那么请求时必须指定 withCredentials 标志为 true，并且响应中必须指定 Access-Control-Allow-Credentials: true 来表明可以携带 cookie （即 Set-Cookie 标头）
+* 例如 XMLHttpRequest 或者 Fetch 都要遵循 CORS。<span style="color:red">但是简单请求并不会触发 CROS 预检请求。</span>
+* 但是当预检请求中需要包含凭据（览器发起跨源请求的时候，是不会主动带上 cookie 的，如果一个请求需要 cookie，需要开发者设置以下选项）那么请求时必须指定 xhr 的标志 `withCredentials` 标志为 true，或者 fetch 的 `credentials` 是同源发送 cookie，还是跨源也发送 cookie。
 
 >在响应附带身份凭证的请求时：
 
-* 服务器不能将 Access-Control-Allow-Origin 的值设为通配符“*”，而应将其设置为特定的域，如：Access-Control-Allow-Origin: <https://example.com>。
+* 服务器不能将 `Access-Control-Allow-Origin` 的值设为通配符“*”，而应将其设置为特定的域，如：Access-Control-Allow-Origin: <https://example.com>。
 * 服务器不能将 Access-Control-Allow-Headers 的值设为通配符“*”，而应将其设置为首部名称的列表，如：Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
 * 服务器不能将 Access-Control-Allow-Methods 的值设为通配符“*”，而应将其设置为特定请求方法名称的列表，如：Access-Control-Allow-Methods: POST, GET
+
+### [简单请求](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS#%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82)
+
+1. 使用 `GET`、`HEAD`、`POST` 方法之一
+2. 除了被用户代理自动设置的标头字段（例如 `Connection`、`User-Agent` 或其他在 Fetch 规范中定义为禁用标头名称的标头），允许人为设置的字段为 Fetch 规范定义的对 CORS 安全的标头字段集合。该集合为：`Accept`、`Accept-Language`、`Content-Language`、`Content-Type`（需要注意额外的限制）、`Range`（只允许简单的范围标头值 如 bytes=256- 或 bytes=127-255）
+3. `Content-Type` 标头所指定的媒体类型的值仅限于下列三者之一：`text/plain`、`multipart/form-data`、`application/x-www-form-urlencoded`
+4. 请求中没有使用 ReadableStream 对象。
 
 ## [Cookie](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Cookies)
 
