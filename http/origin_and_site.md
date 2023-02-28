@@ -41,9 +41,9 @@
 >与**简单请求**不同，“需预检的请求”要求必须首先使用 `OPTIONS` 方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。服务器必须响应 `Access-Control-Allow-Credentials: true` 才可以表明请求中可以携带凭据（cookie）
 
 * 例如 XMLHttpRequest 或者 Fetch 都要遵循 CORS。<span style="color:red">但是简单请求并不会触发 CROS 预检请求。</span>
-* 但是当预检请求中需要包含凭据（览器发起跨源请求的时候，是不会主动带上 cookie 的，如果一个请求需要 cookie，需要开发者设置以下选项）那么请求时必须指定 xhr 的标志 `withCredentials` 标志为 true，或者 fetch 的 `credentials` 是同源发送 cookie，还是跨源也发送 cookie。
+* <span style="color:red">但是当预检请求中需要包含凭据（览器发起跨源请求的时候，是不会主动带上 cookie 的，如果一个请求需要 cookie，需要开发者设置以下选项）那么请求时必须指定 xhr 的标志 `withCredentials` 标志为 true，或者 fetch 的 `credentials` 是同源发送 cookie，还是跨源也发送 cookie。</span>
 
->在响应附带身份凭证的请求时：
+>在**响应附带身份凭证的请求**时：
 
 * 服务器不能将 `Access-Control-Allow-Origin` 的值设为通配符“*”，而应将其设置为特定的域，如：Access-Control-Allow-Origin: <https://example.com>。
 * 服务器不能将 Access-Control-Allow-Headers 的值设为通配符“*”，而应将其设置为首部名称的列表，如：Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
@@ -66,7 +66,7 @@
 
 ### cookie 和跨源
 
-* CORS 响应中设置的 cookie 适用一般性第三方 cookie 策略。在携带 Cookie 标头时不受同源策略的影响，如果是不同的源，响应时会产生跨源的错误，这并不是 cookie 本身的问题。<span style="color:red">LCookie 并不会知道请求标头是否要跨源</sapn>
+* CORS 响应中设置的 cookie 适用一般性第三方 cookie 策略。在携带 Cookie 标头时不受同源策略的影响，如果是不同的源，响应时会产生跨源的错误，这并不是 cookie 本身的问题。<span style="color:red">Cookie 并不会知道请求标头是否要跨源</sapn>
 * 限制访问 cookie，表示的是同站下是否能访问 cookie，将 cookie 携带在请求标头中发送
 
 1. Domain 属性，设置哪些主机可以接受 cookie，如果不设置，只有源站可以访问，如果设置了，那么一定包含子域名
