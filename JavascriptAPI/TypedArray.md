@@ -35,7 +35,7 @@ console.log(ArrayBuffer.isView(buffer))//false
 console.log(ArrayBuffer.isView(float))//true
 ```
 
->[ArrayBufferView](https://developer.mozilla.org/zh-CN/docs/Web/API/ArrayBufferView)是一种简化规范的辅助数据类型，它不是一个接口，也没有实现它的对象
+>[ArrayBufferView](https://developer.mozilla.org/zh-CN/docs/Web/API/ArrayBufferView) 是一种简化规范的辅助数据类型，它不是一个接口，也没有实现它的对象
 
 ## TypedArray
 
