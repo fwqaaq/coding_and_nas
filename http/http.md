@@ -42,7 +42,7 @@
    - 引⼊内容协商机制，包括语⾔、编码、类型等，并允许客户端和服务器之间约定以 最合适的内容进⾏交换。
    - 凭借 [Host](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Host) 标头，能够使不同域名配置在同⼀个 IP 地址的服务器上。
 
-// 请求
+   // 请求
 
    ```http
    GET /en-US/docs/Glossary/Simple\_header HTTP/1.1
@@ -54,7 +54,7 @@
    Referer: https://developer.mozilla.org/en-US/docs/Glossary/Simple\_header
    ```
 
-//响应
+   //响应
 
    ```http
    200 OK
