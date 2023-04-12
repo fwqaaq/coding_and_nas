@@ -36,7 +36,9 @@ $dig aaaa 6.ipw.cn
 ;; MSG SIZE  rcvd: 54
 ```
 
-当 IPv6 启用的设备向 IPv4 地址发送数据包时，IPv6 栈通过在前面加上 `::ffff:` 的前缀，将 IPv4 地址映射为 IPv6 地址。这允许数据包通过 IPv6 网络发送到 IPv4 设备。<sapn style="color:red">如果使用 IPv6 协议，但是经过 nat 之后，其它设备分配到 IPv6 的子网地址，则默认的协议栈是 IPv4。</sapn>
+当 IPv6 启用的设备向 IPv4 地址发送数据包时，IPv6 栈通过在前面加上 `::ffff:` 的前缀，将 IPv4 地址映射为 IPv6 地址。这允许数据包通过 IPv6 网络发送到 IPv4 设备。
+
+<sapn style="color:red">这是由于 Clash 开启了 fake-ip，给的假地址，是与真实地址的映射。在使用 IPv6 协议，并且经过 nat 之后，会出现这种情况。如果仅是 IPv4 地址，则不会有 `::ffff:` 前缀。</sapn>
 
 ## OpenClash
 
@@ -88,7 +90,39 @@ $dig aaaa 6.ipw.cn
   * ss.epdg.epc.geo.mnc260.mcc310.pub.3gppnetwork.org
   * epdg.epc.mnc260.mcc310.pub.3gppnetwork.org
 
-## DNS 模式以及缓存
+## DNS 泄露
+
+> 对于 DNS 泄露可能会有以下问题。DNS 泄露后，会请求本地的 DNS 服务器，有的网站会对此进行侦测，然后判定，对你的 IP 进行限制。
+
+* 如果是 Clash 一定要开启 fake-ip，不要在本地进行 DNS 请求，并要做好分流规则。
+   1. 订阅转换地址：<https://sub.xeton.dev/>
+   2. 分流规则地址：<https://cf.buliang0.cf/clash-rules/nodnsleak.ini>，也可以根据以下规则集自定义设置。
+
+```ini
+[custom]
+;解决DNS泄露，无分流群组
+ruleset=🚀 节点选择,[]DOMAIN-SUFFIX,xn--ngstr-lra8j.com
+ruleset=🚀 节点选择,[]DOMAIN-SUFFIX,services.googleapis.cn
+ruleset=🚀 节点选择,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleCNProxyIP.list
+ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
+ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
+ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
+ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list
+ruleset=REJECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
+ruleset=REJECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
+ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
+ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIp.list
+ruleset=DIRECT,[]GEOIP,CN,no-resolve
+ruleset=🚀 节点选择,[]FINAL
+
+custom_proxy_group=🚀 节点选择`select`[]♻️ 自动选择`[]DIRECT`.*
+custom_proxy_group=♻️ 自动选择`url-test`.*`http://www.gstatic.com/generate_204`300,,50
+
+enable_rule_generator=true
+overwrite_original_rules=true
+```
+
+### DNS 模式以及缓存
 
 > 一些设备和浏览器会对个别网站进行缓存，所以会出现无法访问网站个例的现象。在 Clash 的 `Redir-Host` 模式下，Clash 会对 DNS 服务器进行实际的请求，并且会将请求的 IP 地址（真实）存储到 DNS 缓存中，所以一般都会选择不缓存，但是在请求 DNS 的过程中，还是会被防火墙嗅探到。
 
@@ -96,7 +130,7 @@ $dig aaaa 6.ipw.cn
 
 在每次切换地址的时候，部分网站都会进行安全性检测（如重新登录等）。但是在切换的期间不能进行登录，这时候我们的 IP 并不会显示到国外，而是在国内，并且如果是 Chromium 系的浏览器会有一系列的缓存模式，使你丧失对该网站的重新控制权，这时候，我们可以清除浏览器的历史记录，必要的情况下**禁止缓存**，有的网站甚至会种下 Cookie（例如 ChatGpt），这时候要有针对性的去清除它们，才可以访问。但是 Safria 浏览器的缓存模式和它们似乎有一定区别，所以并不会受到影响。
 
-## IPv6 回落
+### IPv6 回落
 
 > 问题：在开启 IPv6 时，使用 APPLE TV 可能出现刚打开 YouTube 的一瞬间可以访问，之后就无法访问的情况。（其它设备都可以访问）
 
