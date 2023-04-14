@@ -12,7 +12,7 @@
 
 ## IPv6 的 nat
 
-> 当 IPv6 的网关还是使用 nat 分发 IPv6 的内网地址时，与外部 IPv6 网站的通信则会判定本站是 IPv4 协议栈。
+> 当 IPv6 的网关还是使用 nat 分发 IPv6 的内网地址时，并且在只有链路本地地址（`fe80` 开头）时，无法访问 IPv6 地址。
 
 在使用 dig 查询某网站的 aaaa 记录时，可能出现 IPv4 到 IPv6 地址的映射。例如 `::ffff:198.18.0.72`:
 
@@ -38,7 +38,7 @@ $dig aaaa 6.ipw.cn
 
 当 IPv6 启用的设备向 IPv4 地址发送数据包时，IPv6 栈通过在前面加上 `::ffff:` 的前缀，将 IPv4 地址映射为 IPv6 地址。这允许数据包通过 IPv6 网络发送到 IPv4 设备。
 
-<sapn style="color:red">这是由于 Clash 开启了 fake-ip，给的假地址，是与真实地址的映射。在使用 IPv6 协议，并且经过 nat 之后，会出现这种情况。如果仅是 IPv4 地址，则不会有 `::ffff:` 前缀。</sapn>
+<span style="color:red">代理端如果有 IPv6 地址，会替我们访问该仅有 IPv6 地址的网站，并将该网站地址转换为兼容 IPv4 的 IPv6 地址。这样不支持 IPv6 的设备就可以访问了。s</sapn>
 
 ## OpenClash
 
