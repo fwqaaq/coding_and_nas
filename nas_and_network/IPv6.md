@@ -38,7 +38,9 @@ $dig aaaa 6.ipw.cn
 
 当 IPv6 启用的设备向 IPv4 地址发送数据包时，IPv6 栈通过在前面加上 `::ffff:` 的前缀，将 IPv4 地址映射为 IPv6 地址。这允许数据包通过 IPv6 网络发送到 IPv4 设备。
 
-<span style="color:red">代理端如果有 IPv6 地址，会替我们访问该仅有 IPv6 地址的网站，并将该网站地址转换为兼容 IPv4 的 IPv6 地址。这样不支持 IPv6 的设备就可以访问了。s</sapn>
+<span style="color:red">代理端如果有 IPv6 地址，会替我们访问该仅有 IPv6 地址的网站，并将该网站地址转换为兼容 IPv4 的 IPv6 地址。这样不支持 IPv6 的设备就可以访问了。</sapn>
+
+> 当你使用 fake-ip 的时候（例如，Shadowrocket、Clash 等），代理服务器会替你访问 IPv6 的地址，同时帮你转换到兼容 IPv4 的 IPv6 地址。
 
 ## OpenClash
 
