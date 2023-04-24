@@ -74,3 +74,11 @@
 3. SameSite：请参考
    * <https://github.com/mdn/translated-content/pull/3096#issuecomment-1123104136>
    * <https://github.com/mdn/translated-content/pull/11030#discussion_r1065450825>
+
+> 对于 Cookie 的设置（Set-Cookie），会受到 XHR 的 [withCredentials](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/withCredentials) 以及 Fetch 的 [credentials](../JavascriptAPI/Fetch.md) 这两个属性影响。这两个属性都是对响应的 Cookie 进行设定。
+
+* `withCredentials`：属性只有在你请求之前设置为 `true`，才可以保存 Cookie 到浏览器。
+* `credentials`：浏览器会根据该属性的值如何控制 `Cookie`、`Authentication` 等客户端凭证
+  * `omit` 属性一般用于跨源的简单请求，它会忽略响应的凭证（例如，任意的 `Set-Cookie` 设置的值）
+  * `same-origin` 属性一般用于同源 URL，只有在同源时才会保存值
+  * `include` 属性同源跨源都可以使用
