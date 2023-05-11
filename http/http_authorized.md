@@ -8,6 +8,16 @@
 2. 之后，想要使用服务器对自己身份进行验证的客户端，可以通过包含凭据的 `Authorization` 请求标头进行验证。
 3. 通常，客户端会向用户显示密码提示，然后发送包含正确的 `Authorization` 标头的请求
 
+## [Authenticate 标头](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Authorization)
+
+> HTTP `Authorization` 请求标头用于提供服务器验证用户代理身份的凭据，允许访问受保护的资源。
+
+该标头一般以身份验证方案的名称开头，例如 Basic 身份验证方案。
+
+```http
+Authorization: Basic <credentials>
+```
+
 ## [WWW-Authenticate](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/WWW-Authenticate)
 
 >该响应标头提供如何进行验证的信息，其中至少包含有一种质询方式。
@@ -45,7 +55,7 @@
 
 ## JWT（Json Web Token）
 
-![Token](./token.png)
+![Token](./example/token.png)
 
 1. 用户第一次登录网页，服务器会生成一个 JWT，服务器不需要保存JWT，只需要保存**JWT 签名的密文**
 2. 接着把JWT发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储
