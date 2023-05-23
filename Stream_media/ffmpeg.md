@@ -472,49 +472,49 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
 
 ### filter
 
-- **音频filter**
-  - `adelay` filter实现不同声道的延时处理。使用参数如下`adelay=1500|0|500`，这个例子中实现第一个声道的延迟1.5s，第三个声道延迟0.5s，第二个声道不做调整。
-  - `aecho` filter实现回声效果，具体参考 [http://ffmpeg.org/ffmpeg-filters.html#aecho](http://ffmpeg.org/ffmpeg-filters.html#aecho) 。
-  - `amerge` filter将多个音频流合并成一个多声道音频流。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#amerge-1](http://ffmpeg.org/ffmpeg-filters.html#amerge-1) 。
-  - `ashowinfo` filter显示每一个audio frame的信息，比如时间戳、位置、采样格式、采样率、采样点数等。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#ashowinfo](http://ffmpeg.org/ffmpeg-filters.html#ashowinfo) 。
-  - `pan`filter特定声道处理，比如立体声变为单声道，或者通过特定参数修改声道或交换声道。主要有两大类：混音处理，比如下面的例子`pan=1c|c0=0.9*c0+0.1*c1`，实现立体声到单声道的变换；声道变换，比如5.1声道顺序调整，`pan="5.1| c0=c1 | c1=c0 | c2=c2 | c3=c3 | c4=c4 | c5=c5"`。
-  - `silencedetect`和`silenceremove` filter根据特定参数检测静音和移除静音。
-  - `volume`和`volumedetect` filter这两个filter分别实现音量调整和音量检测。
-  - audio source filter`aevalsrc` filter按照特定表达式生成音频信号。`anullsrc` filter生成特定的原始音频数据，用于模板或测试。`anoisesrc` filter生成噪声音频信号。`sine` filter生成正弦波音频信号。
-  - audio sink filter`abuffersink` filter和`anullsink` filter，这些filter只是用于特定情况下结束filter chain。
-- **视频filter**
-  - `blend`和`tblend` filter将两帧视频合并为一帧。具体参数参考 [http://ffmpeg.org/ffmpeg-filters.html#blend](http://ffmpeg.org/ffmpeg-filters.html#blend) 。
-  - `crop` filter按照特定分辨率裁剪输入视频，具体参数参考 [http://ffmpeg.org/ffmpeg-filters.html#crop](http://ffmpeg.org/ffmpeg-filters.html#crop) 。
-  - `drawbox`、`drawgrid`、`drawtext` filter绘制box（对话框）、grid（表格）、text（文本）。
-  - `edgedetect` filter边缘检测filter。
-  - `fps` filter按照指定帧率输出视频帧（丢帧或者复制）。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#fps-1](http://ffmpeg.org/ffmpeg-filters.html#fps-1) 。
-  - `hflip`、`vflip` filter水平和垂直镜像。
-  - `histogram` filter生成每帧的各颜色分量的直方图。
-  - `noise` filter在输入视频帧中添加白噪声。
-  - `overlay` filter视频叠加。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#overlay-1](http://ffmpeg.org/ffmpeg-filters.html#overlay-1) 。
-  - `pad` filter视频边界填充。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#pad-1](http://ffmpeg.org/ffmpeg-filters.html#pad-1) 。
-  - `rotate` filter视频任意角度旋转。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#rotate](http://ffmpeg.org/ffmpeg-filters.html#rotate) 。
-  - `scale` filter使用libswscale库完成视频缩放的filter。
-  - `showinfo` filter显示视频帧的参数信息，比如时间戳、采样格式、帧类型等。
-  - `subtitles` filter使用libass库绘制subtitle（字幕）。
-  - `thumbnail` filter提取缩略图的filter。
-  - `transpose` filter图像转置的filter。参数参考 [http://ffmpeg.org/ffmpeg-filters.html#transpose](http://ffmpeg.org/ffmpeg-filters.html#transpose) 。
+- **音频 filter**
+  - `adelay` filter 实现不同声道的延时处理。使用参数如下 `adelay=1500|0|500`，这个例子中实现第一个声道的延迟 1.5s，第三个声道延迟 0.5s，第二个声道不做调整。
+  - `aecho` filter 实现回声效果，具体参考 <http://ffmpeg.org/ffmpeg-filters.html#aecho>。
+  - `amerge` filter 将多个音频流合并成一个多声道音频流。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#amerge-1>。
+  - `ashowinfo` filter 显示每一个音频帧的信息，比如时间戳、位置、采样格式、采样率、采样点数等。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#ashowinfo>。
+  - `pan`filter 特定声道处理，比如立体声变为单声道，或者通过特定参数修改声道或交换声道。主要有两大类：混音处理，比如下面的例子 `pan=1c|c0=0.9*c0+0.1*c1`，实现立体声到单声道的变换；声道变换，比如 5.1 声道顺序调整，`pan="5.1| c0=c1 | c1=c0 | c2=c2 | c3=c3 | c4=c4 | c5=c5"`。
+  - `silencedetect` 和 `silenceremove` filter 根据特定参数检测静音和移除静音。
+  - `volume` 和 `volumedetect` filter 这两个 filter 分别实现音量调整和音量检测。
+  - audio source filter：`aevalsrc` filter 按照特定表达式生成音频信号。`anullsrc` filter 生成特定的原始音频数据，用于模板或测试。`anoisesrc` filter 生成噪声音频信号。`sine` filter 生成正弦波音频信号。
+  - audio sink filter：`abuffersink` filter 和 `anullsink` filter，这些 filter 只是用于特定情况下结束链式 filter。
+- **视频 filter**
+  - `blend` 和 `tblend` filter 将两帧视频合并为一帧。具体参数参考 <http://ffmpeg.org/ffmpeg-filters.html#blend>。
+  - `crop` filter按照特定分辨率裁剪输入视频，具体参数参考 <http://ffmpeg.org/ffmpeg-filters.html#crop>。
+  - `drawbox`、`drawgrid`、`drawtext` filter 绘制 box（对话框）、grid（表格）、text（文本）。
+  - `edgedetect` filter 边缘检测 filter。
+  - `fps` filter 按照指定帧率输出视频帧（丢帧或者复制）。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#fps-1>。
+  - `hflip`、`vflip` filter 水平和垂直镜像。
+  - `histogram` filter 生成每帧的各颜色分量的直方图。
+  - `noise` filter 在输入视频帧中添加白噪声。
+  - `overlay` filter 视频叠加。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#overlay-1>。
+  - `pad` filter 视频边界填充。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#pad-1>。
+  - `rotate` filter 视频任意角度旋转。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#rotate>。
+  - `scale` filter 使用 libswscale 库完成视频缩放的 filter。
+  - `showinfo` filter 显示视频帧的参数信息，比如时间戳、采样格式、帧类型等。
+  - `subtitles` filter 使用 libass 库绘制 subtitle（字幕）。
+  - `thumbnail` filter 提取缩略图的 filter。
+  - `transpose` filter 图像转置的 filter。参数参考 <http://ffmpeg.org/ffmpeg-filters.html#transpose>。
 - **source filter**
 
-    主要有`buffer`、`cellatuo`、`coreimagesrc`、`mptestsrc`、`life`等filter，具体效果建议参考ffmpeg用户手册。
+    主要有 `buffer`、`cellatuo`、`coreimagesrc`、`mptestsrc`、`life` 等 filter，具体效果建议参考 ffmpeg 用户手册。
 
 - **source sink**
 
     主要有`buffersink`、`nullsink`两个filter。
 
-- **多媒体filter**
-  - `ahistogram` filter将音频转化为视频输出，并显示为音量的直方图。
-  - `concat` filter将音频流、视频流拼接成一个。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#concat](http://ffmpeg.org/ffmpeg-filters.html#concat) 。
-  - `metadata`、`ametadata` filter操作metadata信息。
-  - `setpts`、`asetpts` filter改变输入音频帧或视频帧的pts。
-  - `showfreqs`、`showspectrum`、`showspertrumpic`、`showvolume`、`showwaves` filter将输入音频转换为视频显示，并显示频谱、音量等信息
-  - `split`、`asplit` filter将输入切分为多个相同的输出。
-  - source filter主要是`movie`、`amovie` filter。从movie容器中读取音频或者视频帧。
+- **多媒体 filter**
+  - `ahistogram` filter 将音频转化为视频输出，并显示为音量的直方图。
+  - `concat` filter 将音频流、视频流拼接成一个。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#concat](http://ffmpeg.org/ffmpeg-filters.html#concat) 。
+  - `metadata`、`ametadata` filter 操作 metadata 信息。
+  - `setpts`、`asetpts` filter 改变输入音频帧或视频帧的pts。
+  - `showfreqs`、`showspectrum`、`showspertrumpic`、`showvolume`、`showwaves` filter 将输入音频转换为视频显示，并显示频谱、音量等信息
+  - `split`、`asplit` filter 将输入切分为多个相同的输出。
+  - source filter 主要是 `movie`、`amovie` filter。从 movie 容器中读取音频或者视频帧。
 
 ## 剪切与合并
 
@@ -572,7 +572,7 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
 ffmpeg -i input.mp4 -map 0 -map 0:a:1 -c copy out.mp4
 ```
 
-- **反向的map命令**（在map命令的参数前加负号）。使用 `-map -0:a:0` 这一命令，FFmpeg在选择时就会忽略第一个音轨，例如该视频有五个音频，只想保留除第一个的其他四个
+- **反向的 map 命令**（在map命令的参数前加负号）。使用 `-map -0:a:0` 这一命令，FFmpeg在选择时就会忽略第一个音轨，例如该视频有五个音频，只想保留除第一个的其他四个
 
 ```bash
 ffmpeg -i input.mp4 -map 0 -map -0:a out.mp4

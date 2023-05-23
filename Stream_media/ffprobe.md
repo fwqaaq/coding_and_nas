@@ -9,9 +9,9 @@ ffprobe [OPTION] file
 ```
 
 - `-show_format`：显示输入多媒体流的容器格式信息
-- `-show_streams`显示输入多媒体流中每一个流的信息
-- `-i input_file` 指定输入文件
-- `-print_format json` json 形式输出
+- `-show_streams`：显示输入多媒体流中每一个流的信息
+- `-i input_file`：指定输入文件
+- `-print_format json`：json 形式输出
 - `-of / -print_format`：指定任意一种形式输出 **default/compact/csv/flat/ini/json/xml**
 - 以下指定 json 形式的信息输出**媒体流**和**容器格式**的信息，输入 `c.ts` 形式的文件
 
@@ -216,7 +216,7 @@ ffprobe [OPTION] file
   - `PAR(Pixel Aspect Ratio)`：像素数宽高比，图像的横向采集点数与纵向采集点数的比值，即像素个数的比值
   - `DAR(Display Aspect Ratio)`：显示宽高比，图像最终展示的宽高比，播放器在渲染视频帧时，需要保持DAR的比例。
   - **DAR = PAR * SAR**
-  - 例如：每个方格代表一个像素，宽度为5个像素组成，高度为4个像素组成，即 `PAR=5 : 4`。 假设图像的显示宽度为160，高度为120，即`DAR=4 : 3。` 那么可以计算出`SAR = DAR / PAR = 16 : 15`
+  - 例如：每个方格代表一个像素，宽度为 5 个像素组成，高度为4个像素组成，即 `PAR=5 : 4`。 假设图像的显示宽度为160，高度为120，即 `DAR=4 : 3`。那么可以计算出 `SAR = DAR / PAR = 16 : 15`
 - 展示单独信息（-show_entries，将 `-show_format` 中的信息按单独条目输出）
 
     > 只输出 `size` 信息
