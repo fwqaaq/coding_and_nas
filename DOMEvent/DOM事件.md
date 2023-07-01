@@ -5,7 +5,7 @@ author: Jack-zhang
 categories: JS
 tags:
    - JS
-summary: 关于直接操控DOM属性,编译速度大于任何框架,但是不利于维护
+summary: 关于直接操控 DOM 属性,编译速度大于任何框架,但是不利于维护
 ---
 ## 事件对象
 
@@ -13,24 +13,24 @@ summary: 关于直接操控DOM属性,编译速度大于任何框架,但是不利
 
 ### 事件的绑定
 
->使用 `对象.事件=函数`的形式只能同时为一个元素的一个事件绑定一个响应函数.不能绑定多个,如果绑定多个,则后边会覆盖前边的
+>不使用 `addEventListener` 的形式只能同时为一个元素的一个事件绑定一个响应函数.不能绑定多个，如果绑定多个，则后边会覆盖前边的
 
-* `addEventListener()`:通过这个方法也可以为元素绑定响应函数
+* `addEventListener()`：通过这个方法也可以为元素绑定响应函数
   * 参数
-     1. **事件的字符串,不要on**
-     2. 回调函数,当事件触发时,该事件触发时该函数会被调用
+     1. 事件的字符串，不要 on
+     2. 回调函数，当事件触发时，该事件触发时该函数会被调用
      3. 是否在捕获阶段触发事件
-        * 一个布尔值,<span style="color:red">默认值false(冒泡阶段调用)</span>
-        * `options`:有关`listener`可选参数对象
-           1. `capture`:`Boolean`.表示`listener`会在该类型的事件捕获阶段传播到该EventTarget时触发
-           2. `once`:`Boolean`,表示listener在添加之后最多只调用一次.如果为`true`,listener会在其被调用之后自动移除
-           3. `passive`:`Boolean`,如果为true,表示listener永远不会调用`preventDefault()`.如果listener仍然调用了这个函数,客户端将会忽略它并抛出一个控制台警告
-           4. `signal`:`AbortSignal`.该AbortSignal的`abort()`方法被调用时,监听器会被移除
-  * 注意:
-    * 使用`addEventListener()`可以同时为一个元素的相同事件同时绑定多个响应函数.
-    * 这样当事件触发时,响应函数将会按照函数的绑定顺序执行
-* `removeEventListener()`:使用addEventListener()绑定的事件只能通过`removeEventListener()`来移除.并且如果addEventListener()中的第二个参数是匿名参数将无法移除
-  * 参数和`addEventListener()`相同
+        * 一个布尔值，<span style="color:red">默认值 false（冒泡阶段调用）</span>
+        * `options`：有关 `listener` 可选参数对象
+           1. `capture`：`Boolean`。表示 `listener` 会在该类型的事件捕获阶段传播到该 EventTarget 时触发
+           2. `once`：`Boolean`，表示 listener 在添加之后最多只调用一次。如果为 `true`，listener 会在其被调用之后自动移除
+           3. `passive`：`Boolean`，如果为 true，表示 listener 永远不会调用 `preventDefault()`。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告
+           4. `signal`：`AbortSignal`。该 AbortSignal 的 `abort()` 方法被调用时，监听器会被移除
+  * 注意：
+    * 使用 `addEventListener()` 可以同时为一个元素的相同事件同时绑定多个响应函数。
+    * 这样当事件触发时，响应函数将会按照函数的绑定顺序执行
+* `removeEventListener()`：使用 `addEventListener()` 绑定的事件只能通过 `removeEventListener()` 来移除。并且如果 `addEventListener()` 中的第二个参数是匿名参数将无法移除
+  * 参数和 `addEventListener()` 相同
 
 ```html
 <script>
@@ -103,14 +103,14 @@ document.dispatchEvent(ev);
    p.dispatchEvent(click);
    ```
 
-  * p元素会发出一个click事件.并且默认是捕获阶段触发.在div上的监听函数是冒泡阶段运行,因此该函数不会触发
-    * 如果写成`div.addEventListener('click', callback, true)`函数在捕获阶段运行
-    * 或者写成`const click = new Event("click",{bubbles:true})`函数会在冒泡阶段运行
-  * 如果`div.dispatchEvent(click)`,无论是捕获阶段还是冒泡阶段,都会触发监听函数.因为div元素是事件的目标,不存在是否冒泡的问题
+  * p 元素会发出一个 click 事件，并且默认是捕获阶段触发，在 div 上的监听函数是冒泡阶段运行，因此该函数不会触发
+    * 如果写成 `div.addEventListener('click', callback, true)` 函数在捕获阶段运行
+    * 或者写成 `const click = new Event("click",{bubbles:true})` 函数会在冒泡阶段运行
+  * 如果 `div.dispatchEvent(click)`，无论是捕获阶段还是冒泡阶段，都会触发监听函数。因为 div 元素是事件的目标，不存在是否冒泡的问题
 
-* `event.type`:获得触发事件的类型
+* `event.type`：获得触发事件的类型
 
-> `currentTarge`和`targe`.前者是当前事件处理程序的所在元素.并且始终等于this对象,而target只包含事件的实际目标
+> `currentTarge` 和 `targe`，前者是当前事件处理程序的所在元素。并且始终等于 this 对象，而 target 只包含事件的实际目标
 
 ```js
 let btn =  document.getElementById("myBtn")
@@ -127,46 +127,46 @@ document.body.onclick = function(){
 }
 ```
 
->Event.bubbles,Event.eventPhase
+>Event.bubbles，Event.eventPhase
 
-* `Event.bubbles`:该属性返回一个布尔值.**只读属性**,一般用于Event实例是否可以冒泡
-* `Event.eventPhase`:返回一个整数常量,表示事件所处的目标
-  * `0`:事件目前没有发生
-  * `1`:事件目前处于捕获阶段,即处于从祖先节点向目标节点的传播过程
-  * `2`:事件到达目标节点,`Event.target`属性指向的那个节点
-  * `3`:事件处于冒泡阶段.即处于从目标节点的反向传播过程
+* `Event.bubbles`：该属性返回一个布尔值。**只读属性**，一般用于 Event 实例是否可以冒泡
+* `Event.eventPhase`：返回一个整数常量，表示事件所处的目标
+  * `0`：事件目前没有发生
+  * `1`：事件目前处于捕获阶段，即处于从祖先节点向目标节点的传播过程
+  * `2`：事件到达目标节点，`Event.target` 属性指向的那个节点
+  * `3`：事件处于冒泡阶段，即处于从目标节点的反向传播过程
 
-> Event.cancelable,Event.cancelBubble,Event.defaultPrevented
+> Event.cancelable，Event.cancelBubble，Event.defaultPrevented
 
-* `cancelable`:属性返回一个布尔值,**只读**表示事件是否可以取消
-  * 大多数浏览器原生事件是可以被取消的.比如取消`click`事件,点击链接将无效.除非显示声明,否则默认是不可取消的
+* `cancelable`：属性返回一个布尔值，**只读**表示事件是否可以取消
+  * 大多数浏览器原生事件是可以被取消的。比如取消 `click` 事件，点击链接将无效。除非显示声明，否则默认是不可取消的
 
    ```js
    const ev = new Event("click")
    ev.cancelable//false
    ```
 
-  * 如果`Event.cancelable = true`,调用`Event.preventDefault()`可以阻止浏览器对该事件的默认行为
-  * 如果事件不能取消,调用Event.preventDefault()会没有任何效果
-* `Event.cancelBubble`属性是一个布尔值,如果设为true,相当于执行`Event.stopPropagation()`,可以阻止事件的传播
-* `Event.defaultPrevented`属性返回一个布尔值,**只读**.表示该事件是否调用过Event.preventDefault方法
+  * 如果 `Event.cancelable = true`，调用 `Event.preventDefault()` 可以阻止浏览器对该事件的默认行为
+  * 如果事件不能取消，调用 Event.preventDefault() 会没有任何效果
+* `Event.cancelBubble` 属性是一个布尔值，如果设为true，相当于执行`Event.stopPropagation()`，可以阻止事件的传播
+* `Event.defaultPrevented` 属性返回一个布尔值，**只读**，表示该事件是否调用过Event.preventDefault方法
 
 > `Event.isTrusted`
 
-* 属性返回一个布尔值,表示事件是否由真实的用户行为产生.比如用户点击链接产生一个click事件,该事件由用户产生;`Event`构造函数生成的事件则是由脚本产生的
+* 属性返回一个布尔值，表示事件是否由真实的用户行为产生。比如用户点击链接产生一个 click 事件，该事件由用户产生；`Event` 构造函数生成的事件则是由脚本产生的
 
    ```js
    const ev = new Event("foo")
    ev.isTrusted //false  
    ```
 
-  * ev是由脚本产生的,所以会返回false
+  * ev 是由脚本产生的，所以会返回 false
 
 > `Event.detail`
 
-* `Event.detail`属性只有浏览器的UI(用户界面)事件才具有.该属性返回一个数值,表示事件的某种信息.具体含义与事件类型相关
-  * 比如,对于click和dbclick事件,`Event.detail`是鼠标按下的次数(1表示单击,2表示双击,3表示三击)
-  * 对于鼠标滚轮事件,`Event.detail`是滚轮正向滚动的距离,负值就是负向滚动的距离,返回值总是3的倍数
+* `Event.detail` 属性只有浏览器的 UI（用户界面）事件才具有。该属性返回一个数值，表示事件的某种信息，具体含义与事件类型相关
+  * 比如，对于 click 和 dbclick 事件，`Event.detail` 是鼠标按下的次数（1 表示单击、2 表示双击、3 表示三击）
+  * 对于鼠标滚轮事件，`Event.detail` 是滚轮正向滚动的距离，负值就是负向滚动的距离，返回值总是 3 的倍数
 
   ```js
   function giveDetails(e) {
@@ -176,10 +176,10 @@ document.body.onclick = function(){
   document.querySelector('p').onclick = giveDetails;
   ```
 
-> Event对象的实例方法
+> Event 对象的实例方法
 
-* `event.preventDefault()`:用于阻止特定事件的默认动作.比如链接的默认行为是在被单机时导航到href属性指定的url
-* `event.stopPropagation()`:立即阻止事件流在DOM结构中传播.取消后续事件捕获或者冒泡,不包括当前节点上的其他的事件监听函数
+* `event.preventDefault()`：用于阻止特定事件的默认动作。比如链接的默认行为是在被单机时导航到 href 属性指定的 url
+* `event.stopPropagation()`：立即阻止事件流在DOM结构中传播，取消后续事件捕获或者冒泡，不包括当前节点上的其他的事件监听函数
 
    ```js
    // 事件传播到 p 元素后，就不再向下传播了
@@ -194,11 +194,11 @@ document.body.onclick = function(){
    }, false)
    ```
 
-  * p元素绑定的两个click事件的监听函数.`stopPropageation`方法只能组织这个事件向其他元素传播.第二个监听函数会触发,输出是1,然后是2
-* `event.stopImmediatePropagation()`:彻底组织这个事件的传播,不会在触发后面所有的click的监听函数
-  * 将上面的`stopPropagation`改为`stopImmediatePropagation`可以彻底阻止这个事件的传播
-  * 现在只会输出1
-* `Event.composedPath()`:返回一个数组,成员是事件的最底层节点和依次冒泡经过的所有上层节点
+  * p 元素绑定的两个 click 事件的监听函数。`stopPropageation` 方法只能组织这个事件向其他元素传播，第二个监听函数会触发，输出是 1，然后是2
+* `event.stopImmediatePropagation()`：彻底组织这个事件的传播，不会在触发后面所有的 click 的监听函数
+  * 将上面的 `stopPropagation` 改为 `stopImmediatePropagation` 可以彻底阻止这个事件的传播
+  * 现在只会输出 1
+* `Event.composedPath()`：返回一个数组，成员是事件的最底层节点和依次冒泡经过的所有上层节点
 
    ```js
     // <div><p>Hello</p></div>
@@ -211,17 +211,17 @@ document.body.onclick = function(){
 
 ### CustomEvent
 
->用于生成自定义事件的实例.浏览器预定义的事件,虽然可以手动生成,但是往往不能在事件上绑定数据.如果需要在出发事件的同时,传入指定的数据,就可以使用CustomEvent接口生成的自定义事件对象
+>用于生成自定义事件的实例。浏览器预定义的事件，虽然可以手动生成，但是往往不能在事件上绑定数据。如果需要在出发事件的同时，传入指定的数据，就可以使用 CustomEvent 接口生成的自定义事件对象
 
-* 浏览器原生提供CustomEvent构造函数来生成CustomEvent事件实例
+* 浏览器原生提供 CustomEvent 构造函数来生成 CustomEvent 事件实例
 
    ```js
    new CustomEvent(type,options)
    ```
 
-  * 造函数接受两个参数.第一个参数是字符串,表示事件的名字,这是必须的
-  * 第二个参数是事件的配置对象,这个参数是可选的.CustomEvent的配置对象除了接受Event事件的配置属性,只有一个自己的属性
-  * `detail`:事件的附带数据,默认为null
+  * 造函数接受两个参数。第一个参数是字符串，表示事件的名字，这是必须的
+  * 第二个参数是事件的配置对象，这个参数是可选的。CustomEvent 的配置对象除了接受 Event 事件的配置属性，只有一个自己的属性
+  * `detail`：事件的附带数据，默认为 null
 
   ```js
   const myEvent = new CustomEvent('myevent', {
@@ -241,15 +241,15 @@ document.body.onclick = function(){
 
 ### 鼠标和滚轮事件
 
-* `click`:用户单机鼠标主键(通常是左键)或者按回车键时触发.
-* `dblclick`:用户双机鼠标主键(通常是左键).
-* `mousedown`:用户按下任意鼠标键触发
-* `mouseenter`:用户把光标从元素的外部移动到元素的内部触发.该事件不冒泡,也不会在光标经过后代元素触发
-* `mouseleave`:用户把光标从元素的内部移动到元素的外部触发.该事件不冒泡,也不会在光标经过后代元素触发
-* `mousemove`:鼠标在元素上移动时反复触发
-* `mouseout`:鼠标光标从一个元素移动到另一个元素时触发.移到的元素可以是原始元素的外部元素也可以是子元素
-* `mouseover`:用户把鼠标光标从元素的外部移动到元素的内部时触发
-* `mouseup`:用户释放鼠标时触发
+* `click`：用户单机鼠标主键（通常是左键）或者按回车键时触发。
+* `dblclick`：用户双机鼠标主键（通常是左键）。
+* `mousedown`：用户按下任意鼠标键触发
+* `mouseenter`：用户把光标从元素的外部移动到元素的内部触发。该事件不冒泡，也不会在光标经过后代元素触发
+* `mouseleave`：用户把光标从元素的内部移动到元素的外部触发。该事件不冒泡，也不会在光标经过后代元素触发
+* `mousemove`：鼠标在元素上移动时反复触发
+* `mouseout`：鼠标光标从一个元素移动到另一个元素时触发。移到的元素可以是原始元素的外部元素也可以是子元素
+* `mouseover`：用户把鼠标光标从元素的外部移动到元素的内部时触发
+* `mouseup`：用户释放鼠标时触发
 
 >点击事件的触发顺寻
 
@@ -261,17 +261,17 @@ document.body.onclick = function(){
 6. click
 7. dblclick
 
-> 客户端坐标:被保存在`event.clientX`(鼠标指针的水平坐标)和``event.clientY`(鼠标指针的垂直坐标)
+> 客户端坐标：被保存在 `event.clientX`（鼠标指针的水平坐标）和 `event.clientY`（鼠标指针的垂直坐）
 
 * 这两个属性表示事件发生时鼠标光标在视口中的位置
 
-> 页面坐标:页面坐标时事件发生在页面上的坐标`event.pageX`和`event.pageY`可以获取.
+> 页面坐标：页面坐标时事件发生在页面上的坐标 `event.pageX` 和 `event.pageY` 可以获取.
 
-* 这个属性返回的是鼠标在页面上的位置,并不是像客户端坐标一样返回的是视口左边与上边的距离
+* 这个属性返回的是鼠标在页面上的位置，并不是像客户端坐标一样返回的是视口左边与上边的距离
 
-> 屏幕坐标:相对于屏幕,而不是相对于浏览器视口.所以通常屏幕坐标大于等于客户端坐标
+> 屏幕坐标：相对于屏幕，而不是相对于浏览器视口。所以通常屏幕坐标大于等于客户端坐标
 
-* `event.screenX`和`event.screenY`来获取坐标位置
+* `event.screenX` 和 `event.screenY` 来获取坐标位置
 
 ```html
 <style type="text/css">
@@ -306,8 +306,8 @@ document.body.onclick = function(){
 </body>
 ```
 
-* `onmousewheel`鼠标滚轮滚动的事件,会在滚轮滚动时触发,但是火狐不支持
-  * `event.wheelDelta`可以获取鼠标滚轮滚动的方向
+* `onmousewheel` 鼠标滚轮滚动的事件，会在滚轮滚动时触发，但是火狐不支持
+  * `event.wheelDelta` 可以获取鼠标滚轮滚动的方向
 
 ```html
 <style type="text/css">
