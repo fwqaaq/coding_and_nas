@@ -4,9 +4,9 @@
 
 ![PPPoE 模式下 IPv6 的设置](./Ipv6/IPv6.png)
 
-开启 IPv6 代理后，会出现一系列的兼容问题，建议不要开启。<sapn style="color:red">IPv6 建议用于国内直连。</sapn>
+开启 IPv6 代理后，会出现一系列的兼容问题，建议不要开启。IPv6 建议用于国内直连。
 
-注意：<span style="color:red">需要跟据 Vps/节点提供商确认是否支持，如果该站点支持 IPv6 可以放心大胆地开启，并根据以下操作食用。</span>
+注意：需要跟据 Vps/节点提供商确认是否支持，如果该站点支持 IPv6 可以放心大胆地开启，并根据以下操作食用。
 
 该站点只支持 ipv6：<http://6.ipw.cn>
 
@@ -38,7 +38,7 @@ $dig aaaa 6.ipw.cn
 
 当 IPv6 启用的设备向 IPv4 地址发送数据包时，IPv6 栈通过在前面加上 `::ffff:` 的前缀，将 IPv4 地址映射为 IPv6 地址。这允许数据包通过 IPv6 网络发送到 IPv4 设备。
 
-<span style="color:red">代理端如果有 IPv6 地址，会替我们访问该仅有 IPv6 地址的网站，并将该网站地址转换为兼容 IPv4 的 IPv6 地址。这样不支持 IPv6 的设备就可以访问了。</sapn>
+代理端如果有 IPv6 地址，会替我们访问该仅有 IPv6 地址的网站，并将该网站地址转换为兼容 IPv4 的 IPv6 地址。这样不支持 IPv6 的设备就可以访问了。</sapn>
 
 > 当你使用 fake-ip 的时候（例如，Shadowrocket、Clash 等），代理服务器会替你访问 IPv6 的地址，同时帮你转换到兼容 IPv4 的 IPv6 地址。
 
@@ -48,7 +48,7 @@ $dig aaaa 6.ipw.cn
 >
 > OpenWrt 设置 IPv6 参考：<https://post.smzdm.com/p/awzodmpp/>
 
-在 Native 模式下，**路由前缀**是前 48 位，<span style="color:red">而只有第 48～64 位可以分发子网</span>，这里的前 64 位是子网前缀。
+在 Native 模式下，**路由前缀**是前 48 位，而只有第 48～64 位可以分发子网，这里的前 64 位是子网前缀。
 
 然而事实上，在运营商分发的前缀（IPv6-PD）并不止 48 位，可能更多，如果是 64 位，那么一个子网都不能划分，当然如果是 48 位，那么可以划分 2^16 位的子网。
 
@@ -76,7 +76,7 @@ $dig aaaa 6.ipw.cn
 >
 > 未开启 merlingClash IPv6 的情况
 
-* 关于下发的 IPv6 DNS 服务器，<span color="red">实际上如果对方的网址只有 IPv6，并且没有开启 merlingClash IPv6 时，不会返回 AAAA 记录，</span>所以需要手动指定公共的 DNS，可能是我的华硕路由器太老，并不能指定 IPv6 的 DNS。可以指定以下的 DNS 服务器：
+* 关于下发的 IPv6 DNS 服务器，实际上如果对方的网址只有 IPv6，并且没有开启 merlingClash IPv6 时，不会返回 AAAA 记录，所以需要手动指定公共的 DNS，可能是我的华硕路由器太老，并不能指定 IPv6 的 DNS。可以指定以下的 DNS 服务器：
 
 | 服务商     | DNS                                          |
 | ---------- | -------------------------------------------- |
@@ -85,7 +85,7 @@ $dig aaaa 6.ipw.cn
 
 * 但是这会出现一个问题，IPv6 一般会优先访问，这样还是会造成网络卡顿的情况（部分国外网站可能无法访问，其也可以回落支持 IPv4）。参考：<https://ipw.cn/doc/ipv6/user/ipv4_ipv6_prefix_precedence.html#_3-调整网络前缀优先级-让-ipv4-访问优先>
 
-注意：<sapn style="color:red">下发的 DNS 服务器不要有 IPv6 的</sapn>
+注意：下发的 DNS 服务器不要有 IPv6 的
 
 ## 群晖 docker 中设置 IPv6
 

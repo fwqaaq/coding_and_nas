@@ -4,7 +4,7 @@
 
 ## 缓存的种类
 
-1. [**私有缓存**](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching#%E7%A7%81%E6%9C%89%E7%BC%93%E5%AD%98)：私有缓存通常是浏览器的缓存，它存储用户的个性化响应（<sapn style="color:red">你有必要使用 `private` 指令</sapn>）。
+1. [**私有缓存**](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching#%E7%A7%81%E6%9C%89%E7%BC%93%E5%AD%98)：私有缓存通常是浏览器的缓存，它存储用户的个性化响应（你有必要使用 `private` 指令）。
    * 私有缓存一般是由 cookie 控制，但是你同时还需要设置 `private` 指令
    * 如果具有 Authorization，则不会存至**私有缓存/共享缓存**中，这时应该使用 `public` 指令
 

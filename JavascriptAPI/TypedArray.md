@@ -52,7 +52,7 @@ console.log(ArrayBuffer.isView(float))//true
    new TypedArray(length)
    ```
 
-   * 当传入 `length` 参数时，一个内部的数组缓冲区会被创建在内存中，<span style="color:red">该**缓存区的大小**（类型化数组中 `byteLength` 属性的值）是传入的 length 乘以数组中每个元素的字节数（`BYTES_PER_ELEMENT`）</span>
+   * 当传入 `length` 参数时，一个内部的数组缓冲区会被创建在内存中，该**缓存区的大小**（类型化数组中 `byteLength` 属性的值）是传入的 length 乘以数组中每个元素的字节数（`BYTES_PER_ELEMENT`）
 
 2. 参数是 `object`：当传入一个对象作为参数时，就像通过 `TypedArray.from()` 方法创建一个新的类型化数组一样
 

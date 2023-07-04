@@ -115,7 +115,7 @@ execFile("./a.sh", (error, stdout, stderr) => {
    * `execPath`：用来创建子进程的可执行文件，默认是 `/usr/local/bin/node`。也就是说通过 execPath 来指定具体的 node 版本
    * `execArgv`：传给可执行文件的字符串参数列表。默认是 `process.execArgv`，跟父进程保持一致
    * `silent`：默认是 `false`，即子进程的 `stdio` 从父进程继承。如果是 true，则直接 `pipe` 向子进程的 `child.stdin`，`child.stdout` 等
-   * `stdio`：选项用于配置在父进程和子进程之间建立的管道，<span style="color:red">如果声明了 stdio，则会覆盖 silent 选项的设置</span>
+   * `stdio`：选项用于配置在父进程和子进程之间建立的管道，如果声明了 stdio，则会覆盖 silent 选项的设置
 
 ```js
 //child3.js

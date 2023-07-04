@@ -33,7 +33,7 @@ const adapter = await navigator.gpu.requestAdapter({
 * `requestAdapter()`：如果支持，返回一个`promise`。参数是一个options
   * `powerPreference?`：接受两个参数 `high-performance`，表示开启高性能的独立显卡;`low-power` 低性能的核显
     * 但是具体的控制权最终由浏览器和操作系统决定，这只是一个期望选项
-  * `forceFallbackAdapter?`：一个布尔值，默认值 `false`；<span style="color:red">表示是否是否回退适配器以获得兼容，如果用户代理不支持回退适配器只能返回为</span> `null`
+  * `forceFallbackAdapter?`：一个布尔值，默认值 `false`；表示是否是否回退适配器以获得兼容，如果用户代理不支持回退适配器只能返回为 `null`
 * adapter 有三个属性
    1. `features`：**只读**。它是该浏览器除了标准以外的扩展功能。
    2. `limits`：**只读**。gpu 支持的限制
@@ -90,7 +90,7 @@ context?.configure({
 
 * 使用异步的方法去创造一个管线 `createRenderPipelineAsync(GPURenderPipelineDescriptor)`
   * 当创建的管道准备使用时，返回的兑现的 Promise，而不会产生额外的延迟。如果管道创建失败，返回带有 OperationError 的被拒绝的 Promise
-    * <span style="color:red">尽可能使用此方法，因为它可以防止在管道编译时阻塞队列时间轴工作</sapn>
+    * 尽可能使用此方法，因为它可以防止在管道编译时阻塞队列时间轴工作
 * `GPURenderPipelineDescriptor`：渲染管线的初始化对象
 
 ```js

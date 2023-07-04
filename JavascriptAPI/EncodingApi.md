@@ -7,7 +7,7 @@
 ### [码位](https://developer.mozilla.org/zh-CN/docs/Glossary/Code_point)和[码元](https://developer.mozilla.org/zh-CN/docs/Glossary/Code_unit)
 
 * **码位**是表示文本的系统（例如 Unicode）中用于表示抽象字符的数值。例如 Unicode 中使用 `U+0041` 表示字符 `A` 的码位。你可以在[这里](https://www.qqxiuzi.cn/bianma/Unicode.htm)尝试。
-* <span style="color:red">**码元**是字符编码系统的基本组成部分</span>。字符编码会将一个 Unicode 码位编码成一个或者多个码元。
+* **码元**是字符编码系统的基本组成部分 Unicode 码位编码成一个或者多个码元。
   * 码元是 16 位值，但是并非所有的 Unicode 码位都适合 16 位（例如 emoji，它一般是 32 位）。在 JavaScript 中查看字符的长度，其实就是查看码元的个数：
 
    ```js
@@ -39,7 +39,7 @@
   * `TextEncoder.encoding`：只读。目前总是返回 utf-8
 * 方法：
   * `TextEncoder.prototype.encode()`：接受一个`USVString`作为输入，返回一个 `Unit8Array`，其中文本使用UTF-8编码
-  * [`TextEncoder.prototype.encodeInto()`](https://developer.mozilla.org/zh-CN/docs/Web/API/TextEncoder/encodeInto)：接受一个 `USVString` 作为输入，将其编码好的字符填充到传入的 Unit8Array 中，并返回一个字典。性能比 `encode()` 更好一些（<span style="color:red"></span>）
+  * [`TextEncoder.prototype.encodeInto()`](https://developer.mozilla.org/zh-CN/docs/Web/API/TextEncoder/encodeInto)：接受一个 `USVString` 作为输入，将其编码好的字符填充到传入的 Unit8Array 中，并返回一个字典。性能比 `encode()` 更好一些
     * 该字典包含 `read`（使用 UTF-16 编码的码元数）和 `written`（在目标 Uint8Array 中修改的字节数）属性。如果给定的 Uint8Array 的长度小于编码字符的字节数，则最后的值为数组的长度。
 
 ```js

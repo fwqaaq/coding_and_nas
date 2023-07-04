@@ -51,10 +51,10 @@ blob.text().then(res => console.log(res))
 * `blob.stream()`：方法返回一个 **ReadableStream** 对象，读取它将返回包含在 Blob 中的数据
   * 调用方法 `getReader()`，在返回的 stream 上获取一个对象，通过 `ReadableStreamDefaultReader` 接口提供的 `read()` 方法读取 `blob` 对象的方法。
   * 调用返回 stream 对象的 `pipeTo()` 方法将 **blob 对象**的数据传输到**可写流**。
-  * 调用返回 stream 对象的 `tee()` 方法以**准备可读流**。该方法会返回一个数组，<span style="background-color:red">该数组包含两个新的 ReadableStream 对象</span>，每个对象都会返回 Blob 的内容。
-  * 调用返回 stream 对象的 `pipeThrough()` 方法，通过一个 <sapn style="background-color:red">TransformStream 对象或其它任意可读可写对传输流对象</sapn>。
+  * 调用返回 stream 对象的 `tee()` 方法以**准备可读流**。该方法会返回一个数组，该数组包含两个新的 ReadableStream 对象，每个对象都会返回 Blob 的内容。
+  * 调用返回 stream 对象的 `pipeThrough()` 方法，通过一个 TransformStream 对象或其它任意可读可写对传输流对象。
 * `blob.slice()`：方法创建并返回一个新对象，该对象包含来自调用它的 `blob` 子集的数据
-  1. `start` 可选。默认值为 0。<span style="color:red">Blob 中的索引，指示要包含在新 Blob 中的第几个字节</span>。指定的值大于源 Blob 的大小，默认为0，并且不包含任何数据。如果指定负值，则会将其视为从 Blob 末尾到开头的偏移量。例如，-10 将是 Blob 中距离最后一个字节的第 10 个字节。
+  1. `start` 可选。默认值为 0。Blob 中的索引，指示要包含在新 Blob 中的第几个字节。指定的值大于源 Blob 的大小，默认为0，并且不包含任何数据。如果指定负值，则会将其视为从 Blob 末尾到开头的偏移量。例如，-10 将是 Blob 中距离最后一个字节的第 10 个字节。
   2. `end` 可选。缺省值为 **size** Blob 中的索引，指示 Blob 中的末尾字节（不包含此索引中的字节）。如果指定负值，和 start 一样.
   3. `contentType`可选。默认值为空字符串。要分配给新 Blob 的内容类型
 * `blob.arrayBuffer()`：返回一个 Promise，该 Promise 将 blob 的内容解析为 `ArrayBuffer` 中包含的二进制数据

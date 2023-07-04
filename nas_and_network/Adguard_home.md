@@ -3,7 +3,7 @@
 > 有以下几个方案，这里只讲述第三种方案
 
 1. client: any -> Dnsmasq: 53 -> Clash: 7874 -> ADG: 5335
-   * 这里需要在 clash 中开启 dns 劫持，让 dnsmasq 将请求转发到 clash，然后将 clash 中的所有自定义上游 dns 换成 ADG 的 <sapn style="color:red">fallback 127.0.0.1:5535 UDP</sapn>。
+   * 这里需要在 clash 中开启 dns 劫持，让 dnsmasq 将请求转发到 clash，然后将 clash 中的所有自定义上游 dns 换成 ADG 的 `fallback 127.0.0.1:5535 UDP`。
    * 但是如果屏蔽的广告在 clash 中决定走代理，那么就不会向上游 ADG 去请求，并且只会出现 `127.0.0.1`
 2. client: any -> Dnsmasq: 53 -> ADG: 5335 -> Clash: 7874
    * 该方案的 Dnsmasq 明显是多余的，只是起到了转发功能
@@ -38,7 +38,7 @@ dns:
     - 127.0.0.1:7874
 ```
 
-注意：<sapn>由于已经将 openclash 定义为上游 dns 服务器，这里将不会再配置</sapn>
+注意：由于已经将 openclash 定义为上游 dns 服务器，这里将不会再配置
 
 ## 设置 OpenClash
 

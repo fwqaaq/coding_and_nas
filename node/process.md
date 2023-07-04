@@ -120,7 +120,7 @@ console.log(process.platform)
 * `argv` 获取非命令行选项的所有信息
 * `argv0` 则获取 argv[0] 的值
 * `execArgv` 进程启动时传入的一组特定于 `Node.js` 的命令行选项。这些选项可用于衍生与父进程具有相同执行环境的子进程
-  * 选项不会出现在 `process.argv` 属性返回的数组中，也不包括 `Node.js` <span style="color:red">可执行文件，脚本名称或脚本名称后面的任何选项</span>
+  * 选项不会出现在 `process.argv` 属性返回的数组中，也不包括 `Node.js` 可执行文件，脚本名称或脚本名称后面的任何选项
 
 ```js
 // node --harmony a.js --version

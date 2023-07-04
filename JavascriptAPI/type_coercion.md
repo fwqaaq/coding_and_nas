@@ -32,7 +32,7 @@ console.log(+object1);
 // expected output: 42
 ```
 
-注意：<span style="color:red">`[@@toPrimitive]()` 必须返回一个原始值，否则将抛出 TypeError。</span>
+注意：`[@@toPrimitive]()` 必须返回一个原始值，否则将抛出 TypeError。
 
 ### 原始值的强制转换
 

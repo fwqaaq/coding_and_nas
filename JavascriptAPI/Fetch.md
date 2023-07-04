@@ -9,9 +9,9 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
 
 * `fetch`一定是异步的，天生支持 promise，接收两个参数
   1. 第一个参数：`RequestInfo(request对象)|URL`。URL 是必须的（例如`https://www.baidu.com`），只传第一个参数，默认是 get 请求
-  2. 第二个参数是 <span style="color:red">**RequestInit** 可选的</span>,是一个对象
+  2. 第二个参数是 **RequestInit** 可选的,是一个对象
      * `method?: string`：请求方法。默认值 `GET`
-     * `body?:BodyInit | null`：请求的`body`信息。可能是一个 Blob、BufferSource、FormData、URLSearchParams 或者 USVString 对象（<span style="color:red">GET 或者 HEAD 方法的请求不能包含</span>）
+     * `body?:BodyInit | null`：请求的`body`信息。可能是一个 Blob、BufferSource、FormData、URLSearchParams 或者 USVString 对象（GET 或者 HEAD 方法的请求不能包含）
      * `mode?: RequestMode`:请求的模式（是否使用 `CORS`）。`cors` **允许遵守 CORS 的跨源请求**（非简单跨源，需要预检）。`navigate`、`no-cors`（允许不需要发送预检请求的跨源请求，同源请求或者简单跨源）、`same-origin`（**任何跨源请求都不允许发送**）
      * `cache?: RequestCache`:请求的 cache 模式：`default`,`no-store`、`reload`、`no-cache`、`force-cache` 或者 `only-if-cached`
      * `credentials?: RequestCredentials`：请求的 credentials，如 `omit`（不发送 cookie）、`same-origin`（同源时发送 cookie）或者 `include`（无论同源还是跨源都发送）
@@ -24,7 +24,7 @@ declare function fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Re
      * `headers?: HeadersInit`
 * 参考：<https://developer.mozilla.org/zh-CN/docs/Web/API/fetch>
 
-* 注意：<span>如果，在浏览器网页中向其他源发起请求，那么必定不是同源，需要使用  `mode: "no-cors"`</span>。`cors` 参数是表示后台必须**支持跨源**，而 no-cors 一般用于**简单请求**（图片等静态资源），但是响应会表明你的数据是 `opaque`，没有访问权限。
+* 注意：如果，在浏览器网页中向其他源发起请求，那么必定不是同源，需要使用  `mode: "no-cors"`。`cors` 参数是表示后台必须**支持跨源**，而 no-cors 一般用于**简单请求**（图片等静态资源），但是响应会表明你的数据是 `opaque`，没有访问权限。
 * `cache`：
   * `default` 表示hi现在缓存中寻找匹配；
   * `no-store` 直接请求远程服务器，并且不更新缓存；
@@ -121,7 +121,7 @@ fetch("./README.md").then(response => response.text()).then(
       * `Access-Control-Allow-Headers:<header-name>[, <header-name>]*` 表示允许的请求头
       * `Access-Control-Allow-Credentials: true` 表示是否允许发送 Cookie。如果不包含应该去除，而不是写 false
         * 如果是`XMLHttpRequest`，需要将其 `withCredentials` 标志设置为 true；如果是 `fetch`，需要设置 `credentials:include`，表明无论是同源或者跨源都会发送 cookie
-        * <span style="color:red">此时`Access-Control-Allow-Origin` 不能使用 `*`，而应该是当前请求的源</span>
+        * 此时`Access-Control-Allow-Origin` 不能使用 `*`，而应该是当前请求的源
 6. 中断请求:`fetch API` 可以通过 `AbortController/AbortSignal` 对请求中断
    * `AbortController.abort()` 会中断所有网络请求，适合希望停止传输大型负载的情况
 
@@ -413,7 +413,7 @@ const queue = new ByteLengthQueuingStrategy({
 
 1. 直接使用 `ReadableStream.cancel()` 取消源流
    * 这时候 `cancel` 报一个错误。由于 `res.text()` 读取流时，reader 已经锁定到该流，不能取消已经锁定的流
-   * <span style="color:red">Failed to execute 'cancel' on 'ReadableStream': Cannot cancel a locked stream</span>
+   * Failed to execute 'cancel' on 'ReadableStream': Cannot cancel a locked stream
 
    ```js
    let aborter = null;
@@ -430,7 +430,7 @@ const queue = new ByteLengthQueuingStrategy({
 
 2. 使用 `ReadableStreamDefaultReader.cancel()` 取消源流
    * 这时候 `cancel` 报一个错误：由于已经使用 `res.text()` 锁定读取流，同一个流不能继续再加锁
-   * <span style="color:red">Failed to execute 'getReader' on 'ReadableStream': ReadableStreamDefaultReader constructor can only accept readable streams that are not yet locked to a reader</span>
+   * Failed to execute 'getReader' on 'ReadableStream': ReadableStreamDefaultReader constructor can only accept readable streams that are not yet locked to a reader
   
    ```js
    let aborter = null;

@@ -144,7 +144,7 @@ date.getFullYear()//2020
      * `long`：完整的字段表述
      * `short`：部分字段表述（可以使用这个意思）
      * `2-dight`：只有两位数字表示。亲测之后除了 Year 字段外使用会抛出
-       * <span style="color:red">Value 2-dight out of range for Date.prototype.toLocaleString options property month</span>
+       * Value 2-dight out of range for Date.prototype.toLocaleString options property month
      * `narrow`：相比于 short，更少的描述
      * `numeric`：本地化的字符描述
 

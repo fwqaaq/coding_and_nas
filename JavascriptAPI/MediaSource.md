@@ -2,7 +2,7 @@
 
 > Media Source Extensions (MSE),即媒体源扩展 API，实现无插件且基于 Web 的流媒体功能.通过 MSE， 媒体串流能够通过 js 创建，并且使用\<video>和\<audio> 播放
 
-* `MSE` 通常可以把单个媒体文件的 `src` 值替换成引用 `MediaSource` 对象（<span style="color:red">一个包含即将播放的媒体文件的准备状态等信息的容器</span>），以及引用多个 `SourceBuffer` 对象（<span style="color:red">代表多个组成整个串流的不同媒体块元素</span>）
+* `MSE` 通常可以把单个媒体文件的 `src` 值替换成引用 `MediaSource` 对象（一个包含即将播放的媒体文件的准备状态等信息的容器），以及引用多个 `SourceBuffer` 对象（代表多个组成整个串流的不同媒体块元素）
 * 它是基于可扩展的 API 建立自适应比特流客户端（例如 DASH 和 HLS 客户端）的基础.
 
 > 使用 `ffmpeg` 将其他媒体资源转换为 FMP4
@@ -25,7 +25,7 @@
 
 * 在使用 MSE 播放 MP4 资源时，可能会遇到不可以播放的情况，原因是 MSE 不支持 MP4 格式的媒体文件，需要将 MP4 的文件转换为 FMP4(Fragment MP4) 格式，然而即使转换成 FMP4 格式，也不一定能播放.
    1. 普通的 MP4 格式的媒体文件所有**元数据**都在文件头，所有媒体数据都在一整块.如果文件比较大，对于一些视频播放器来说需要用户将整个文件都下载下来才可以播放，这就意味着用户的缓冲时间会因为 mp4 整体的大小而增加，尽管这样对本地视频没有问题
-   2. FMP4 格式的媒体文件会被分成多个片段，每个片段都可以单独索引，传输和播放.<sapn style="color:red">但是这种格式目前并不被多数解码器完全支持,并且浏览器内嵌的播放器也可能不完全支持</sapn>
+   2. FMP4 格式的媒体文件会被分成多个片段，每个片段都可以单独索引，传输和播放。但是这种格式目前并不被多数解码器完全支持,并且浏览器内嵌的播放器也可能不完全支持
 
 >在 `Fragmented MP4` 文件中含有三个非常关键的 boxes：moov、moof 和 mdat。
 
@@ -85,7 +85,7 @@ LL = level_idc
 
 ### Constructor
 
->`MediaSource` 构造函数返回一个没有分配 source buffers 新的 `MediaSource` 对象.<span style="color:red">并且返回一个 sourceBuffer 对象</span>
+>`MediaSource` 构造函数返回一个没有分配 source buffers 新的 `MediaSource` 对象.并且返回一个 sourceBuffer 对象
 
 ```js
 const mediaSource = new MediaSource()

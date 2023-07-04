@@ -26,7 +26,7 @@
    1. 流出口的处理数据的速度比入口提供数据的速度快.流出口空闲，浪费一点内存资源，可以接受
    2. 流入和流出均衡（理想）
    3. 流入口提供数据的速度比出口处理数据的速度快.这种不平衡的问题会造成某个地方数据积压，流需要做出处理
-* <span style="background:red">所有流都会为已进入流但是尚未离开流的块提供一个内部队列</span>。在均衡流中，这个内部队列只会由 0 或者少量排队的块
+* 所有流都会为已进入流但是尚未离开流的块提供一个内部队列。在均衡流中，这个内部队列只会由 0 或者少量排队的块
   * 如果块入列的速度快于出列的速度，则内部队列会不断的增大.流会阻止这种情况，因此他会使用**背压**（backpress）通知流入口停止放送数据，直到队列大小降到某一个既定的阈值之下。这个值由排列策略决定了内部队列可以占用了多大的内存，即**高水位线**（high water mask）
 
 ## ReadableStream
@@ -41,7 +41,7 @@
    1. `start(controller)`：当对象被构造是立刻调用的方法，此方法的内容由开发人员定义，用于访问，并执行其他任何必须的设置流的功能。
       * 如果这个过程是异步完成的,它可以返回一个 promise，表明成功或者失败
       * 这个方法的 `controller` 是一个 [ReadableStreamDefaultController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultController) 或者 [ReadableByteStreamController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableByteStreamController) 具体取决于 `type` 属性的值
-   2. `pull(controller)?`：由开发人员定义.当流的内部队列不满时，会重复调用这个方法，直到队列补满。<span style="color： red">一般用于控制流</span>
+   2. `pull(controller)?`：由开发人员定义.当流的内部队列不满时，会重复调用这个方法，直到队列补满。一般用于控制流
       * 如果`pull()`返回一个 promise，那么它将不会再被调用，直到 promise 完成或者失败，该流将会出现错误
       * controller 参数和 start 一样
    3. `cancel(reason)?`：如果应用程序标识该流将被取消（例如调用 `ReadableStream.cancel()`），则将调用此方法，该方法由开发人员定义。
@@ -165,7 +165,7 @@ const size = queueingStrategy.size(chunk);
 
 >`new ReadableStreamDefaultReader(stream)`：创造并且返回一个 ReadableStreamDefaultReader 实例对象
 
-* <sapn style="background:red">注意：通常你不需要手动构造，你只需要使用 `ReadableStream.getReader()` 方法</sapn>
+* 注意：通常你不需要手动构造，你只需要使用 `ReadableStream.getReader()` 方法
 
 ```js
 //消费

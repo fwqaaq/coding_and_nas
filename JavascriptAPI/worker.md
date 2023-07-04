@@ -12,84 +12,15 @@
 
 * 专用工作者线程：[DedicatedWorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope)
 
-<svg viewBox="-1 -1 650 42" preserveAspectRatio="xMinYMin meet">
-  <a style="text-decoration: none;" xlink:href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">
-    <rect x="0" y="0" width="88" height="25" fill="#fff" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="44" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      EventTarget
-    </text>
-  </a>
-  <line x1="88" y1="14" x2="118" y2="14" stroke="#D4DDE4"></line>
-  <polyline points="88,14 98,9 98,19 88,14" stroke="#D4DDE4" fill="#fff"></polyline>
-  <a style="text-decoration: none;" xlink:href="[/en-US/docs/Web/API/WorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope)">
-    <rect x="118" y="0" width="136" height="25" fill="#fff" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="186" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      WorkerGlobalScope
-    </text>
-  </a>
-  <line x1="254" y1="14" x2="284" y2="14" stroke="#D4DDE4"></line>
-  <polyline points="254,14 264,9 264,19 254,14" stroke="#D4DDE4" fill="#fff"></polyline>
-  <a style="text-decoration: none;" xlink:href="https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope" aria-current="page">
-    <rect x="284" y="0" width="208" height="25" fill="#F4F7F8" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="388" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      DedicatedWorkerGlobalScope
-    </text>
-  </a>
-</svg>
+![ ](./img/dedicatedworker.svg)
 
 * 共享工作者线程：[SharedWorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorkerGlobalScope)
 
-<svg viewBox="-1 -1 650 42" preserveAspectRatio="xMinYMin meet">
-  <a style="text-decoration: none;" xlink:href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">
-    <rect x="0" y="0" width="88" height="25" fill="#fff" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="44" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      EventTarget
-    </text>
-  </a>
-  <line x1="88" y1="14" x2="118" y2="14" stroke="#D4DDE4"></line>
-  <polyline points="88,14 98,9 98,19 88,14" stroke="#D4DDE4" fill="#fff"></polyline>
-  <a style="text-decoration: none;" xlink:href="[/en-US/docs/Web/API/WorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope)">
-    <rect x="118" y="0" width="136" height="25" fill="#fff" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="186" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      WorkerGlobalScope
-    </text>
-  </a>
-  <line x1="254" y1="14" x2="284" y2="14" stroke="#D4DDE4"></line>
-  <polyline points="254,14 264,9 264,19 254,14" stroke="#D4DDE4" fill="#fff"></polyline>
-  <a style="text-decoration: none;" xlink:href="https://developer.mozilla.org/en-US/docs/Web/API/SharedWorkerGlobalScope" aria-current="page">
-    <rect x="284" y="0" width="208" height="25" fill="#F4F7F8" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="388" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      SharedWorkerGlobalScope
-    </text>
-  </a>
-</svg>
+![ ](./img/sharedworker.svg)
 
 * 服务工作者线程：[ServiceWorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope)
 
-<svg viewBox="-1 -1 650 42" preserveAspectRatio="xMinYMin meet">
-  <a style="text-decoration: none;" xlink:href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">
-    <rect x="0" y="0" width="88" height="25" fill="#fff" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="44" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      EventTarget
-    </text>
-  </a>
-  <line x1="88" y1="14" x2="118" y2="14" stroke="#D4DDE4"></line>
-  <polyline points="88,14 98,9 98,19 88,14" stroke="#D4DDE4" fill="#fff"></polyline>
-  <a style="text-decoration: none;" xlink:href="[/en-US/docs/Web/API/WorkerGlobalScope](https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope)">
-    <rect x="118" y="0" width="136" height="25" fill="#fff" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="186" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      WorkerGlobalScope
-    </text>
-  </a>
-  <line x1="254" y1="14" x2="284" y2="14" stroke="#D4DDE4"></line>
-  <polyline points="254,14 264,9 264,19 254,14" stroke="#D4DDE4" fill="#fff"></polyline>
-  <a style="text-decoration: none;" xlink:href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope" aria-current="page">
-    <rect x="284" y="0" width="208" height="25" fill="#F4F7F8" stroke="#D4DDE4" stroke-width="2px"></rect>
-    <text x="388" y="16" font-size="10px" fill="#4D4E53" text-anchor="middle">
-      ServiceWorkerGlobalScope
-    </text>
-  </a>
-</svg>
+![ ](./img/serviceworker.svg)
 
 ## [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers)
 
@@ -108,7 +39,7 @@
    ```
 
 3. 新的 service worker 会立即收到 `activate` 事件，该事件主要用于清理过时的 service worker。
-4. 激活后，service worker 会立刻控制只有那些在 register() 成功后打开的页面（<span style="color:red">文档必须重新加载才能真正的受控制，因为文档不管 service worker 是否存在的情况下就已经存在，并在其生命周期维护</span>）。
+4. 激活后，service worker 会立刻控制只有那些在 register() 成功后打开的页面（文档必须重新加载才能真正的受控制，因为文档不管 service worker 是否存在的情况下就已经存在，并在其生命周期维护）。
 
 如果我们使用 `register()` 注册成功，它会使用 [ServiceWorkerRegistration](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration) 对象来兑现。
 
@@ -118,7 +49,7 @@
 * service worker 文件的地址没有写对——需要相对于源（origin），而不是 app 的根目录。例如，worker 是在 <https://mdn.github.io/sw-test/sw.js，app> 的根目录是 <https://mdn.github.io/sw-test/>，你需要写成 `/sw.js`。
 * 不允许你的 app 指向**不同源**（origin）的 service worker。
 * service worker 只能在 **service worker 作用域**里捕获客户端发出的请求。
-* service worker 最大的作用域是 worker 所在的位置（换句话说，如果脚本 `sw.js` 位于 `/js/sw.js` 中，<sapn style="color:red">默认情况下它只能控制 `/js/` 下的 URL</sapn>）。可以使用该 **Service-Worker-Allowed** 标头指定该 worker 的最大范围列表。
+* service worker 最大的作用域是 worker 所在的位置（换句话说，如果脚本 `sw.js` 位于 `/js/sw.js` 中，默认情况下它只能控制 `/js/` 下的 URL）。可以使用该 **Service-Worker-Allowed** 标头指定该 worker 的最大范围列表。
 
 ### 事件
 

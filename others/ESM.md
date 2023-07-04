@@ -44,7 +44,7 @@
    import json from "./package.json" assert {type: "json"}
    ```
 
-**<span style="color:red">注意</span>**：如果是使用的 TypeScript，那么必须在配置文件中添加以下字段
+**注意**：如果是使用的 TypeScript，那么必须在配置文件中添加以下字段
 
 ```json
 {

@@ -20,7 +20,7 @@ summary: 关于直接操控 DOM 属性,编译速度大于任何框架,但是不�
      1. 事件的字符串，不要 on
      2. 回调函数，当事件触发时，该事件触发时该函数会被调用
      3. 是否在捕获阶段触发事件
-        * 一个布尔值，<span style="color:red">默认值 false（冒泡阶段调用）</span>
+        * 一个布尔值，默认值 false（冒泡阶段调用）
         * `options`：有关 `listener` 可选参数对象
            1. `capture`：`Boolean`。表示 `listener` 会在该类型的事件捕获阶段传播到该 EventTarget 时触发
            2. `once`：`Boolean`，表示 listener 在添加之后最多只调用一次。如果为 `true`，listener 会在其被调用之后自动移除

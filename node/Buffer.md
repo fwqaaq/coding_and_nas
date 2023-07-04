@@ -74,7 +74,7 @@ summary: node中的stream机制
    console.log(buf)
    ```
 
-* <span style="background-color:red">如果 `size` 大于 `buffer.constants.MAX_LENGTH` 或小于 0，则抛出 `ERR_INVALID_ARG_VALUE`</span>
+* 如果 `size` 大于 `buffer.constants.MAX_LENGTH` 或小于 0，则抛出 `ERR_INVALID_ARG_VALUE`
 
 1. 如果指定了 `fill`，则分配的 `Buffer` 将通过调用 `buf.fill(fill)` 进行初始化
 
@@ -92,7 +92,7 @@ summary: node中的stream机制
    //<Buffer 6a 0b 9d 19 6a>
    ```
 
-* 调用 `Buffer.alloc()` 可能比替代的 `Buffer.allocUnsafe()` 慢得多，但可确保新创建的 `Buffer` 实例的内容永远<span style="color:red">不会包含来自先前分配的敏感数据</span>，包括可能尚未分配给 `Buffer` 的数据
+* 调用 `Buffer.alloc()` 可能比替代的 `Buffer.allocUnsafe()` 慢得多，但可确保新创建的 `Buffer` 实例的内容永远不会包含来自先前分配的敏感数据，包括可能尚未分配给 `Buffer` 的数据
 
 >`Buffer.allocUnsafe(size)`：以这种方式创建的 Buffer 实例的底层内存不会被初始化。新创建的 Buffer 的内容是未知的，可能包含敏感的数据
 
@@ -157,8 +157,8 @@ console.log(buf.toString("hex"))
 2. `partial`：部分分配状态
 3. `empty`：没有被分配状态
 
-* <span style="color:red">Buffer 在创建时大小已经被确定且是无法调整的</span>,并且以8kb限制区分是大对象还是小对象
-   1. 在初次加载时就会初始化1个8KB的内存空间，buffer.js 源码有体现
+* Buffer 在创建时大小已经被确定且是无法调整的,并且以 8kb 限制区分是大对象还是小对象
+   1. 在初次加载时就会初始化 1 个 8KB 的内存空间，buffer.js 源码有体现
    2. 根据申请的内存大小分为小 Buffer 对象和大 Buffer 对象
    3. 小 Buffer 情况，会继续判断这个 slab 空间是否足够
       * 如果空间足够就去使用剩余空间同时更新 slab 分配状态，偏移量会增加

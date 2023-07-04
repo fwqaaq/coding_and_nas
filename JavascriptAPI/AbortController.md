@@ -88,7 +88,7 @@
 
 > 使用以上两个 API 中断请求
 
-* 使用此方法中断请求:<span style="color:red">DOMException: The user aborted a request.</span>
+* 使用此方法中断请求：DOMException: The user aborted a request.
 
 ```js
 const controller = new AbortController()
