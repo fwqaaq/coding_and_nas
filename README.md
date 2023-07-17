@@ -86,6 +86,7 @@
 * [Linux 正则表达式](Bash/04.Linux正则表达式.md)
 * [Shell 脚本入门](Bash/05.Shell脚本入门.md)
 * [Bash 语句](Bash/06.Shell语句.md)
+* [深入 Bash](Bash/others.md)
 
 ## Others
 
