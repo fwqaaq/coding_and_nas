@@ -8,9 +8,9 @@
 4. [child_process](node/child_process.md)
 5. [websocket](node/ws/websocket.md)
 
-## http
+## HTTP
 
-* [http](http/http.md)
+* [HTTP](http/http.md)
 * [HTTP 缓存](http/HTTP_Cache.md)
 * [源和站](http/origin_and_site.md)
 * [websocket](http/websocket.md)
@@ -26,6 +26,7 @@
   * [WritableStream](./JavascriptAPI/WritableStream.md)
     * [WritableStreamDefaultWriter](./JavascriptAPI/WritableStream.md#writablestreamdefaultwriter)
   * [TransformStream](./JavascriptAPI/TransformStream.md)
+* [EncodingAPI](./JavascriptAPI/EncodingAPI.md)
 * [blob](./JavascriptAPI/blob.md)
 * [fetch](./JavascriptAPI/Fetch.md)
 * [drag](./JavascriptAPI/drag.md)
