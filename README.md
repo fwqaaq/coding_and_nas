@@ -6,7 +6,6 @@
 2. [event](./node/node-event.md)
 3. [process](node/process.md)
 4. [child_process](node/child_process.md)
-5. [websocket](node/ws/websocket.md)
 
 ## HTTP
 
@@ -110,6 +109,7 @@
 * [开启 IPv6](./nas_and_network/IPv6.md)
   * [开启 docker IPv6](./nas_and_network/IPv6.md#群晖-docker-中设置-ipv6)
   * [阿里云公共 IPv6 DNS 对 WIFI Calling 的支持](./nas_and_network/IPv6.md#wifi-calling)
+* [ESXI 学习](./nas_and_network/Esxi.md)
 
 ## 一些示例
 
