@@ -1,5 +1,22 @@
 # ADGuard Home
 
+## 工作原理
+
+1. ADGuard Home 作为本地网络的 DNS 服务器：ADGuard Home会运行一个本地DNS服务器，如 dnsmasq 或 unbound，监听本地网络的 53 端口 DNS 请求。本地网络设备会把 DNS 查询发送到 ADGuard Home。
+
+2. 过滤查询请求：ADGuard Home 收到 DNS 查询请求后，会先检查请求域名是否在过滤列表或黑名单中，如果命中，则直接返回空地址或错误，不会进一步转发查询。
+3. 转发查询请求：如果查询请求未被过滤，ADGuard Home 会将其转发到上游 DNS 服务器，如 AdGuard DNS 或 OpenDNS 等。上游 DNS 服务器会递归解析查询，并返回结果。
+4. 过滤查询结果：上游 DNS 返回查询结果后，ADGuard Home 会再次检查是否需要过滤，过滤之后再返回给本地网络设备。
+5. 缓存结果：ADGuard Home 还会 caches DNS 查询结果，下次相同查询时直接使用缓存，提高速度。
+
+## 三种模式
+
+* 作为 dnsmasq 的上游服务器：这个选项表示 ADGuard Home 自己会运行一个 dnsmasq DNS 服务器，并将其上游设置为指定的上游 DNS 服务器。启用此选项后，ADGuard Home 会作为一个递归 DNS 服务器工作，本地网络的设备会把 DNS 查询请求发到 ADGuard Home，然后 ADGuard Home 再向上游 DNS 请求数据。
+* 重定向 53 端口到上游服务器：这个选项会关闭 ADGuard Home 中的 dnsmasq 服务器，直接把本地网络设备的 DNS 请求（53端口）重定向到上游 DNS 服务器。也就是说，本地网络的设备会直接把 DNS 查询发送到上游 DNS，不经过 ADGuard Home 本身。（需要重定向到 ADG DNS 等有拦截广告等上游服务器）
+* 重定向 53 端口替换 dnsmasq：这个选项表示关闭 dnsmasq，并把本地 DNS 请求重定向到上游 DNS。与上一个选项作用基本一致。
+
+## 设计方案
+
 > 有以下几个方案，这里只讲述第三种方案
 
 1. client: any -> Dnsmasq: 53 -> Clash: 7874 -> ADG: 5335
