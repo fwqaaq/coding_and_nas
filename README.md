@@ -13,6 +13,7 @@
 * [HTTP 缓存](http/HTTP_Cache.md)
 * [源和站](http/origin_and_site.md)
 * [websocket](http/websocket.md)
+* [分片下载](http/splitter_file.md)
 
 ## JavaScript API
 

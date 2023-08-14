@@ -8,6 +8,63 @@
 <body>
   <h1>Welcome</h1>
   <p>You have successfully authenticated.</p>
+  <a href="http://localhost:3000/file" download="cookie.png">download</a>
 </body>
+
+<script type="module">
+
+  // function part({ rangeStart = 0, rangeEnd = '' }) {
+  //   const headers = new Headers({
+  //     Range: `bytes=${rangeStart}-${rangeEnd}`
+  //   })
+  //   return fetch("http://localhost:3000/file", {
+  //     headers
+  //   })
+  //     .then(res => res.arrayBuffer())
+  // }
+
+  // Promise.all([part({ rangeEnd: 18 * 1024 }), part({ rangeStart: 18 * 1024 })]).then(([first, second]) => {
+  //   const blob = new Blob([first, second])
+  //   const url = URL.createObjectURL(blob)
+  //   document.querySelector('a').href = url
+  // })
+
+  /// 流式的读取
+
+  /**
+   *@param {ReadableStreamDefaultReader<Uint8Array>} reader
+  */
+  async function* IteratorStreams(reader) {
+    let { done, value } = await reader.read()
+    while (!done) {
+      if (done) return
+      let count = 0, total = value.length
+      while (count < total) {
+        yield value.slice(count, count + 2048)
+        count += 2048
+      }
+      ({ done, value } = await reader.read())
+    }
+  }
+
+  fetch("http://localhost:3000/file").then(async res => {
+    const reader = res.body.getReader()
+    const generator = IteratorStreams(reader)
+    const arr = []
+    const getStream = async () => {
+      const { value, done } = await generator.next()
+      if (done) return
+      arr.push(value)
+      await getStream()
+    }
+
+    await getStream()
+    const blob = new Blob(arr)
+    const url = URL.createObjectURL(blob)
+    const img = document.createElement('img')
+    img.src = url
+    document.body.appendChild(img)
+  })
+</script>
 
 </html>

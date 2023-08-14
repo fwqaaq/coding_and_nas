@@ -22,7 +22,7 @@
    User-Agent: NCSA\_Mosaic/2.0 (Windows 3.1)
    ```
 
-   //响应
+   // 响应
 
    ```http
    200 OK
