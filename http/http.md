@@ -71,7 +71,7 @@
    (content)
    ```
 
-4. **http2.0**： HTTP/1.1 链接需要请求以正确的顺序发送，理论上可以⽤⼀些并⾏的链接（尤其是 5 到 8 个），带来的成本和复杂性堪忧。⽐如，HTTP 管线化（pipelining）就成为了 Web 开发的负担。
+4. **http2.0**：HTTP/1.1 链接需要请求以正确的顺序发送，理论上可以⽤⼀些并⾏的链接（尤其是 5 到 8 个），带来的成本和复杂性堪忧。⽐如，HTTP 管线化（pipelining）就成为了 Web 开发的负担。
    - HTTP/2 是 **⼆进制协议** ⽽不是⽂本协议。不再可读，也不可⽆障碍的⼿动创建，改 善的优化技术现在可被实施。
    - 这是⼀个多路复⽤协议。并⾏的请求能在同⼀个链接中处理，移除了 HTTP/1.x 中 顺序和阻塞的约束。
    - 压缩了标头。因为标头在⼀系列请求中常常是相似的，其移除了重复和传输重复数 据的成本。
@@ -116,3 +116,47 @@ const httpConn = Deno.serveHttp(await conn.accept())
 - 注意: `headers: new Headers().set('content-type', contentType)!` 添加请求头时不能这样添加，不会更改 `content-type` 的内容
 
 详细代码请移步到[这里](./example/http.ts)
+
+## HTTPS
+
+以下均是在 TLS 协议之上的握手过程
+
+1. `ClientHello`：客户端开始 SSL/TLS 握手过程，发送一个 `Client Hello` 消息给服务器。该消息包括客户端支持的协议版本，一个随机生成的数，以及客户端支持的密码套件。
+2. `ServerHello`：服务器回应 ClientHello 消息，发送一个 `Server Hello` 消息给客户端。该消息包括服务器选择的协议版本，一个随机生成的数，服务器选择的密码套件，以及服务器证书。
+    - TLS 1.3 为了兼容 1.2，会加上 `Change Cipher Spec` 以及成功之后的 Application Data
+
+    ```txt
+    Server Hello, Change Cipher Spec, Application Data
+    ```
+
+3. `Server Certificate`：服务器发送自己的数字证书给客户端。数字证书是由受信任的第三方（CA）签发的，包括了服务器的公钥和一些身份信息。
+4. `Key Exchange`：双方根据之前交换的信息，生成预主密钥（Pre-Master Secret）。然后双方使用该预主密钥生成主密钥（Master Secret），该主密钥用于加密接下来的通信内容。
+5. `Finished`：客户端和服务器发送 Finished 消息，表明握手过程结束。
+
+还有一个就是 HTTPS CONNECT 方法，专门用于请求代理服务器建立一个到目标服务器的 TCP 隧道，之后的所有数据都会通过这个隧道传输，这样就可以做到 HTTPS 代理。
+
+```http
+CONNECT www.example.com:443 HTTP/1.1
+Host: www.example.com
+```
+
+如果成功建立到目标服务器的 TCP 连接，代理服务器会返回 `HTTP/1.1 200 Connection established\r\n\r\n` 这个响应状态行：
+
+申请本地证书和密钥之后启动
+
+```bash
+openssl req -x509 -newkey rsa:4096 -nodes -sha256 -subj '/CN=localhost' -keyout private.pem -out cert.pem
+```
+
+由于浏览器的安全策略，需要手动信任证书，但是可能是 Deno 的 Bug 导致无法直接选择信任（直接报错），
+
+```txt
+error: Uncaught (in promise) Http: error writing a body to connection: tls handshake eof: tls handshake eof
+  for await (const req of httpConn) {
+                   ^
+    at async HttpConn.nextRequest (ext:deno_http/01_http.js:101:21)
+    at async Object.next (ext:deno_http/01_http.js:184:24)
+    at async handleConn (file:///Users/feiwu/Project/node/coding_and_nas/http/example/http.ts:21:20)
+```
+
+参考：<https://www.cnblogs.com/enoc/p/tls-handshake.html>

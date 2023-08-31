@@ -13,12 +13,10 @@ for await (const req of server) {
 
   if (pathname === '/login') {
     const authHeader = req.request.headers.get('authorization')
-    // console.log(authHeader)
     if (authHeader && authHeader.startsWith('Basic ')) {
       const encoded = authHeader.slice(6)
       const decoded = atob(encoded)
       const [username, password] = decoded.split(':')
-      console.log('xxxxx')
       if (username === USERNAME && password === PASSWORD) {
         req.respondWith(
           new Response(null, {
@@ -79,5 +77,3 @@ for await (const req of server) {
     )
   }
 }
-
-fetch

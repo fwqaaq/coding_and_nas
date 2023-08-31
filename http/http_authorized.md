@@ -28,7 +28,7 @@ Authorization: Basic <credentials>
 
 ## [Cookie](./origin_and_site.md#cookie)&Session
 
-![cookie](./example/cookie.png)
+![cookie](./imgs/cookie.png)
 
 1. 浏览器发送http请求后，服务器会进行 cookie 设置。（设置 `Set-Cookie` 表头）
 2. `Cookie` 中有 `value` 和 `name` 两个重要属性。还有一些对于跨源问题的重要标头
@@ -38,7 +38,7 @@ Authorization: Basic <credentials>
 
 >Session：浏览器和服务器是在进行会话，然而比较模糊的就是会话时间。因为关闭浏览器的行为可能是不小心的
 
-![session](./example/session.png)
+![session](./imgs/session.png)
 
 * 所以很多网站会给每个用户的会话设定会话时间（结束会话的时间）和唯一的 ID，并且这些 session 一般都是存储在数据库中的。
 
@@ -55,7 +55,7 @@ Authorization: Basic <credentials>
 
 ## JWT（Json Web Token）
 
-![Token](./example/token.png)
+![Token](./imgs/token.png)
 
 1. 用户第一次登录网页，服务器会生成一个 JWT，服务器不需要保存JWT，只需要保存**JWT 签名的密文**
 2. 接着把JWT发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储
