@@ -11,7 +11,7 @@
    ```
 
 2. **http/1.0**:
-   - 协议版本信息现在会随着每个请求发送（ HTTP/1.0 被追加到了 GET⾏）
+   - 协议版本信息现在会随着每个请求发送（HTTP/1.0 被追加到了 GET ⾏）
    - 状态码会在响应开始时发送，使浏览器能了解请求执⾏成功或失败，并相应调整⾏ 为（如更新或使⽤本地缓存）。
    - 引⼊了 HTTP 标头的概念，⽆论是对于请求还是响应，允许传输元数据，使协议 变得⾮常灵活，更具扩展性。
 
@@ -25,7 +25,7 @@
    // 响应
 
    ```http
-   200 OK
+   HTTP/1.0 200 OK
    Date: Tue, 15 Nov 1994 08:12:31 GMT Server: CERN/3.0 libwww/2.17 Content-Type: text/html
    <HTML>
    ⼀个包含图⽚的⻚⾯
@@ -57,7 +57,7 @@
    //响应
 
    ```http
-   200 OK
+   HTTP/1.1 200 OK
    Connection: Keep-Alive
    Content-Encoding: gzip
    Content-Type: text/html; charset=utf-8
