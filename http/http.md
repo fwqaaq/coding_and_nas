@@ -1,6 +1,6 @@
-# Http
+# HTTP
 
-1. **http/0.9**: 求由单⾏指令构成，以唯⼀可⽤⽅法[GET](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET)，其后跟⽬标资源的路径 （⼀旦连接到服务器，协议、服务器、端⼝号这些都不是必须的）
+1. **http/0.9**: 求由单⾏指令构成，以唯⼀可⽤⽅法 [GET](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods/GET)，其后跟⽬标资源的路径（⼀旦连接到服务器，协议、服务器、端⼝号这些都不是必须的）
    - 请求： `GET /mypage.html`
    - 响应也是⼗分简单：
 
@@ -119,19 +119,48 @@ const httpConn = Deno.serveHttp(await conn.accept())
 
 ## HTTPS
 
-以下均是在 TLS 协议之上的握手过程
+> 证书：<https://www.cloudflare.com/zh-cn/learning/ssl/what-is-an-ssl-certificate/>
+>
+> 握手：<https://www.cloudflare.com/zh-cn/learning/ssl/what-happens-in-a-tls-handshake/>
+>
+> 1. 身份验证：HTTPS 的证书允许客户端验证服务器的身份。
+> 2. 建立信任：证书采用了授权的机构来签发，这些机构就是 CA（Certificate Authority，证书授权机构），CA 会对申请者进行身份验证，然后签发证书，这样就可以保证证书的可信度
+> 3. 防止中间人攻击：如果没有证书验证，尽管数据是加密的，中间人通过建立两个独立的会话，并在中间转发数据，就可以解密、查看以及修改数据。例如自签证书，可能在发送的时候遭到中间人替换，从而解密查看数据。
+> 4. 提供公钥：在 TLS1.3 的 1RTT 的握手中，证书的交换可能在数据交换之后开始，但在某些情况下，可能用于后续的操作。
 
-1. `ClientHello`：客户端开始 SSL/TLS 握手过程，发送一个 `Client Hello` 消息给服务器。该消息包括客户端支持的协议版本，一个随机生成的数，以及客户端支持的密码套件。
-2. `ServerHello`：服务器回应 ClientHello 消息，发送一个 `Server Hello` 消息给客户端。该消息包括服务器选择的协议版本，一个随机生成的数，服务器选择的密码套件，以及服务器证书。
-    - TLS 1.3 为了兼容 1.2，会加上 `Change Cipher Spec` 以及成功之后的 Application Data
+- 证书验证：每个操作系统或浏览器都维护了一个受信任的认证中心（CA）列表。这些 CA 被视为可信的，因为它们遵循严格的标准和流程来签发证书。
+- 证书链：大多数服务器不直接使用由根CA签发的证书，而是使用由中间CA签发的证书。这创建了一个证书链，从服务器证书到中间CA，然后再到根CA。
 
-    ```txt
-    Server Hello, Change Cipher Spec, Application Data
-    ```
+### TLS 1.2
 
-3. `Server Certificate`：服务器发送自己的数字证书给客户端。数字证书是由受信任的第三方（CA）签发的，包括了服务器的公钥和一些身份信息。
-4. `Key Exchange`：双方根据之前交换的信息，生成预主密钥（Pre-Master Secret）。然后双方使用该预主密钥生成主密钥（Master Secret），该主密钥用于加密接下来的通信内容。
-5. `Finished`：客户端和服务器发送 Finished 消息，表明握手过程结束。
+密码套件：
+
+```txt
+// TLS1.2
+TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+协议 密钥交换 验证    对称加密  模式  哈希
+```
+
+TLS 1.2 在不同的密码套件中，加密流程都不太一样，但是大致流程如下：最安全的是 DH，DH 不会发送预主密钥，而是根据协商好的 DH 参数生成预主密钥，然后再生成会话密钥。
+
+1. 客户端生成一个随机数，称为 `Client Random`，以及发送密码套件（`Client Hello`）
+2. 服务端生成一个随机数，称为 `Server Random`，以及发送协商好的密码套件（例如 DH，则生成 **DH 参数**），然后使用证书的**私钥**给客户端随机数，服务器随机数和 DH 参数随机数加密，加密之后的数据就是**数字签名**，最后将*数字签名与证书*一起发送出去。（`Server Hello`、`Certificate`）。[如果不是 DH，这里仅使用 SSL 证书进行验证，不会进行数字签名，之后发送公钥（`Server Key Exchange`），用于加密预主密钥，以及 `Server Hello Done`，*这里并未开始进行加密*]
+3. 客户端会使用证书中的公钥解密数字签名，并进行验证，如果验证成功，则发送**客户端 DH 参数**。[或者使用公钥加密客户端生成的第二个随机数，然后使用公钥将客户端生成的**第二随机数**（也称为**预主密钥**）发送给服务端。]
+4. 这时两边会使用 DH 协商参数生成**预主密钥**，接着再用**预主密钥**和一开始的随机数生成**会话密钥**。并且开始为正式的内容进行加密。
+
+## TLS 1.3
+
+> TLS 1.3 开始也仅能支持 DH 这类算法，所以发送的时候也可以直接发送 DH 参数。
+
+密码套件：
+
+```txt
+// TLS1.3 只支持三种密钥交换
+TLS_AES_256_GCM_SHA256
+协议 对称加密     哈希
+```
+
+## HTTP 代理
 
 还有一个就是 HTTPS CONNECT 方法，专门用于请求代理服务器建立一个到目标服务器的 TCP 隧道，之后的所有数据都会通过这个隧道传输，这样就可以做到 HTTPS 代理。
 

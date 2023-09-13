@@ -263,7 +263,7 @@ gif 动图
 
   - Mac 下录制屏幕
     - avfoundation -i 1:0
-    - 这里的 1是视频输入位置（可能也有其他设备，如显示器）， 0代表音频输入位置
+    - 这里的 1 是视频输入位置（可能也有其他设备，如显示器），0 代表音频输入位置
 
     ```bash
     ffmpeg -f avfoundation -i 1:0 -vcodec libx264 -preset ultrafast -acodec libmp3lame -f flv out.flv
@@ -272,7 +272,7 @@ gif 动图
     - 也可以不指定编码器，指定视频的帧率以及视频的大小
 
     ```bash
-    ffmpeg -f avfoundation -r 30 -s 1280x720 -i "1:1"  output.mkv
+    ffmpeg -f avfoundation -r 30 -s 1280x720 -i 1:1  output.mkv
     ```
 
     - 指定视频需要录制的时间也是可以的 `-t`
@@ -315,13 +315,13 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
     ```
 
 - `-preset` 预设的编码质量。**为什么 `veryslow` 之下没有任何参数**
-  - **这是一种收益递减准则：**slow 与medium相比提升了5%——10%；slower 与 slow相比提升了5%；veryslow 与slower相比提升了3%。与veryslow相比，如果继续设定一个以极高的编码时间为代价的参数，只换取了大概1%的视频质量提升。
+  - **这是一种收益递减准则：**slow 与 medium 相比提升了 5%——10%；slower 与 slow 相比提升了5%；veryslow 与 slower 相比提升了 3%。与 veryslow 相比，如果继续设定一个以极高的编码时间为代价的参数，只换取了大概 1% 的视频质量提升。
 - `-profile:v` 指定编码器的配置，和压缩比有关
   - `basline`：实时通信领域
   - `main`：流媒体视频
   - `high`：高清视频
 - `-level:v`:对编码器具体规范配置的规范和限制，**由于压缩比和画质成反比**
-  - 参数：**1.1,1.2 2.1,2.2 …. 5.1,5.2**
+  - 参数：**1.1,1.2 2.1,2.2 … 5.1,5.2**
   - 如果是 1080p 的视频就使用 4.1
 
 ### 过滤器（filter）
@@ -333,16 +333,16 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
 前一个过滤器的输出会直接作为下一个过滤器的输入
 
 - 通常多媒体 filter 的分类
-  - 音频filter
-  - 视频filter
-  - 字幕filter
+  - 音频 filter
+  - 视频 filter
+  - 字幕 filter
 - ffmpeg 中 filter 的分类
   - source filter （只有输出）
   - audio filter
   - video filter
   - Multimedia filter
-  - sink filter （只有输入）
-- **-vf 使用（视频）**
+  - sink filter（只有输入）
+- **-vf** 使用（视频）
   - 如果一个 fliter 有多个参数，需要使用 `,` 分隔
 
      ```bash
@@ -393,7 +393,7 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
      ffmpeg -i input.mkv -vf "crop=w=3/4*in_w:h=3/4*in_h" output.mkv
      ```
 
-  - 视频旋转，指定一个弧度，顺时针旋转视频，你可以给角度然后乘以 **PI/180**
+  - 视频旋转，指定一个弧度，顺时针旋转视频，你可以给角度然后乘以 **PI/180**
 
      ```bash
      # 顺时针旋转 90
@@ -402,7 +402,7 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
      ffmpeg -i input.mp4 -vf "rotate=PI"
      ```
 
-  - **setpts** (PTS = presentation time stamp) 更改视频播放速度，较大的数值意味着较慢的播放速度
+  - **setpts**（PTS = presentation time stamp）更改视频播放速度，较大的数值意味着较慢的播放速度
 
      ```bash
      # 加速
@@ -414,7 +414,7 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
   - 添加背景音乐
     - ffmpeg -i 原始视频文件 -i 背景音乐文件 -filter_complex \[1:a]aloop=loop=-1:size=2e+09[out];\[out]\[0:a]amix -t 视频时间 添加背景音乐后的视频文件
       - -filter_complex：滤镜
-      - [1:a]aloop=loop=-1:size=2e+09[out]; 将背景音无限循环
+      - [1:a]aloop=loop=-1:size=2e+09[out]；将背景音无限循环
       - \[out]\[0:a]amix 将背景音和视频中的音频混合
       - -t 10 文件时长，单位为秒，建议取值原始视频总时长
 
@@ -453,16 +453,16 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
     4. 删除音频、视频、字幕、数据流
 
         ```bash
-        ffmpeg  -i test.mp4 -an/-vn/-sn/-dn out.mp4
+        ffmpeg -i test.mp4 -an/-vn/-sn/-dn out.mp4
         ```
 
-    5. 让声音同时在左右声道出现(有时候音频只能右耳听到)
+    5. 让声音同时在左右声道出现（有时候音频只能右耳听到）
 
         ```bash
         ffmpeg -i input.mp3 -af "channelmap=1-0|1-1" output.mp3
         ```
 
-    6. **atempo** 它只接受 **0.5**(半速) 到 **2** (倍速)之间的值。为了越过这个限制，你可以链式使用这个过滤器
+    6. **atempo** 它只接受 **0.5**(半速) 到 **2** (倍速)之间的值。为了越过这个限制，你可以链式使用这个过滤器
 
         ```bash
         ffmpeg -i input.wav -af "atempo=0.75" output.wav 
@@ -473,32 +473,32 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
 ### filter
 
 - **音频 filter**
-  - `adelay` filter 实现不同声道的延时处理。使用参数如下 `adelay=1500|0|500`，这个例子中实现第一个声道的延迟 1.5s，第三个声道延迟 0.5s，第二个声道不做调整。
-  - `aecho` filter 实现回声效果，具体参考 <http://ffmpeg.org/ffmpeg-filters.html#aecho>。
-  - `amerge` filter 将多个音频流合并成一个多声道音频流。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#amerge-1>。
-  - `ashowinfo` filter 显示每一个音频帧的信息，比如时间戳、位置、采样格式、采样率、采样点数等。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#ashowinfo>。
+  - `adelay` filter 实现不同声道的延时处理。使用参数如下 `adelay=1500|0|500`，这个例子中实现第一个声道的延迟 1.5s，第三个声道延迟 0.5s，第二个声道不做调整。
+  - `aecho` filter 实现回声效果，具体参考 <http://ffmpeg.org/ffmpeg-filters.html#aecho>。
+  - `amerge` filter 将多个音频流合并成一个多声道音频流。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#amerge-1>。
+  - `ashowinfo` filter 显示每一个音频帧的信息，比如时间戳、位置、采样格式、采样率、采样点数等。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#ashowinfo>。
   - `pan`filter 特定声道处理，比如立体声变为单声道，或者通过特定参数修改声道或交换声道。主要有两大类：混音处理，比如下面的例子 `pan=1c|c0=0.9*c0+0.1*c1`，实现立体声到单声道的变换；声道变换，比如 5.1 声道顺序调整，`pan="5.1| c0=c1 | c1=c0 | c2=c2 | c3=c3 | c4=c4 | c5=c5"`。
-  - `silencedetect` 和 `silenceremove` filter 根据特定参数检测静音和移除静音。
-  - `volume` 和 `volumedetect` filter 这两个 filter 分别实现音量调整和音量检测。
-  - audio source filter：`aevalsrc` filter 按照特定表达式生成音频信号。`anullsrc` filter 生成特定的原始音频数据，用于模板或测试。`anoisesrc` filter 生成噪声音频信号。`sine` filter 生成正弦波音频信号。
-  - audio sink filter：`abuffersink` filter 和 `anullsink` filter，这些 filter 只是用于特定情况下结束链式 filter。
+  - `silencedetect` 和 `silenceremove` filter 根据特定参数检测静音和移除静音。
+  - `volume` 和 `volumedetect` filter 这两个 filter 分别实现音量调整和音量检测。
+  - audio source filter：`aevalsrc` filter 按照特定表达式生成音频信号。`anullsrc` filter 生成特定的原始音频数据，用于模板或测试。`anoisesrc` filter 生成噪声音频信号。`sine` filter 生成正弦波音频信号。
+  - audio sink filter：`abuffersink` filter 和 `anullsink` filter，这些 filter 只是用于特定情况下结束链式 filter。
 - **视频 filter**
-  - `blend` 和 `tblend` filter 将两帧视频合并为一帧。具体参数参考 <http://ffmpeg.org/ffmpeg-filters.html#blend>。
-  - `crop` filter按照特定分辨率裁剪输入视频，具体参数参考 <http://ffmpeg.org/ffmpeg-filters.html#crop>。
-  - `drawbox`、`drawgrid`、`drawtext` filter 绘制 box（对话框）、grid（表格）、text（文本）。
-  - `edgedetect` filter 边缘检测 filter。
-  - `fps` filter 按照指定帧率输出视频帧（丢帧或者复制）。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#fps-1>。
-  - `hflip`、`vflip` filter 水平和垂直镜像。
-  - `histogram` filter 生成每帧的各颜色分量的直方图。
-  - `noise` filter 在输入视频帧中添加白噪声。
-  - `overlay` filter 视频叠加。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#overlay-1>。
-  - `pad` filter 视频边界填充。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#pad-1>。
-  - `rotate` filter 视频任意角度旋转。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#rotate>。
-  - `scale` filter 使用 libswscale 库完成视频缩放的 filter。
-  - `showinfo` filter 显示视频帧的参数信息，比如时间戳、采样格式、帧类型等。
-  - `subtitles` filter 使用 libass 库绘制 subtitle（字幕）。
-  - `thumbnail` filter 提取缩略图的 filter。
-  - `transpose` filter 图像转置的 filter。参数参考 <http://ffmpeg.org/ffmpeg-filters.html#transpose>。
+  - `blend` 和 `tblend` filter 将两帧视频合并为一帧。具体参数参考 <http://ffmpeg.org/ffmpeg-filters.html#blend>。
+  - `crop` filter按照特定分辨率裁剪输入视频，具体参数参考 <http://ffmpeg.org/ffmpeg-filters.html#crop>。
+  - `drawbox`、`drawgrid`、`drawtext` filter 绘制 box（对话框）、grid（表格）、text（文本）。
+  - `edgedetect` filter 边缘检测 filter。
+  - `fps` filter 按照指定帧率输出视频帧（丢帧或者复制）。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#fps-1>。
+  - `hflip`、`vflip` filter 水平和垂直镜像。
+  - `histogram` filter 生成每帧的各颜色分量的直方图。
+  - `noise` filter 在输入视频帧中添加白噪声。
+  - `overlay` filter 视频叠加。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#overlay-1>。
+  - `pad` filter 视频边界填充。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#pad-1>。
+  - `rotate` filter 视频任意角度旋转。具体参考 <http://ffmpeg.org/ffmpeg-filters.html#rotate>。
+  - `scale` filter 使用 libswscale 库完成视频缩放的 filter。
+  - `showinfo` filter 显示视频帧的参数信息，比如时间戳、采样格式、帧类型等。
+  - `subtitles` filter 使用 libass 库绘制 subtitle（字幕）。
+  - `thumbnail` filter 提取缩略图的 filter。
+  - `transpose` filter 图像转置的 filter。参数参考 <http://ffmpeg.org/ffmpeg-filters.html#transpose>。
 - **source filter**
 
     主要有 `buffer`、`cellatuo`、`coreimagesrc`、`mptestsrc`、`life` 等 filter，具体效果建议参考 ffmpeg 用户手册。
@@ -508,13 +508,13 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
     主要有`buffersink`、`nullsink`两个filter。
 
 - **多媒体 filter**
-  - `ahistogram` filter 将音频转化为视频输出，并显示为音量的直方图。
-  - `concat` filter 将音频流、视频流拼接成一个。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#concat](http://ffmpeg.org/ffmpeg-filters.html#concat) 。
-  - `metadata`、`ametadata` filter 操作 metadata 信息。
-  - `setpts`、`asetpts` filter 改变输入音频帧或视频帧的pts。
-  - `showfreqs`、`showspectrum`、`showspertrumpic`、`showvolume`、`showwaves` filter 将输入音频转换为视频显示，并显示频谱、音量等信息
-  - `split`、`asplit` filter 将输入切分为多个相同的输出。
-  - source filter 主要是 `movie`、`amovie` filter。从 movie 容器中读取音频或者视频帧。
+  - `ahistogram` filter 将音频转化为视频输出，并显示为音量的直方图。
+  - `concat` filter 将音频流、视频流拼接成一个。具体参考 [http://ffmpeg.org/ffmpeg-filters.html#concat](http://ffmpeg.org/ffmpeg-filters.html#concat) 。
+  - `metadata`、`ametadata` filter 操作 metadata 信息。
+  - `setpts`、`asetpts` filter 改变输入音频帧或视频帧的pts。
+  - `showfreqs`、`showspectrum`、`showspertrumpic`、`showvolume`、`showwaves` filter 将输入音频转换为视频显示，并显示频谱、音量等信息
+  - `split`、`asplit` filter 将输入切分为多个相同的输出。
+  - source filter 主要是 `movie`、`amovie` filter。从 movie 容器中读取音频或者视频帧。
 
 ## 剪切与合并
 
@@ -564,7 +564,7 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
 2. `stream_type_specifier`: 指定文件的流的类型（a：表示音频，v：表示视频）
 3. `stream_index`：指定流的类型的索引（从 0 开始）
 
-- 例如 `map 0:a:1`（从0开始计数）从视频中选择第二个音轨
+- 例如 `map 0:a:1`（从 0开始计数）从视频中选择第二个音轨
 
 > 同样，`-map 0`是指选择第一个输入文件中的所有数据（包括音频和视频）；如果你只要选择视频流，使用 `-map 0:v`，或者音频流（`-map 0:a`）； 如果只要一个音频，选择 `-map 0:a:1` 第二个音频，那么就是过滤音频
 
@@ -596,11 +596,11 @@ ffmpeg -i input.mp4 -map 0 -map -0:a out.mp4
   - 如果音频文件的长度大于视频的文件，则合成后的视频会停留在最后一个画面播放音频
 
     ```bash
-    ffmpeg -r 3 -i %3d.jpg -i test.mp3 -shortest out2.mp4
+    ffmpeg -r 3 -i %3d.jpg -i test.mp3 -shortest out2.mp4
     ```
 
 - 从视频中提取图片
-  - ffmpeg -i 原始视频文件 -ss 开始时间 -t 时间长度 -s  宽度*高度 -r 每秒图片张数 输出图片
+  - ffmpeg -i 原始视频文件 -ss 开始时间 -t 时间长度 -s  宽度*高度 -r 每秒图片张数 输出图片
   - 获取640*624分辨率的图片，每秒获取3张图片
   - 图片的分辨率最好和视频的分辨率一致，可以用 ffproble -i 1.mp4 的方式获取视频的分辨率信息
 

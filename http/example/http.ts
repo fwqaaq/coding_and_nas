@@ -25,20 +25,13 @@ async function handleConn(conn: Deno.TlsConn) {
     const ext = path.split('.').pop()
 
     const file = (await Deno.open(`./http/example${path}`)).readable
+
     let res: Response | null = null
-    switch (ext) {
-      case 'html' || 'css':
-        res = resBuilder(file, `text/${ext}`)
-        break
-      case 'js':
-        res = resBuilder(file, 'text/javascript')
-        break
-      case 'png' || 'jpg' || 'ico':
-        res = resBuilder(file, `image/${ext}`)
-        break
-      default:
-        res = resBuilder(file, '*/*')
-    }
+    if (ext === 'html' || ext === 'css') res = resBuilder(file, `text/${ext}`)
+    else if (ext === 'js') res = resBuilder(file, 'text/javascript')
+    else if (ext === 'png' || ext === 'jpg' || ext === 'ico')
+      res = resBuilder(file, `image/${ext}`)
+    else res = resBuilder(file, '*/*')
     req.respondWith(res!)
   }
 }

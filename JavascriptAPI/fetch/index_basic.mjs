@@ -36,6 +36,7 @@ fetch('https://audio.fwqaq.us/banner/wlop.png').then(
 
               loaded += value.byteLength
               progress({ loaded, total })
+              // enqueue the next data chunk into our target stream
               controller.enqueue(value)
               read()
             }).catch(error => {
@@ -46,6 +47,7 @@ fetch('https://audio.fwqaq.us/banner/wlop.png').then(
         }
       }))
   }).then(response => response.blob()).then(
+    // display the image only when the image is completely downloaded
     data => {
       status("download successful")
       document.getElementById('img').src = URL.createObjectURL(data)
