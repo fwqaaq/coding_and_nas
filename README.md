@@ -14,6 +14,7 @@
 * [源和站](http/origin_and_site.md)
 * [websocket](http/websocket.md)
 * [分片下载](http/splitter_file.md)
+* [RPC](http/rpc.md)
 
 ## JavaScript API
 
