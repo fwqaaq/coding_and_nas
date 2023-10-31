@@ -61,7 +61,7 @@ nc --send-only -lvp 8888 < listen.sh
 客户端
 
 ```bash
-nc -v --recv-only ip 8888 > listen.sh
+nc --recv-only -v ip 8888 > listen.sh
 ```
 
 参见：<https://wangchujiang.com/reference/docs/netcat.html>

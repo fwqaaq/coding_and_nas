@@ -126,4 +126,62 @@ echo -e '{"method":"HelloService.Hello","params":["hello"],"id":1}' | nc localho
 # {"id":1,"result":"hello:World","error":null}
 ```
 
+## grpc
+
+grpc 是 Google 开源的一款 rpc 库，它使用 protobuf 作为接口定义语言，可以用于多种语言，包括 C、C++、Java、Go、Python、Ruby、Node.js、Android Java、Objective-C、PHP、C# 等。
+
+1. 在 Mac 上下载 protobuf 编译器
+
+   ```bash
+   brew install protobuf
+   protoc
+   ```
+
+2. 安装 Go 语言的 protobuf 编译器插件，参考 [golang/protobuf](https://grpc.io/docs/languages/go/quickstart/)
+
+   ```bash
+   go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+   go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+   ```
+
+3. 为本项目安装 go 的 protobuf 库，并且 GitHub 中的 golang 版本已经停止更新
+
+   ```bash
+   go get -u google.golang.org/protobuf
+   ```
+
+4. 生成 go 代码
+
+   ```bash
+   protoc --proto_path src/ --go_out=src/ src/first/person.proto
+   ```
+
+注意事项：在编写 proto 文件时，需要注意 `option go_package` 指定的包名。`The import path must contain at least one period ('.') or forward slash ('/') character.`
+
+```bash
+option go_package = "example.first";
+```
+
+如果没有在暴露 go bin 的 PATH，需要指定
+
+```bash
+echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.zshrc
+```
+
+### 生成服务端和客户端的代码
+
+```bash
+protoc --proto_path ./protos ./protos/*.proto \
+      --go_out=./pb \
+      --go-grpc_out=./pb
+```
+
+此时，在 pb 目录下会生成 `*.pb.go` 以及 `*_grpc.pb.go` 文件，第一个文件是 Protocol Buffers 的消息定义，第二个是 gRPC 的客户端和服务端代码。
+
+### 生成证书文件
+
+```bash
+openssl req -x509 -newkey rsa:4096 -nodes -sha256 -config openssl.cnf -keyout private.pem -out cert.pem
+```
+
 参考：<https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html>

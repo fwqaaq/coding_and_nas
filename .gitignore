@@ -3,3 +3,6 @@ package.json
 pnpm-lock.yaml
 /test/
 /**/*/.DS_Store
+http/grpc_example/*.pem
+http/grpc_example/pb
+http/grpc_example/server

@@ -1,0 +1,61 @@
+// 版本号
+syntax = "proto3";
+
+// 生成 go 版本的包名
+option go_package = "protobuf.go";
+
+import "google/protobuf/timestamp.proto";
+import "enums.proto";
+
+// 定义消息的类型，结构
+message Employee {
+  int32 id = 1;
+  int32 no = 2;
+  string firstName = 3;
+  string lastName = 4;
+
+  MonthSalary monthSalary = 6;
+  EmployeeStatus status = 7;
+  google.protobuf.Timestamp lastModified = 8;
+
+  reserved 5;
+  reserved "salary";
+}
+
+message MonthSalary {
+  float basic = 1;
+  float bonus = 2;
+}
+
+message GetByNoRequest { int32 no = 1; }
+
+message EmployeeResponse { Employee employee = 1; }
+
+message EmployeeRequest { Employee employee = 1; }
+
+message GetAllRequest {}
+
+message AddPhotoRequest { bytes data = 1; }
+
+message AddPhotoResponse { bool isOk = 1; }
+
+message TokenRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message TokenResponse {
+  string token = 1;
+  google.protobuf.Timestamp expiration = 2;
+  bool success = 3;
+}
+
+// 提供对外的接口，stream 关键字可以传输多个消息流
+service EmployeeService {
+  rpc GetByNo(GetByNoRequest) returns (EmployeeResponse);
+  rpc GetAll(GetAllRequest) returns (stream EmployeeResponse);
+  rpc AddPhoto(stream AddPhotoRequest) returns (AddPhotoResponse);
+  rpc Save(EmployeeRequest) returns (EmployeeResponse);
+  rpc SaveAll(stream EmployeeRequest) returns (stream EmployeeResponse);
+  rpc CreateToken(TokenRequest) returns (TokenResponse);
+}
