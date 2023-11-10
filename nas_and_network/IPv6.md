@@ -67,7 +67,7 @@ $dig aaaa 6.ipw.cn
 
 ## merlingClash
 
-> 开启 merlingClash 的 IPv6 支持，一定要确定 Vps 是否支持。
+> 开启 merlingClash 的 IPv6 支持，一定要确定 VPS 是否支持。
 
 1. 在【**附加功能**】的【**高级模式**】下开启【**TPROXY**】功能
 2. 然后在【高级模式】中滑到最下面的【**Tproxy转发 | IPV6模式**】，按照指示开启即可
@@ -83,9 +83,9 @@ $dig aaaa 6.ipw.cn
 | Cloudflare | 2606:4700:4700::1111、2606:4700:4700::1001  |
 | Google     | 2001:4860:4860::8888、2001:4860:4860::8844 |
 
-* 但是这会出现一个问题，IPv6 一般会优先访问，这样还是会造成网络卡顿的情况（部分国外网站可能无法访问，其也可以回落支持 IPv4）。参考：<https://ipw.cn/doc/ipv6/user/ipv4_ipv6_prefix_precedence.html#_3-调整网络前缀优先级-让-ipv4-访问优先>
+* 但是这会出现一个问题，IPv6 一般会优先访问，这样还是会造成网络卡顿的情况（参考这篇文章：<https://www.v2ex.com/t/800024>）。参考：<https://ipw.cn/doc/ipv6/user/ipv4_ipv6_prefix_precedence.html#_3-调整网络前缀优先级-让-ipv4-访问优先>
 
-注意：下发的 DNS 服务器不要有 IPv6 的
+⚠️注意：下发的 DNS 服务器不要有 IPv6 的
 
 ## 群晖 docker 中设置 IPv6
 
@@ -97,7 +97,7 @@ $dig aaaa 6.ipw.cn
 
 ## WIFI Calling
 
-> 国内对于 ultra mobile 的域名会进行 DNS 污染，但是即使是用 google、cloudflare 的公共 dns 服务器也是有问题的。
+> 国内对于 ultra mobile 的域名会进行 DNS 污染，但是即使是用 google、cloudflare 的公共 dns 服务器也是有问题的。（前提是节点的 UDP 可以代理，并且同时开启了 UDP 代理）
 
 * 但是，IPv6 的阿里云公共 DNS 是完全可以解析的，不仅仅是对 WIFI Calling，而且对国外，如 Youtube 的域名都是可以解析，而且很快：`2400:3200::1`
 * 不过 ultra mobile 至今未支持 IPv6。所以使用**域名劫持**还是得对应 IPv4
@@ -111,32 +111,7 @@ $dig aaaa 6.ipw.cn
 
 * 如果是 Clash 一定要开启 fake-ip，不要在本地进行 DNS 请求，并要做好分流规则。
    1. 订阅转换地址：<https://sub.xeton.dev/>
-   2. 分流规则地址：<https://cf.buliang0.cf/clash-rules/nodnsleak.ini>，也可以根据以下规则集自定义设置。
-
-```ini
-[custom]
-;解决DNS泄露，无分流群组
-ruleset=🚀 节点选择,[]DOMAIN-SUFFIX,xn--ngstr-lra8j.com
-ruleset=🚀 节点选择,[]DOMAIN-SUFFIX,services.googleapis.cn
-ruleset=🚀 节点选择,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleCNProxyIP.list
-ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
-ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
-ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
-ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list
-ruleset=REJECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
-ruleset=REJECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
-ruleset=REJECT,https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
-ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
-ruleset=DIRECT,https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaIp.list
-ruleset=DIRECT,[]GEOIP,CN,no-resolve
-ruleset=🚀 节点选择,[]FINAL
-
-custom_proxy_group=🚀 节点选择`select`[]♻️ 自动选择`[]DIRECT`.*
-custom_proxy_group=♻️ 自动选择`url-test`.*`http://www.gstatic.com/generate_204`300,,50
-
-enable_rule_generator=true
-overwrite_original_rules=true
-```
+   2. 分流规则地址：<https://gist.githubusercontent.com/fwqaaq/21fdebec74f1e2def127f400c94c7679/raw/102bfd9d78aaceb2afb57a31632a1357e99e7147/custom.ini>，也可以根据以下规则集自定义设置。
 
 ### DNS 模式以及缓存
 
@@ -150,7 +125,7 @@ overwrite_original_rules=true
 
 > 问题：在开启 IPv6 时，使用 APPLE TV 可能出现刚打开 YouTube 的一瞬间可以访问，之后就无法访问的情况。（其它设备都可以访问）
 
-* 猜测以及解决方法：APPLE TV 可能是无法进行 IPv6 到 IPv4 的回落，所以一旦 IPv6 检测到是国内，无法回落，就会被禁止访问。（不要检测到自己的 IPv6 出现在国内，否则无法回落）
+* 猜测以及解决方法：APPLE TV 可能是无法进行 IPv6 的代理，或者 DNS 解析错误，但是流量正常，所以一旦 IPv6 检测到是国内，无法回落，就会被禁止访问。（不要检测到自己的 IPv6 出现在国内，否则无法回落）
    1. 将 IPv6 的功能关闭，只使用 IPv4 的代理进行访问。
    2. 开启带有 IPv6 代理的 Vps。
 
@@ -162,7 +137,7 @@ overwrite_original_rules=true
 2. 旁路网关（例如 n1 盒子的 IP 是 192.168.50.57）和主路由桥接，如果是 n1 盒子（桥接不需要 wan 口），网关需要指向**主路由的 IP**（例如 192.168.50.1）
 3. 设置主路由的网关，主路由的默认网关指向 n1 的 IP 地址，并且 DNS 服务器最好指向公共的 DNS，这样所有的流量都会经过 n1
    * ![assus_router.png](./网关设置/assus_router.png)
-   * 如果你的主路由是 openwrt，那么需要设置 lan 口的 DHCP 服务器中的 DHCP 选项**3, 192.168.50.1 6, 1.1.1.1**（3 是网关地址，6 是 DNS 服务器地址）
+   * 如果你的主路由是 openwrt，那么需要设置 lan 口的 DHCP 服务器中的 DHCP 选项 **3, 192.168.50.1 6, 1.1.1.1**（3 是网关地址，6 是 DNS 服务器地址）
 4. 由于网关互指，可能会产生 NAT 回环，不能正确的映射 DMZ 主机的位置，请设置好防火墙规则。
 
 > 很明显，这有时候甚至是不需要的操作，因为两个网关其实并没有什么作用。
