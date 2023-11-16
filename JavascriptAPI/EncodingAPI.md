@@ -7,9 +7,9 @@
 ### [码位](https://developer.mozilla.org/zh-CN/docs/Glossary/Code_point)和[码元](https://developer.mozilla.org/zh-CN/docs/Glossary/Code_unit)
 
 * **码位**是表示文本的系统（例如 Unicode）中用于表示抽象字符的数值。例如 Unicode 中使用 `U+0041` 表示字符 `A` 的码位。你可以在[这里](https://www.qqxiuzi.cn/bianma/Unicode.htm)尝试。
-* **码元**是字符编码系统的基本组成部分，1 或者 2 个码元可能编码成一个 Unicode 码位。
-  * 码元是 16 位值，但是并非所有的 Unicode 码位都适合 16 位（例如 emoji，它一般是 32 位）。在 JavaScript 中查看字符的长度，其实就是查看码元的个数：
-* **Unicode 字符集**试图为全世界的每一个字符提供一个唯一的数字标识，而这个标识就是码位，每个字符都对应一个码位（可能不准确，因为可能由两个码位组成的 emoji）。
+* **码元**是字符编码系统的基本组成部分，1 或者多个码元可可能编码成一个 Unicode 码位。
+  * 码元可能是 16 位（UTF-16）/8 位（UTF-8）值，但是并非所有的 Unicode 码位都对应码元的位数（例如 emoji，它一般是 32 位）。在 JavaScript 中查看字符的长度，其实就是查看 UTF-16 码元的个数：
+* **Unicode 字符集**试图为全世界的每一个字符提供一个唯一的数字标识，而这个标识就是码位，每个字符都对应一个码位。
 
    ```js
    const face = "🥵";
@@ -58,7 +58,7 @@ console.log(s.length) // 1
    console.log('💗'.charCodeAt(0)) // 码元，不是有效的 unicode 字符
    ```
 
-> 我们也会经常遇到由两个**码位**组成的 emoji，例如 `🀄️`，这种是拼接 emoji，具体字节取决于码位的字符编码。
+> 我们也会经常遇到看似由两个**码位**组成的 emoji，例如 `🀄️`，这种是拼接 emoji，具体字节取决于码位的字符编码。
 
 ```js
 const emoji = '🀄️'
@@ -75,15 +75,15 @@ console.log(emoji.length) // 3
    ```
 
 * 但是当我们使用 [String.codePointAt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt) 的时候，我们必须了解它的返回值，如果是高位代理，会返回整个字符的码位（包含低位代理），如果是低位代理，则返回该低位代理。
-  * `emoji.codePointAt(0)` 获取的是索引位置 0 的码位，返回值 126980 对应的是 `U+1F004`，这是字符“🀄”的 Unicode 码位。
-  * `emoji.codePointAt(1)` 获取的是索引位置 1 的码位，返回值 56324 是因为字符“🀄”超出了 Unicode 的基本多语言平面（BMP），在 UTF-16 编码中被表示为一个代理对。所以你这里得到的是这个代理对的**第二个部分**。
-  * `emoji.codePointAt(2)` 获取的是索引位置 2 的码位，返回值 65039 对应的是 U+FE0F，这是字符“”的 Unicode 码位，用于指定前面的 emoji 应该以彩色显示。你可以看到，字符“🀄️”实际上由两个 Unicode 码位 `U+1F004` 和 `U+FE0F` 组成，它们分别对应字符“🀄”和“”。
+  * `emoji.codePointAt(0)` 获取的是索引位置 0 的码位（这里饭回的是不含修饰符的码位），返回值 126980 对应的是 `U+1F004`，这是字符“🀄”的 Unicode 码位。
+  * `emoji.codePointAt(1)` 获取的是索引位置 1 的码元，返回值 56324 是因为字符“🀄”超出了 Unicode 的基本多语言平面（BMP），在 UTF-16 编码中被表示为一个代理对。所以你这里得到的是这个代理对的**第二个部分**。
+  * `emoji.codePointAt(2)` 获取的是索引位置 2 的码元，返回值 65039 对应的是 U+FE0F，这是修饰符的 Unicode 码位，用于指定前面的 emoji 应该以彩色显示。你可以看到，字符“🀄️”实际上由两个 Unicode 码位 `U+1F004` 和 `U+FE0F` 组成，它们分别对应字符“🀄”和修饰符。
 
    ```js
    const emoji = '🀄️'
    emoji.codePointAt(0) // 126980，高位代理
    emoji.codePointAt(1) // 56324，低位代理
-   emoji.codePointAt(2) // 65039，另一个码位
+   emoji.codePointAt(2) // 65039，修饰符
    String.fromCodePoint(126980, 65039) // 🀄️
    ```
 
@@ -267,7 +267,7 @@ const ReadableStreamDefault = decodedTextStream.getReader()
    //http://www.daidu.com?bar=#
    ```
 
-## base64编码
+## base64 编码
 
 * `atob()`：如果传入字符串不是有效的 `base64` 字符串，比如其长度不是 4 的倍数，则抛出 DOMException
 * `btob()`：该字符串包含非单字节的字符，则抛出 DOMException
