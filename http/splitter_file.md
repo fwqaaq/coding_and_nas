@@ -96,18 +96,18 @@ const handler = async (req: Request) => {
 在前端，主要是如何指定字节的读取数量，这里再次使用了一个异步迭代器，以每 2048 字节开始读取：
 
 ```js
-  async function* IteratorStreams(reader) {
-    let { done, value } = await reader.read()
-    while (!done) {
-      if (done) return
-      let count = 0, total = value.length
-      while (count < total) {
-        yield value.slice(count, count + 2048)
-        count += 2048
-      }
-      ({ done, value } = await reader.read())
+async function* IteratorStreams(reader) {
+  let { done, value } = await reader.read()
+  while (!done) {
+    if (done) return
+    let count = 0, total = value.length
+    while (count < total) {
+      yield value.slice(count, count + 2048)
+      count += 2048
     }
+    ({ done, value } = await reader.read())
   }
+}
 ```
 
 具体实现请看：[server](./example/split_downloaded.ts)、[client](./example/welcome.html)
