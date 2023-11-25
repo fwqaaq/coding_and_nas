@@ -2,7 +2,7 @@
 
 ## 工作原理
 
-1. ADGuard Home 作为本地网络的 DNS 服务器：ADGuard Home会运行一个本地DNS服务器，如 dnsmasq 或 unbound，监听本地网络的 53 端口 DNS 请求。本地网络设备会把 DNS 查询发送到 ADGuard Home。
+1. ADGuard Home 作为本地网络的 DNS 服务器：ADGuard Home会运行一个本地 DNS 服务器，如 dnsmasq 或 unbound，监听本地网络的 53 端口 DNS 请求。本地网络设备会把 DNS 查询发送到 ADGuard Home。
 
 2. 过滤查询请求：ADGuard Home 收到 DNS 查询请求后，会先检查请求域名是否在过滤列表或黑名单中，如果命中，则直接返回空地址或错误，不会进一步转发查询。
 3. 转发查询请求：如果查询请求未被过滤，ADGuard Home 会将其转发到上游 DNS 服务器，如 AdGuard DNS 或 OpenDNS 等。上游 DNS 服务器会递归解析查询，并返回结果。
