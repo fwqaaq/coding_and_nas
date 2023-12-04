@@ -4,8 +4,6 @@
 
 1. [buffer](./node/Buffer.md)
 2. [event](./node/node-event.md)
-3. [process](node/process.md)
-4. [child_process](node/child_process.md)
 
 ## HTTP
 

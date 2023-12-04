@@ -1,21 +1,10 @@
----
-title: Buffer
-date: 2022-05-19 15:22:37
-author: Jack-zhang
-categories: node
-tags:
-  - JS
-  - node
-summary: node中的stream机制
----
-
-## Buffer
+# Buffer
 
 >Buffer 是内存区域，帮助开发者处理二进制数据，在此生态系统中处理二进制数据
 
 * Buffer 与流紧密相连。当处理器接受的数据的速度快于消费的速度，则会将数据收入 Buffer
 
-### 创建 Buffer
+## 创建 Buffer
 
 > 在 6.0.0 之前只能使用 Buffer 构造函数（new Buffer()）创建，该函数会根据提供的参数以不同的方式分配返回的 `Buffer`
 
