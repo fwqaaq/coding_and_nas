@@ -18,9 +18,26 @@
 Authorization: Basic <credentials>
 ```
 
+当然还有其他的认证方案：例如 JWT 使用的是 [Bear](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#bearer)，通过 OAuth 保护令牌。
+
+其他比较重要的认证方案：
+
+| 认证方案 | RFC 文档 | 描述 |
+| ------- | ---------| ----|
+| Digest  | [RFC 7616](https://datatracker.ietf.org/doc/html/rfc7616) | 请使用支持 SHA-256 的版本 |
+| HOBA    | [RFC 7486](https://datatracker.ietf.org/doc/html/rfc7486) | 基于数字签名，目前在阶段三  |
+
 ## [WWW-Authenticate](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/WWW-Authenticate)
 
 >该响应标头提供如何进行验证的信息，其中至少包含有一种质询方式。
+
+有多种可能的质询方式，这里只列出一种（也可以指定多个质询，每个质询之间使用 `,` 分割）：
+
+```http
+WWW-Authenticate: <auth-scheme> auth-param1=token1, ..., auth-paramN=auth-paramN-token
+```
+
+客户端在收到响应状态吗 401 以及`WWW-Authenticate` 标头之后，通常会提示用户接收凭据，然后重新请求资源。这个新的请求会使用 **`Authorization`** 标头向服务器提供凭据，并针对所选择的“质询”身份验证方法进行合适的编码。
 
 ### 授权的持久性
 
