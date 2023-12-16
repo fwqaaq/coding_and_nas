@@ -120,3 +120,37 @@ IEEE 802.11 Wireless Management
         Tag: Vendor Specific: Ralink Technology, Corp.
         Tag: Vendor Specific: MediaTek Inc.
         Tag: FILS Indication
+``
+
+### 管理帧
+
+> 以下帧用于与 Wi-Fi 之间的认证
+
+* Beacon 帧：包含网络信息，如 SSID 和支持的速率。
+* Probe 请求/响应：用于发现网络和获取网络信息。
+* Authentication 帧：网络访问前的身份验证过程。
+* Association 请求/响应：用于将客户端设备连接到 AP。
+* Reassociation 请求/响应：用于在 AP 之间进行漫游。
+* Disassociation 帧：终止关联。
+* Deauthentication 帧：终止认证。
+
+### 控制帧
+
+> 控制帧用于辅助数据的传递过程。包括：
+
+* RTS（Request to Send）：清除发送数据的通道。
+* CTS（Clear to Send）：响应RTS，提供发送数据的确认。
+* ACK（Acknowledgement）：数据接收确认。
+* PS-Poll：省电模式下的客户端询问AP是否有等待的数据。
+* CF-End（Contention-Free End）：结束无竞争期。
+* CF-End + CF-Ack：结束无竞争期并确认接收。
+
+### 数据帧
+
+> 数据帧用于实际的数据传输。包括：
+
+* Data：承载上层协议的数据。
+* Data + CF-Ack：数据帧和确认。
+* Data + CF-Poll：数据帧和询问下一个接收方。
+* Null Function：没有数据传输，但通知AP客户端仍然活跃。
+
