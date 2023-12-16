@@ -7,7 +7,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-var employees = []protobuf_go.Employee{
+var employees = []*protobuf_go.Employee{
 	{
 		Id:        1,
 		No:        1994,

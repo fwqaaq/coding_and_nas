@@ -58,7 +58,7 @@ func (s *employeeService) GetByNo(ctx context.Context, req *protobuf_go.GetByNoR
 
 func (s *employeeService) GetAll(req *protobuf_go.GetAllRequest, stream protobuf_go.EmployeeService_GetAllServer) error {
 	for _, e := range employees {
-		if err := stream.Send(&protobuf_go.EmployeeResponse{Employee: &e}); err != nil {
+		if err := stream.Send(&protobuf_go.EmployeeResponse{Employee: e}); err != nil {
 			return err
 		}
 		time.Sleep(2 * time.Second)
@@ -100,7 +100,7 @@ func (s *employeeService) SaveAll(stream protobuf_go.EmployeeService_SaveAllServ
 		if err != nil {
 			return err
 		}
-		employees = append(employees, *req.Employee)
+		employees = append(employees, req.Employee)
 		stream.Send(&protobuf_go.EmployeeResponse{Employee: req.Employee})
 	}
 

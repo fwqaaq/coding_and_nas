@@ -62,3 +62,94 @@
 * 提高信噪比：提高信噪比的方法包括增强信号源的功率、使用更有效的天线、减少环境噪声源或使用更先进的信号处理技术。
 
 信噪比与其他无线网络性能指标（如 RSSI - 接收信号强度指示）有关，但它们不是同一回事。RSSI 主要衡量信号强度，而不考虑噪声水平。
+
+## Beacon
+
+Wi-Fi 握手的第一帧就是 Beacon 帧，它会发上面这些信息，以及国家的代号等相关的信息，用于控制信道的号。
+
+在这里，我们有一个捕获 Wi-Fi 802.11 相关的参考：<https://wiki.wireshark.org/CaptureSetup/WLAN#turning-on-monitor-mode>，在不开启 `monitor mode` 的模式下，网络驱动器会将 `802.11` 数据包翻译到一个“假的”以太网数据包。
+
+> Without any interaction, capturing on WLAN's may capture only user data packets with "fake" Ethernet headers. In this case, you won't see any 802.11 management or control packets at all, and the 802.11 packet headers are "translated" by the network driver to "fake" Ethernet packet headers.
+
+在 WireShark 设置中的 `monitor mode` 中勾选上，就可以捕获“真正的”原始数据包，但是不幸的是 MacOS 竟然将这一功能禁止了：<https://ask.wireshark.org/question/14292/how-to-get-monitor-mode-working-in-mac-os-catalina/>。并且只在 Wireless Diagnostics 这一程序中可以使用 monitor mode，打开最上层的 window 窗口选择 sniff 监视，然后就会得到 802.11 的 pcap 数据包。
+
+> Seems that Apple has decided in its great wisdom to disable monitor mode for newer Mac (or it is a bug they don't bother to fix...
+
+必须使用 `monitor mode` 才能真正捕获 802.11 帧，大多数时候这些都会像上面那样被翻译成假的以太网帧。以下是链路层 802.11 的详细帧情况：
+
+1. Frame：表示捕获的帧的总体信息，包括在网络上的大小和捕获的大小。
+2. Radiotap Header：是一个介于物理层和 MAC 层之间的自定义头部，通常包含了关于捕获的无线数据包的物理层信息，如信道、速率、信号强度等。
+3. 802.11 radio information：提供关于无线电传输的详细信息，比如使用的频率、信道宽度等。
+4. IEEE 802.11 Beacon frame：这是一个管理帧，用于在无线网络中通告网络的存在，包含了网络的一些基本信息，如时间戳、SSID、支持的速率等。
+5. IEEE 802.11 Wireless Management：这部分提供了管理无线网络连接和配置的信息。
+
+```txt
+Frame 4: 465 bytes on wire (3720 bits), 465 bytes captured (3720 bits)
+Radiotap Header v0, Length 36
+802.11 radio information
+IEEE 802.11 Beacon frame, Flags: ........C
+IEEE 802.11 Wireless Management
+    Fixed parameters (12 bytes)
+        Timestamp: 5338465996880
+        Beacon Interval: 0.102400 [Seconds]
+        Capabilities Information: 0x1131
+    Tagged parameters (389 bytes)
+        Tag: SSID parameter set: "Redmi_436A_5G"
+        Tag: Supported Rates 6(B), 9, 12(B), 18, 24(B), 36, 48, 54, [Mbit/sec]
+        Tag: DS Parameter set: Current Channel: 48
+        Tag: Traffic Indication Map (TIM): DTIM 0 of 1 bitmap
+        Tag: Country Information: Country Code CN, Environment Global operating classes
+        Tag: Power Constraint: 0
+        Tag: TPC Report Transmit Power: 22, Link Margin: 0
+        Tag: Tx Power Envelope
+        Tag: RM Enabled Capabilities (5 octets)
+        Tag: AP Channel Report: Operating Class 129, Channel List : 50,
+        Tag: RSN Information
+        Tag: Vendor Specific: Microsoft Corp.: WPS
+        Tag: QBSS Load Element 802.11e CCA Version
+        Tag: HT Capabilities (802.11n D1.10)
+        Tag: HT Information (802.11n D1.10)
+        Tag: VHT Capabilities
+        Tag: VHT Operation
+        Tag: Extended Capabilities (11 octets)
+        Tag: Vendor Specific: Microsoft Corp.: WMM/WME: Parameter Element
+        Ext Tag: HE Capabilities
+        Ext Tag: HE Operation
+        Ext Tag: Spatial Reuse Parameter Set
+        Ext Tag: MU EDCA Parameter Set
+        Tag: Vendor Specific: Ralink Technology, Corp.
+        Tag: Vendor Specific: MediaTek Inc.
+        Tag: FILS Indication
+```
+
+### 管理帧
+
+> 以下帧用于与 Wi-Fi 之间的认证
+
+* Beacon 帧：包含网络信息，如 SSID 和支持的速率。
+* Probe 请求/响应：用于发现网络和获取网络信息。
+* Authentication 帧：网络访问前的身份验证过程。
+* Association 请求/响应：用于将客户端设备连接到 AP。
+* Reassociation 请求/响应：用于在 AP 之间进行漫游。
+* Disassociation 帧：终止关联。
+* Deauthentication 帧：终止认证。
+
+### 控制帧
+
+> 控制帧用于辅助数据的传递过程。包括：
+
+* RTS（Request to Send）：清除发送数据的通道。
+* CTS（Clear to Send）：响应RTS，提供发送数据的确认。
+* ACK（Acknowledgement）：数据接收确认。
+* PS-Poll：省电模式下的客户端询问AP是否有等待的数据。
+* CF-End（Contention-Free End）：结束无竞争期。
+* CF-End + CF-Ack：结束无竞争期并确认接收。
+
+### 数据帧
+
+> 数据帧用于实际的数据传输。包括：
+
+* Data：承载上层协议的数据。
+* Data + CF-Ack：数据帧和确认。
+* Data + CF-Poll：数据帧和询问下一个接收方。
+* Null Function：没有数据传输，但通知AP客户端仍然活跃。

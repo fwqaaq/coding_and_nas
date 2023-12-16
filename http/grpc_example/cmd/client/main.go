@@ -30,10 +30,10 @@ func main() {
 	}
 	defer conn.Close()
 	client := protobuf_go.NewEmployeeServiceClient(conn)
-	// getByNo(client)
+	getByNo(client)
 	// getAll(client)
 	// addPhoto(client)
-	saveAll(client)
+	// saveAll(client)
 }
 
 func saveAll(client protobuf_go.EmployeeServiceClient) {
@@ -155,5 +155,4 @@ func getAll(client protobuf_go.EmployeeServiceClient) {
 		}
 		fmt.Println(res.Employee)
 	}
-
 }
