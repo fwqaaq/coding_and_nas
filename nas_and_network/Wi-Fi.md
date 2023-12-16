@@ -65,12 +65,58 @@
 
 ## Beacon
 
-Wi-Fi 握手的第一帧就是 Beacon 帧，它会发上面这些信息，以及国家等相关的信息。
+Wi-Fi 握手的第一帧就是 Beacon 帧，它会发上面这些信息，以及国家的代号等相关的信息，用于控制信道的号。
 
 在这里，我们有一个捕获 Wi-Fi 802.11 相关的参考：<https://wiki.wireshark.org/CaptureSetup/WLAN#turning-on-monitor-mode>，在不开启 `monitor mode` 的模式下，网络驱动器会将 `802.11` 数据包翻译到一个“假的”以太网数据包。
 
 > Without any interaction, capturing on WLAN's may capture only user data packets with "fake" Ethernet headers. In this case, you won't see any 802.11 management or control packets at all, and the 802.11 packet headers are "translated" by the network driver to "fake" Ethernet packet headers.
 
-在 WireShark 设置中的 `monitor mode` 中勾选上，就可以捕获“真正的”原始数据包，但是不幸的是 MacOS 竟然将这一功能砍掉：<https://ask.wireshark.org/question/14292/how-to-get-monitor-mode-working-in-mac-os-catalina/>
+在 WireShark 设置中的 `monitor mode` 中勾选上，就可以捕获“真正的”原始数据包，但是不幸的是 MacOS 竟然将这一功能禁止了：<https://ask.wireshark.org/question/14292/how-to-get-monitor-mode-working-in-mac-os-catalina/>。并且只在 Wireless Diagnostics 这一程序中可以使用 monitor mode，打开最上层的 window 窗口选择 sniff 监视，然后就会得到 802.11 的 pcap 数据包。
 
 > Seems that Apple has decided in its great wisdom to disable monitor mode for newer Mac (or it is a bug they don't bother to fix...
+
+必须使用 `monitor mode` 才能真正捕获 802.11 帧，大多数时候这些都会像上面那样被翻译成假的以太网帧。以下是链路层 802.11 的详细帧情况：
+
+1. Frame：表示捕获的帧的总体信息，包括在网络上的大小和捕获的大小。
+2. Radiotap Header：是一个介于物理层和 MAC 层之间的自定义头部，通常包含了关于捕获的无线数据包的物理层信息，如信道、速率、信号强度等。
+3. 802.11 radio information：提供关于无线电传输的详细信息，比如使用的频率、信道宽度等。
+4. IEEE 802.11 Beacon frame：这是一个管理帧，用于在无线网络中通告网络的存在，包含了网络的一些基本信息，如时间戳、SSID、支持的速率等。
+5. IEEE 802.11 Wireless Management：这部分提供了管理无线网络连接和配置的信息。
+
+```txt
+Frame 4: 465 bytes on wire (3720 bits), 465 bytes captured (3720 bits)
+Radiotap Header v0, Length 36
+802.11 radio information
+IEEE 802.11 Beacon frame, Flags: ........C
+IEEE 802.11 Wireless Management
+    Fixed parameters (12 bytes)
+        Timestamp: 5338465996880
+        Beacon Interval: 0.102400 [Seconds]
+        Capabilities Information: 0x1131
+    Tagged parameters (389 bytes)
+        Tag: SSID parameter set: "Redmi_436A_5G"
+        Tag: Supported Rates 6(B), 9, 12(B), 18, 24(B), 36, 48, 54, [Mbit/sec]
+        Tag: DS Parameter set: Current Channel: 48
+        Tag: Traffic Indication Map (TIM): DTIM 0 of 1 bitmap
+        Tag: Country Information: Country Code CN, Environment Global operating classes
+        Tag: Power Constraint: 0
+        Tag: TPC Report Transmit Power: 22, Link Margin: 0
+        Tag: Tx Power Envelope
+        Tag: RM Enabled Capabilities (5 octets)
+        Tag: AP Channel Report: Operating Class 129, Channel List : 50,
+        Tag: RSN Information
+        Tag: Vendor Specific: Microsoft Corp.: WPS
+        Tag: QBSS Load Element 802.11e CCA Version
+        Tag: HT Capabilities (802.11n D1.10)
+        Tag: HT Information (802.11n D1.10)
+        Tag: VHT Capabilities
+        Tag: VHT Operation
+        Tag: Extended Capabilities (11 octets)
+        Tag: Vendor Specific: Microsoft Corp.: WMM/WME: Parameter Element
+        Ext Tag: HE Capabilities
+        Ext Tag: HE Operation
+        Ext Tag: Spatial Reuse Parameter Set
+        Ext Tag: MU EDCA Parameter Set
+        Tag: Vendor Specific: Ralink Technology, Corp.
+        Tag: Vendor Specific: MediaTek Inc.
+        Tag: FILS Indication
