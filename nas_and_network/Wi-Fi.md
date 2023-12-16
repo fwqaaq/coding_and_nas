@@ -62,3 +62,15 @@
 * 提高信噪比：提高信噪比的方法包括增强信号源的功率、使用更有效的天线、减少环境噪声源或使用更先进的信号处理技术。
 
 信噪比与其他无线网络性能指标（如 RSSI - 接收信号强度指示）有关，但它们不是同一回事。RSSI 主要衡量信号强度，而不考虑噪声水平。
+
+## Beacon
+
+Wi-Fi 握手的第一帧就是 Beacon 帧，它会发上面这些信息，以及国家等相关的信息。
+
+在这里，我们有一个捕获 Wi-Fi 802.11 相关的参考：<https://wiki.wireshark.org/CaptureSetup/WLAN#turning-on-monitor-mode>，在不开启 `monitor mode` 的模式下，网络驱动器会将 `802.11` 数据包翻译到一个“假的”以太网数据包。
+
+> Without any interaction, capturing on WLAN's may capture only user data packets with "fake" Ethernet headers. In this case, you won't see any 802.11 management or control packets at all, and the 802.11 packet headers are "translated" by the network driver to "fake" Ethernet packet headers.
+
+在 WireShark 设置中的 `monitor mode` 中勾选上，就可以捕获“真正的”原始数据包，但是不幸的是 MacOS 竟然将这一功能砍掉：<https://ask.wireshark.org/question/14292/how-to-get-monitor-mode-working-in-mac-os-catalina/>
+
+> Seems that Apple has decided in its great wisdom to disable monitor mode for newer Mac (or it is a bug they don't bother to fix...
