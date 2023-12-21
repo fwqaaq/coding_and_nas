@@ -83,8 +83,9 @@ Wi-Fi 握手的第一帧就是 Beacon 帧，它会发上面这些信息，以及
 4. IEEE 802.11 Beacon frame：这是一个管理帧，用于在无线网络中通告网络的存在，包含了网络的一些基本信息，如时间戳、SSID、支持的速率等。
 5. IEEE 802.11 Wireless Management：这部分提供了管理无线网络连接和配置的信息。
 
-```txt
-Frame 4: 465 bytes on wire (3720 bits), 465 bytes captured (3720 bits)
+<details>
+  <summary>管理帧</summary>
+  <p><pre>Frame 4: 465 bytes on wire (3720 bits), 465 bytes captured (3720 bits)
 Radiotap Header v0, Length 36
 802.11 radio information
 IEEE 802.11 Beacon frame, Flags: ........C
@@ -119,8 +120,8 @@ IEEE 802.11 Wireless Management
         Ext Tag: MU EDCA Parameter Set
         Tag: Vendor Specific: Ralink Technology, Corp.
         Tag: Vendor Specific: MediaTek Inc.
-        Tag: FILS Indication
-```
+        Tag: FILS Indication</pre></p>
+</details>
 
 ### 管理帧
 
@@ -152,4 +153,8 @@ IEEE 802.11 Wireless Management
 * Data：承载上层协议的数据。
 * Data + CF-Ack：数据帧和确认。
 * Data + CF-Poll：数据帧和询问下一个接收方。
-* Null Function：没有数据传输，但通知AP客户端仍然活跃。
+* Null Function：没有数据传输，但通知 AP 客户端仍然活跃。
+
+## [IEEE 802.1 协议](https://en.wikipedia.org/wiki/IEEE_802.1)
+
+参考：<https://zhuanlan.zhihu.com/p/469409849>
