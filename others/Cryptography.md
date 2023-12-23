@@ -264,11 +264,10 @@ crypto.randomUUID()
 
 keyusages 是一个数组，包含了密钥的用途，但是各个密钥算法指定的用途各不相同：
 
-* RSA-OAEP：["encrypt", "decrypt"]
-* ECDSA/HMAC/RSA-PSS：["sign", "verify"]
-* ECDH：["deriveKey", "deriveBits"]
-* AES-CTR/AES-CBC/AES-GCM：["encrypt", "decrypt", "wrapKey", "unwrapKey"]（既可以加密解密也可以解包装）
-* AES-KW：["wrapKey", "unwrapKey"]
+* RSASSA-PKCS1-v1_5/ECDSA/HMAC/RSA-PSS：["sign", "verify"]
+* ECDH/HKDF/PBKDF2：["deriveKey", "deriveBits"]
+* RSA-OAEP/AES-CTR/AES-CBC/AES-GCM：["encrypt", "decrypt"]
+* AES-CTR/AES-CBC/AES-GCM/AES-KW：["wrapKey", "unwrapKey"]
 
 ```js
 const key = await window.crypto.subtle.generateKey(
@@ -315,6 +314,30 @@ const sign = await crypto.subtle.sign(
 const verify = await crypto.subtle.verify("HMAC", key, sign, data)
 // true
 ```
+
+#### 加密解密
+
+```js
+const { publicKey, privateKey } = await crypto.subtle.generateKey(
+    {
+        name: "RSA-OAEP",
+        modulusLength: 4096,
+        publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+        hash: "SHA-256",
+    },
+    true,
+    ["encrypt", "decrypt"]
+)
+
+const secrets = await window.crypto.subtle.encrypt("RSA-OAEP", publicKey, new TextEncoder().encode("Hello, World!"))
+const message = await window.crypto.subtle.decrypt("RSA-OAEP", privateKey, secrets)
+console.log(new TextDecoder().decode(message))
+```
+
+* `modulusLength`：RSA 加密的长度
+* [`publicExponent`](https://stackoverflow.com/questions/51168408/how-can-i-use-publicexponent-as-65537-in-rsa-oaep-algorithm-in-javascript)：RSA 加密的公开指数（通常是 (E, N) 中的 E，私钥加密对是 (D, N)），一般使用 65535、17、3 作为公开指数。
+
+应用——关于前端密码为什么要加密的参考：<https://blog.huli.tw/2023/01/10/security-of-encrypt-or-hash-password-in-client-side/>
 
 #### [导出](https://developer.mozilla.org/zh-CN/docs/Web/API/SubtleCrypto/exportKey)/[导入](https://developer.mozilla.org/zh-CN/docs/Web/API/SubtleCrypto/importKey)密钥
 
