@@ -77,14 +77,17 @@ WWW-Authenticate: <auth-scheme> auth-param1=token1, ..., auth-paramN=auth-paramN
 1. 用户第一次登录网页，服务器会生成一个 JWT，服务器不需要保存 JWT，只需要保存 **JWT 签名的密文**
 2. 接着把 JWT 发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储
 
-* token验证登录
-  >三段式加密字符串：header（算法）、payload（数据）、signature（签名信息）
-  >>
-  >> * 第一段：头，签证（安全信息验证，你的口令，进行不可逆加密）
-  >> * 第二段：你要保存的信息，将 `header` 和 `payload` base64 编码后进行算法运算得到签名信息
-  >> * 第三段：额外信息，不可逆加密
-  >>
-  >>>  这一段字符串由后端发给前端。在登陆过以后，生成一个 token 给前端，前端保存这个 token。如果前端需要登录后查看页面，或者登陆后发送的请求，只要你把 token 带回来，解密一下
+* token 验证登录
+
+> 这里的 token 分为三段：header（头）、payload（载荷）、signature（签名信息）
+>>
+>> * header：通常是 token 的类型（如 jwt）以及加密的算法（如 HS256，默认是 HMAC SHA256）。
+>> * payload：这些声明可以是标准的（如发行者 `iss`、过期时间 `exp`、主题 `sub`），以及自定义的用户角色、id 等信息。
+>> * signature：使用密钥和 header 中指定的算法对 header 和 payload 进行签名。确保 token 在传输过程中未被篡改。
+
+服务端验证签名：服务端不仅要验证签名是否正确以及是否过期，如果过期，一种做法是返回 401，让用户重定向到登录页面；另一种是“刷新令牌（Refresh Token）”机制。当访问令牌（Access Token）过期时，可以使用刷新令牌来无需用户干预地获取一个新的访问令牌。
+
+参考：<https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html>
 
 ## 总结
 
