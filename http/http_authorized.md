@@ -51,9 +51,17 @@ WWW-Authenticate: <auth-scheme> auth-param1=token1, ..., auth-paramN=auth-paramN
 2. `Cookie` 中有 `value` 和 `name` 两个重要属性，还有一些对于跨源问题的重要标头。
 3. 浏览器会将 Cookie 保存起来，并且在以后的每一个请求自动附上这个 Cookie（关于是否主动带标头要看浏览器设置）
 
-* 并且打开浏览器就可以看到 Cookie，并且如果将用户密码等重要信息放在浏览器就很不安全
+* 并且打开浏览器就可以看到 Cookie，并且如果将用户密码等重要信息放在浏览器就很不安全。
+* 例如对于下面的 JWT 的情况，这时候可能就会有使用 Cookie 的情况，但是希望保证安全，就可以对 Cookie 做一些限制：
 
->Session：浏览器和服务器是在进行会话，然而比较模糊的就是会话时间，因为关闭浏览器的行为可能是不小心的。
+```http
+Set-Cookie: id=a3fWa; Expires=Thu, 21 Oct 2021 07:28:00 GMT; Secure; HttpOnly
+```
+
+> [!NOTE]
+> 设置 HttpOnly 会阻止一些第三方脚本通过 document.cookie 拿到 cookie，Cookie 本身并不可以[跨源](./http/origin_and_site.md#cookie)。
+
+Session：浏览器和服务器是在进行会话，然而比较模糊的就是会话时间，因为关闭浏览器的行为可能是不小心的。
 
 ![session](./imgs/session.png)
 
