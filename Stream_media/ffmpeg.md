@@ -63,7 +63,7 @@
   - `-encoders` 显示可用编码器
   - `-layouts` 显示标准声道名称
   - `-pix_fmts` 显示可用的像素格式
-  - `-sample_fmts`显示可用的音频采样 格式
+  - `-sample_fmts` 显示可用的音频采样 格式
   - `-bsfs` 显示可用比特流filter
   - `-colors` 显示可用的颜色名称
 

@@ -34,6 +34,7 @@
 * [MediaSource](./JavascriptAPI/MediaSource.md)
 * [AbortController](./JavascriptAPI/AbortController.md)
 * [worker](./JavascriptAPI/worker.md)
+* [Crypto](./JavascriptAPI/Cryptography.md)
 
 ### 类型转换
 
@@ -92,12 +93,11 @@
 
 1. [ESM](./others/ESM.md)
 2. [端口转发](./others/端口转发.md)
-3. [密码学](./others/Cryptography.md)
-4. [netcat](./others/netcat.md)
-5. [使用 iperf3 测速](./others/iperf3.md)
-6. [图灵完备](./others/Turing_Complete.md)
-7. [TCP](./others/TCP.md)
-8. [文件系统](./others/FileSystem.md)
+3. [netcat](./others/netcat.md)
+4. [使用 iperf3 测速](./others/iperf3.md)
+5. [图灵完备](./others/Turing_Complete.md)
+6. [TCP](./others/TCP.md)
+7. [文件系统](./others/FileSystem.md)
 
 ## Stream Media
 
@@ -117,6 +117,7 @@
   * [阿里云公共 IPv6 DNS 对 WIFI Calling 的支持](./nas_and_network/IPv6.md#wifi-calling)
 * [ESXI 学习](./nas_and_network/Esxi.md)
 * [Wi-Fi](./nas_and_network/Wi-Fi.md)
+* [群晖问题](./nas_and_network/Synology.md)
 
 ## 一些示例
 

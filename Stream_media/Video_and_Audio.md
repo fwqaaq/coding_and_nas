@@ -13,15 +13,8 @@
     - 使用 `ffmpeg -codecs` 可以查看FFmpeg支持的编码格式，包括视频，音频
 3. 编码器
     - 编码器（encoders）是实现某种编码格式的库文件。只有安装了某种格式的编码器，才能实现该格式视频/音频的编码和解码。
-        1. FFmpeg 内置的视频编码器
-            - libx264：最流行的开源 H.264 编码器
-            - NVENC：基于 NVIDIA GPU 的 H.264 编码器
-            - libx265：开源的 HEVC 编码器
-            - libvpx：谷歌的 VP8 和 VP9 编码器
-            - libaom：AV1 编码器
-        2. 音频编码器
-            - libfdk-aac
-            - aac
+        1. FFmpeg 内置的视频编码器：`libx264`：最流行的开源 H.264 编码器；`NVENC`：基于 NVIDIA GPU 的 H.264 编码器；`libx265`：开源的 HEVC 编码器；`libvpx`：谷歌的 VP8 和 VP9 编码器；`libaom`：AV1 编码器
+        2. 音频编码器：`libfdk-aac`、`aac`
     - 使用 `ffmpeg -encoders` 可以查看已安装的编码器
 4. 常见的音视频编码组合（适用于 **1080p**）
     1. MP4 封装：H264 视频编码 + AAC 音频编码
