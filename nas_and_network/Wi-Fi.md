@@ -157,4 +157,4 @@ IEEE 802.11 Wireless Management
 
 ## [IEEE 802.1 协议](https://en.wikipedia.org/wiki/IEEE_802.1)
 
-参考：<https://zhuanlan.zhihu.com/p/469409849>
+参考：<https://en.wikipedia.org/wiki/IEEE_802.1>
