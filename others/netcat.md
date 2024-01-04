@@ -64,4 +64,12 @@ nc --send-only -lvp 8888 < listen.sh
 nc --recv-only -v ip 8888 > listen.sh
 ```
 
+## 端口扫描
+
+> 通过 netcat 进行端口扫描，可以快速判断目标主机的端口是否开放。
+
+```bash
+nc -vz ip port
+```
+
 参见：<https://wangchujiang.com/reference/docs/netcat.html>

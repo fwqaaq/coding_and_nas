@@ -96,8 +96,7 @@
 3. [netcat](./others/netcat.md)
 4. [使用 iperf3 测速](./others/iperf3.md)
 5. [图灵完备](./others/Turing_Complete.md)
-6. [TCP](./others/TCP.md)
-7. [文件系统](./others/FileSystem.md)
+6. [文件系统](./others/FileSystem.md)
 
 ## Stream Media
 
