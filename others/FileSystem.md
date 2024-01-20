@@ -50,3 +50,13 @@ sudo mount -t apfs /dev/disk6s1 /path/to/MyMountPoint
 ```
 
 * 卸载的时候，一定要先离开挂载点，再卸载。
+
+### Linux 下文件系统的挂载
+
+在 Linux 下文件系统一般默认是 ext4，可以使用 `lsblk -f`, `fdisk -l` 查看系统的文件系统类型。
+
+使用如下命令可以格式化文件系统，但是注意，如果只想格式化某个分区，一定要指定分区，例如 /dev/sdb1，否则会格式化整个磁盘。
+
+```bash
+sudo mkfs.ext4 /dev/sdb
+```
