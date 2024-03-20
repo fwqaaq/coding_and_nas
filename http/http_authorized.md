@@ -74,11 +74,14 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 
 * 浏览器会利用 Cookie 的特点，每次访问都会带有 SessionID，直到有效期失效后会自行删除 Cookie
 
->如果有大量用户访问服务器的时候，服务器依旧使用基于 Cookie 的 Session，就需要存储大量 `SessionID` 在服务器中。
+> 如果有大量用户访问服务器的时候，服务器依旧使用基于 Cookie 的 Session，就需要存储大量 `SessionID` 在服务器中。
 >
 > 如果有多台服务器的情况，服务器中的 SessionID 还要分配给其它服务器才能保证用户避免再次输入用户名和密码
 
 ## JWT（Json Web Token）
+
+> [!NOTE]
+> JWT 不用保存任何 session 信息，服务器变成无状态的。
 
 ![Token](./imgs/token.png)
 
@@ -102,3 +105,5 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 1. Session 是由服务器诞生并且保存在服务器中的，由服务器主导
 2. Cookie 是一种数据载体，把 Session 保存在 Cookie 中，送到客户端中，就可以跟随每个 HTTP 发送
 3. Token 诞生在服务器，但保存在浏览器中，可以放在 Cookie 或者 Storage 中，持有 Token 就像持有令牌可以访问服务器
+
+参考：<https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html>

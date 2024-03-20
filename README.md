@@ -97,6 +97,7 @@
 4. [使用 iperf3 测速](./others/iperf3.md)
 5. [图灵完备](./others/Turing_Complete.md)
 6. [文件系统](./others/FileSystem.md)
+7. [设计模式](./others/design_pattern.md)
 
 ## Stream Media
 
