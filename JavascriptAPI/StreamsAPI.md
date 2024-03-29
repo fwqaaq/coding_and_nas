@@ -21,7 +21,7 @@
 
 >块（chunk）
 
-* 流的基本单位是块（chunk）。块可以是任意数据类型，但通常是定型数组.块不是固定的大小，也不一定按固定间隔到达（好的流需要考虑边界情况）
+* 流的基本单位是块（chunk）。块可以是任意数据类型，但通常是定型数组。块不是固定的大小，也不一定按固定间隔到达（好的流需要考虑边界情况）
 * 由于数据进出的速率不同，可能会出现不匹配的情况
    1. 流出口的处理数据的速度比入口提供数据的速度快.流出口空闲，浪费一点内存资源，可以接受
    2. 流入和流出均衡（理想）
@@ -38,12 +38,12 @@
 >`new ReadableStream(underlyingSource[, queueingStrategy])`
   
 * `underlyingSource`：定义构造流的行为方法和属性对象.
-   1. `start(controller)`：当对象被构造是立刻调用的方法，此方法的内容由开发人员定义，用于访问，并执行其他任何必须的设置流的功能。
+   1. `start(controller)?`：当对象被构造时立刻调用的方法，此方法的内容由开发人员定义，用于访问，并执行其他任何必须的设置流的功能。
       * 如果这个过程是异步完成的,它可以返回一个 promise，表明成功或者失败
       * 这个方法的 `controller` 是一个 [ReadableStreamDefaultController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultController) 或者 [ReadableByteStreamController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableByteStreamController) 具体取决于 `type` 属性的值
    2. `pull(controller)?`：由开发人员定义.当流的内部队列不满时，会重复调用这个方法，直到队列补满。一般用于控制流
-      * 如果`pull()`返回一个 promise，那么它将不会再被调用，直到 promise 完成或者失败，该流将会出现错误
-      * controller 参数和 start 一样
+      * 如果 `pull()` 返回一个 promise，那么它将不会再被调用，直到 promise 完成或者失败，该流将会出现错误。
+      * 如果在 start 方法中使用 `controller.enqueue` 方法排队，那么流控制算法会优先调用 start 方法，不调用 pull。
    3. `cancel(reason)?`：如果应用程序标识该流将被取消（例如调用 `ReadableStream.cancel()`），则将调用此方法，该方法由开发人员定义。
       * 该方法应该做任何必要的事情来释放对流的访问
       * 如果这个过程是异步的，它可以返回一个 promise，表明成功或者失败
@@ -78,11 +78,22 @@ async function* ints() {
 const readableStream = new ReadableStream({
   async start(controller) {
     for await (const i of ints()) {
-      await controller.enqueue(i)
+      controller.enqueue(i)
     }
-    await controller.close()
+    controller.close()
   }
 })
+
+async function main() {
+  const reader = readableStream.getReader()
+  while (true) {
+    const {done, value} = reader.read()
+    if (done) break
+    console.log(value)
+  }
+}
+
+main()
 ```
 
 ### 属性
@@ -133,6 +144,10 @@ console.log(readableStream.locked)
 
 >`tee()`：方法对当前的可读流进行**拷贝**（tee）,返回包含两个 `ReadableStream` 实例分支的数组
 
+### 静态方法
+
+[`from` 静态方法](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/from_static)用于将异步迭代器转换为流
+
 ### ByteLengthQueuingStrategy
 
 >`ByteLengthQueuingStrategy` 提供了一个排队策略，该排队策略提供了内置的字节长度并且可以在构造流的时候使用
@@ -141,10 +156,10 @@ console.log(readableStream.locked)
 const queueingStrategy = new ByteLengthQueuingStrategy({ highWaterMark: 1 });
 const readableStream = new ReadableStream({
   start(controller) {
-    ...
+    //...
   },
   pull(controller) {
-    ...
+    //...
   },
   cancel(err) {
     console.log("stream error:", err);
@@ -172,7 +187,7 @@ const size = queueingStrategy.size(chunk);
 (
   async function(){
     while(true){
-      const { done, value} = await readableStreamDefaultReader.read()
+      const {done, value} = await readableStreamDefaultReader.read()
       if(done){
         break
       }else{
@@ -183,7 +198,7 @@ const size = queueingStrategy.size(chunk);
 )()
 ```
 
-* `stream`:一个将要被读取的`readableStream`
+* `stream`：一个将要被读取的 `readableStream`
 
 ### ReadableStreamDefaultReader 属性
 
@@ -202,9 +217,9 @@ reader.closed.then(() => {
   * 如果一个块可用，则 promise 将使用 `{ value: theChunk, done: false }` 形式的对象来兑现
   * 如果流关闭，则 promise 将使用 `{ value: undefined, done: true }` 形式的对象来兑现
   * 如果流发生错误，promise 将因相关错误被拒绝
-* `releaseLock()`:没有参数，也没有返回值。释放 reader 对流的锁定
+* `releaseLock()`：没有参数，也没有返回值。释放 reader 对流的锁定
   * 如果释放锁时关联流出错，reader 随后会以同样的方式发生错误
-  * reader 的所在仍有到处理的读取请求时无法释放，即 `reade()` 返回的 promise 尚未完成
+  * reader 的所在仍有到处理的读取请求时无法释放，即 `read()` 返回的 promise 尚未完成
 
 ## 示例
 
