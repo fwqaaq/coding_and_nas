@@ -219,7 +219,7 @@ reader.closed.then(() => {
   * 如果流发生错误，promise 将因相关错误被拒绝
 * `releaseLock()`：没有参数，也没有返回值。释放 reader 对流的锁定
   * 如果释放锁时关联流出错，reader 随后会以同样的方式发生错误
-  * reader 的所在仍有到处理的读取请求时无法释放，即 `reade()` 返回的 promise 尚未完成
+  * reader 的所在仍有到处理的读取请求时无法释放，即 `read()` 返回的 promise 尚未完成
 
 ## 示例
 
