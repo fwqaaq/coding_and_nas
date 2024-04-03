@@ -313,7 +313,7 @@ crypto.randomUUID()
 * RSA-OAEP/AES-CTR/AES-CBC/AES-GCM：["encrypt", "decrypt"]
 * AES-CTR/AES-CBC/AES-GCM/AES-KW：["wrapKey", "unwrapKey"]
 
-可以参见 Cloudflare 的图标：<https://developers.cloudflare.com/workers/runtime-apis/web-crypto/#supported-algorithms>
+可以参见 Cloudflare 的[图表](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/#supported-algorithms)查看各个算法的功能
 
 ```js
 const key = await window.crypto.subtle.generateKey(
