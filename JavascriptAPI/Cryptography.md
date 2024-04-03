@@ -305,12 +305,15 @@ crypto.randomUUID()
 
 #### 生成密钥
 
-keyusages 是一个数组，包含了密钥的用途，但是各个密钥算法指定的用途各不相同：
+> ![NOTE]
+> keyusages 是一个数组，包含了密钥的用途，但是各个密钥算法指定的用途各不相同：
 
 * RSASSA-PKCS1-v1_5/ECDSA/HMAC/RSA-PSS：["sign", "verify"]
 * ECDH/HKDF/PBKDF2：["deriveKey", "deriveBits"]
 * RSA-OAEP/AES-CTR/AES-CBC/AES-GCM：["encrypt", "decrypt"]
 * AES-CTR/AES-CBC/AES-GCM/AES-KW：["wrapKey", "unwrapKey"]
+
+可以参见 Cloudflare 的[图表](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/#supported-algorithms)查看各个算法的功能
 
 ```js
 const key = await window.crypto.subtle.generateKey(
