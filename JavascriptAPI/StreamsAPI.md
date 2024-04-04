@@ -38,8 +38,8 @@
 >`new ReadableStream(underlyingSource[, queueingStrategy])`
   
 * `underlyingSource`：定义构造流的行为方法和属性对象.
-   1. `start(controller)?`：当对象被构造时立刻调用的方法，此方法的内容由开发人员定义，用于访问，并执行其他任何必须的设置流的功能。
-      * 如果这个过程是异步完成的,它可以返回一个 promise，表明成功或者失败
+   1. `start(controller)?`：当对象被构造时立刻调用的方法，或者此方法的也可以由开发人员定义，用于访问，并执行底层源，参见[规范](https://streams.spec.whatwg.org/#dom-underlyingsource-start)。
+      * 如果这个过程是异步完成的，它可以返回一个 promise，表明成功或者失败
       * 这个方法的 `controller` 是一个 [ReadableStreamDefaultController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultController) 或者 [ReadableByteStreamController](https://developer.mozilla.org/en-US/docs/Web/API/ReadableByteStreamController) 具体取决于 `type` 属性的值
    2. `pull(controller)?`：由开发人员定义.当流的内部队列不满时，会重复调用这个方法，直到队列补满。一般用于控制流
       * 如果 `pull()` 返回一个 promise，那么它将不会再被调用，直到 promise 完成或者失败，该流将会出现错误。
@@ -239,3 +239,5 @@ function iteratorToStream(iterator) {
   })
 }
 ```
+
+规范：<https://streams.spec.whatwg.org/>
