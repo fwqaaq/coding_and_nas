@@ -61,8 +61,8 @@ console.log(ArrayBuffer.isView(float))//true
    console.log(test)//Float32Array(3) [ 1, 2, 3 ]
    ```
 
-3. 参数是`typedArray`:当传入一个**任意类型化数组**对象作为 `typedArray` 参数时（比如 Int32Array），typedArray 会被**复制**到一个新的类型数组中
-   * `typedArray` 中的每个值在被复制到新的数组之前，会被转化为相应类型的构造函数
+3. 参数是 `TypedArray`：当传入一个**任意类型化数组**对象作为 `TypedArray` 参数时（比如 Int32Array），TypedArray 会被**复制**到一个新的类型数组中
+   * `TypedArray` 中的每个值在被复制到新的数组之前，会被转化为相应类型的构造函数
 
    ```js
    const test = new Int32Array([1, 2, 3])
@@ -70,8 +70,8 @@ console.log(ArrayBuffer.isView(float))//true
    console.log(a.BYTES_PER_ELEMENT, test.BYTES_PER_ELEMENT)//2 4
    ```
 
-4. 参数是：`buffer`，`byteOffset`，`length`.该 buffer 是对类 `ArrayBuffer` 的引用
-   * 如果只传入buffer，那么会呈现整个 `buffer` 的内容
+4. 参数是：`buffer`，`byteOffset`，`length`。该 buffer 是对类 `ArrayBuffer` 的引用
+   * 如果只传入 buffer，那么会呈现整个 `buffer` 的内容
    * `byteOffset?`：该数值必须是各个 `TypedArray.BYTES_PER_ELEMENT` 的倍数（例如 Float32Array，就需要传入 4）
    * `length?`：该数值必须小于等于剩余字节/`TypedArray.BYTES_PER_ELEMENT` 的大小
 
@@ -112,7 +112,7 @@ console.log(ArrayBuffer.isView(float))//true
 
    ```js
    // 使用 Set (可迭代对象)
-   var s = new Set([1, 2, 3]);
+   const s = new Set([1, 2, 3]);
    Uint8Array.from(s);
    // Uint8Array [ 1, 2, 3 ]
    // 使用箭头函数对数组元素进行映射
@@ -120,7 +120,7 @@ console.log(ArrayBuffer.isView(float))//true
    // Float32Array [ 2, 4, 6 ]
    ```
 
->原型属性(只读)
+>原型属性（只读）
 
 * 使用 `Float32Array` 示例
    1. `Float32Array.prototype.buffer`（只读）。返回这个 Float32Array **引用的 ArrayBuffer**
@@ -142,3 +142,30 @@ console.log(ArrayBuffer.isView(float))//true
    ```
 
 >原型方法：和数组一样
+
+## [DataView](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView/DataView)
+
+DataView 用于读或者设置 `ArrayBuffer` 对象，而不需要关心底层的大小端序。
+
+> 构造函数
+
+```js
+new DataView(buffer, offset?, length?)
+```
+
+buffer 是存在的 `ArrayBuffer` 或者 `SharedArrayBuffer`；offset 默认是从第一个开始；length 默认是整个 buffer 的长度。
+
+```js
+const buffer = new ArrayBuffer(2)
+const view = new DataView(buffer)
+view.setInt8(0, 100)
+console.log(view.getInt8(1))
+```
+
+> 静态属性
+
+view 的静态属性与 ArrayBuffer 相同，`buffer`、`byteLength` 以及 `byteOffset`。
+
+> 静态方法：由各种 number 类型的 get 和 set 方法组成
+
+例如：setInt8 和 getInt8 组成
