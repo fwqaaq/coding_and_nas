@@ -1,10 +1,5 @@
 # 👍
 
-## node_modules
-
-1. [buffer](./node/Buffer.md)
-2. [event](./node/node-event.md)
-
 ## HTTP
 
 * [HTTP](http/http.md)
