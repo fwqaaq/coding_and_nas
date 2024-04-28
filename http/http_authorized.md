@@ -81,20 +81,21 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 ## JWT（Json Web Token）
 
 > [!NOTE]
-> JWT 不用保存任何 session 信息，服务器变成无状态的。
+> JWT 不用保存任何 session 信息，在不需要保证任何状态的情况下，验证客户端是否登录。
 
 ![Token](./imgs/token.png)
 
 1. 用户第一次登录网页，服务器会生成一个 JWT，服务器不需要保存 JWT，只需要保存 **JWT 签名的密文**
-2. 接着把 JWT 发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储
+2. 接着把 JWT 发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储（最好是放在 `Authenticate` 标头中）
+3. 服务端会先 base64 解码之后，然后使用密钥对 header 以及 payload 进行签名，然后和 signature 进行比对
 
 * token 验证登录
 
 > 这里的 token 分为三段：header（头）、payload（载荷）、signature（签名信息）
->>
->> * header：通常是 token 的类型（如 jwt）以及加密的算法（如 HS256，默认是 HMAC SHA256）。
->> * payload：这些声明可以是标准的（如发行者 `iss`、过期时间 `exp`、主题 `sub`），以及自定义的用户角色、id 等信息。
->> * signature：使用密钥和 header 中指定的算法对 header 和 payload 进行签名。确保 token 在传输过程中未被篡改。
+>
+> * `header`：通常是 token 的类型（如 jwt）以及加密的算法（如 HS256，默认是 HMAC SHA256）。
+> * `payload`：这些声明可以是标准的（如发行者 `iss`、过期时间 `exp`、主题 `sub`），以及自定义的用户角色、id 等信息。
+> * `signature`：使用密钥和 header 中指定的算法对 header 和 payload 进行签名。确保 token 在传输过程中未被篡改。
 
 服务端验证签名：服务端不仅要验证签名是否正确以及是否过期，如果过期，一种做法是返回 401，让用户重定向到登录页面；另一种是“刷新令牌（Refresh Token）”机制。当访问令牌（Access Token）过期时，可以使用刷新令牌来无需用户干预地获取一个新的访问令牌。
 
