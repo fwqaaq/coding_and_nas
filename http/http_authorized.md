@@ -81,29 +81,42 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 ## JWT（Json Web Token）
 
 > [!NOTE]
-> JWT 不用保存任何 session 信息，服务器变成无状态的。
+> JWT 不用保存任何 session 信息，在不需要保证任何状态的情况下，验证客户端是否登录。
 
 ![Token](./imgs/token.png)
 
 1. 用户第一次登录网页，服务器会生成一个 JWT，服务器不需要保存 JWT，只需要保存 **JWT 签名的密文**
-2. 接着把 JWT 发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储
+2. 接着把 JWT 发送给服务器，浏览器可以以 `Cookie` 或者 `Storage` 的形式进行存储（最好是放在 `Authenticate` 标头中）
+3. 服务端会先 base64 解码之后，然后使用密钥对 header 以及 payload 进行签名，然后和 signature 进行比对
 
 * token 验证登录
 
 > 这里的 token 分为三段：header（头）、payload（载荷）、signature（签名信息）
->>
->> * header：通常是 token 的类型（如 jwt）以及加密的算法（如 HS256，默认是 HMAC SHA256）。
->> * payload：这些声明可以是标准的（如发行者 `iss`、过期时间 `exp`、主题 `sub`），以及自定义的用户角色、id 等信息。
->> * signature：使用密钥和 header 中指定的算法对 header 和 payload 进行签名。确保 token 在传输过程中未被篡改。
+>
+> * `header`：通常是 token 的类型（如 jwt）以及加密的算法（如 HS256，默认是 HMAC SHA256）。
+> * `payload`：这些声明可以是标准的（如发行者 `iss`、过期时间 `exp`、主题 `sub`），以及自定义的用户角色、id 等信息。
+> * `signature`：使用密钥和 header 中指定的算法对 header 和 payload 进行签名。确保 token 在传输过程中未被篡改。
 
 服务端验证签名：服务端不仅要验证签名是否正确以及是否过期，如果过期，一种做法是返回 401，让用户重定向到登录页面；另一种是“刷新令牌（Refresh Token）”机制。当访问令牌（Access Token）过期时，可以使用刷新令牌来无需用户干预地获取一个新的访问令牌。
 
 参考：<https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html>
 
-## 总结
+### 总结
 
 1. Session 是由服务器诞生并且保存在服务器中的，由服务器主导
 2. Cookie 是一种数据载体，把 Session 保存在 Cookie 中，送到客户端中，就可以跟随每个 HTTP 发送
 3. Token 诞生在服务器，但保存在浏览器中，可以放在 Cookie 或者 Storage 中，持有 Token 就像持有令牌可以访问服务器
 
 参考：<https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html>
+
+## Salt + Digest
+
+>[!NOTE]
+>在进行用户名和密码保存的时候，为了防止撞库带来的明文密码泄漏，需要对密码进行加盐以及 Hash 运算。
+
+像 MD5、SHA256 等这类 Hash 算法都是单向的（mod 运算），而 md5 现在已经不安全了，可以暴力破解。
+
+如果在保存密码的时候是明文，那么撞库之后，用户密码信息将完全被破解。而当你使用 hash 运算，但是没有进行加密，那么攻击者在得知使用的是什么加密算法的情况下，使用**彩虹表**可以很快的破解密码。而加*盐*之后，由于 hash 运算是单向的，彩虹表很难或者根本收集不到密码的内容，很难进行逆向解析。
+
+参考：<https://zhuanlan.zhihu.com/p/20407064?theme=dark>
+
