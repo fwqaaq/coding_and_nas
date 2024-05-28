@@ -46,7 +46,7 @@ console.log(ArrayBuffer.isView(float))//true
 
 > 创建 TypedArray 类型的构造函数
 
-1. 参数是`length`
+1. 参数是 `length`
 
    ```js
    new TypedArray(length)
@@ -128,7 +128,7 @@ console.log(ArrayBuffer.isView(float))//true
    3. `Float32Array.prototype.byteOffset`（只读）。返回从 Float32Array 的 ArrayBuffer 开头开始的偏移量（以字节为单位）
    4. `Float32Array.prototype.length`（只读）。返回 Float32Array 中的元素个数
 
-   ```js
+  ```js
   const buffer = new ArrayBuffer(12)
   const float = new Float32Array(buffer, 4, 1)
   console.log(float.buffer)
@@ -139,7 +139,7 @@ console.log(ArrayBuffer.isView(float))//true
   console.log(float.byteOffset)//4
   console.log(float.byteLength)//4
   console.log(float.length)//1
-   ```
+  ```
 
 >原型方法：和数组一样
 
@@ -162,10 +162,23 @@ view.setInt8(0, 100)
 console.log(view.getInt8(1))
 ```
 
+>[!NOTE]
+>在使用 DataView 的 offset 的时候，`DataView.prototype.buffer` 依然引用的是原来的整个 `ArrayBuffer`，并不会带有偏移量！！！
+
 > 静态属性
 
 view 的静态属性与 ArrayBuffer 相同，`buffer`、`byteLength` 以及 `byteOffset`。
 
-> 静态方法：由各种 number 类型的 get 和 set 方法组成
+> 静态方法：由各种 number 类型的 get 和 set 方法组成。例如：`setInt8` 和 `getInt8`。
 
-例如：setInt8 和 getInt8 组成
+>[!IMPORTANT]
+>在 JavaScript 中的 TypedArray 默认是**小端序**存储，而使用 `getUint16` 等方法默认是**大端序**。
+
+```js
+const ipv6 = "240e:3a0:7a03:9ee9:2d62:205:5a93:14c5".split(":")
+const u16 = new Uint16Array(ipv6.map(x => parseInt(x, 16)))
+const v = new DataView(new Uint8Array(u16.buffer).buffer)
+v.getInt16(0, true).toString(16) // 240e
+```
+
+在处理网络协议的时候，一般情况下网络协议都是**大端序**，而 TypedArray 使用的则是小端序，所以如果直接遍历 8 位以上的 TypedArray 尤其要注意，它们默认是**小端序**读取，对原来的**大端序**进行了翻转，最好的方式是直接使用 `getUint` 等方式设置大小端避免错误的字节序。
