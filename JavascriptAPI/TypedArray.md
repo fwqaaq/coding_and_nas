@@ -128,7 +128,7 @@ console.log(ArrayBuffer.isView(float))//true
    3. `Float32Array.prototype.byteOffset`（只读）。返回从 Float32Array 的 ArrayBuffer 开头开始的偏移量（以字节为单位）
    4. `Float32Array.prototype.length`（只读）。返回 Float32Array 中的元素个数
 
-   ```js
+  ```js
   const buffer = new ArrayBuffer(12)
   const float = new Float32Array(buffer, 4, 1)
   console.log(float.buffer)
@@ -139,7 +139,7 @@ console.log(ArrayBuffer.isView(float))//true
   console.log(float.byteOffset)//4
   console.log(float.byteLength)//4
   console.log(float.length)//1
-   ```
+  ```
 
 >原型方法：和数组一样
 
