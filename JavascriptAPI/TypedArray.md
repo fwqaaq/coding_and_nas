@@ -169,6 +169,14 @@ console.log(view.getInt8(1))
 
 view 的静态属性与 ArrayBuffer 相同，`buffer`、`byteLength` 以及 `byteOffset`。
 
-> 静态方法：由各种 number 类型的 get 和 set 方法组成
+> 静态方法：由各种 number 类型的 get 和 set 方法组成。例如：`setInt8` 和 `getInt8`。
 
-例如：setInt8 和 getInt8 组成
+>[!IMPORTANT]
+>在 JavaScript 中的 TypedArray 默认是**小端序**存储，而使用 `getUint16` 等方法默认是**大端序**。
+>
+>```js
+>const ipv6 = "240e:3a0:7a03:9ee9:2d62:205:5a93:14c5".split(":")
+>const u16 = new Uint16Array(ipv6.map(x => parseInt(x, 16)))
+>const v = new DataView(new Uint8Array(u16.buffer).buffer)
+>v.getInt16(0, true).toString(16) // 240e
+>```
