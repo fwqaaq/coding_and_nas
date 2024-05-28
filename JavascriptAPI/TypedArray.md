@@ -162,6 +162,9 @@ view.setInt8(0, 100)
 console.log(view.getInt8(1))
 ```
 
+>[!NOTE]
+>在使用 DataView 的 offset 的时候，`DataView.prototype.buffer` 依然引用的是原来的整个 `ArrayBuffer`，并不会带有偏移量！！！
+
 > 静态属性
 
 view 的静态属性与 ArrayBuffer 相同，`buffer`、`byteLength` 以及 `byteOffset`。
