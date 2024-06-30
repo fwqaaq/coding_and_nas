@@ -6,3 +6,5 @@ pnpm-lock.yaml
 http/grpc_example/*.pem
 http/grpc_example/pb
 http/grpc_example/server
+cert.pem
+private.pem

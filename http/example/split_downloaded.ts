@@ -1,8 +1,10 @@
-import { Server } from 'https://deno.land/std@0.198.0/http/server.ts'
-const port = 3000
-
 const url = new URL(import.meta.resolve('./cookie.png'))
 
+/**
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
+ * @link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+ */
 // const handler = async (req: Request) => {
 //   // const body = `Your user-agent is:\n\n${req.headers.get('user-agent')}`
 //   const body = await Deno.readFile(url)
@@ -48,9 +50,11 @@ const handler = async (req: Request) => {
   return new Response('Not Found', { status: 404 })
 }
 
-const server = new Server({ handler })
-const listener = Deno.listen({ port })
-
-console.log(`Listening on http://localhost:${port}/`)
-
-await server.serve(listener)
+Deno.serve(
+  {
+    onListen({ port }) {
+      console.log(`Listening on http://localhost:${port}/`)
+    },
+  },
+  handler
+)
