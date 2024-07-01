@@ -101,6 +101,17 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 
 参考：<https://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html>
 
+查看示例：[Go JWT 示例](./go_example/jwt/main.go)
+
+```shell
+# sign in
+curl -v -X POST "http://localhost:8080/signin" -d '{"username": "user", "password": "password"}' --header "Content-Type: application/json"
+# welcome 
+curl -b "cookie" http://localhost:8080/welcome
+# refresh（在 30s 之内）
+curl -v -b "cookie" http://localhost:8080/refresh
+```
+
 ### 总结
 
 1. Session 是由服务器诞生并且保存在服务器中的，由服务器主导
@@ -119,4 +130,3 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 如果在保存密码的时候是明文，那么撞库之后，用户密码信息将完全被破解。而当你使用 hash 运算，但是没有进行加密，那么攻击者在得知使用的是什么加密算法的情况下，使用**彩虹表**可以很快的破解密码。而加*盐*之后，由于 hash 运算是单向的，彩虹表很难或者根本收集不到密码的内容，很难进行逆向解析。
 
 参考：<https://zhuanlan.zhihu.com/p/20407064?theme=dark>
-
