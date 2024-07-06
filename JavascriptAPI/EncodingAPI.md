@@ -274,6 +274,24 @@ const ReadableStreamDefault = decodedTextStream.getReader()
   * 例如 `new Blob(["✓"]).size` 为 3 个字节
 
 ```js
-let encodedData = window.btoa("Hello, world"); // 编码
-let decodedData = window.atob(encodedData);    // 解码
+const encodedData = window.btoa("Hello, world"); // 编码
+const decodedData = window.atob(encodedData);    // 解码
 ```
+
+## 其它语言中的字符编码
+
+在 C 语言中，只有字符的概念，字符串只是字符的指针表示，而使用 i8 表示 `char` 以及使用 u8 表示 `unsigned char`。
+
+```c
+typedef unsigned char           __uint8_t;
+typedef __signed char           __int8_t;
+```
+> [!NOTE]
+> 这是由于 C 语言设计之初，计算机架构和字符集还没有完全标准化。某些早期系统使用 7 位 ASCII，留下一位可能用作奇偶校验位或其他用途。有符号字符在一定程度上可能对某些算法更优。（采自 Claude）
+
+* Rust 中既有字符也有字符串的概念：
+  * Rust 中的字符是 32 位的 unicode 字符集表示，可以使用 char 类型遍历 unicode 字符。u8 可以用于表示这个字符的字节或者它的 `ASCII` 码
+  * Rust 中的字符串类型是使用 UTF-8 编码的，UTF-8 是将 unicode 字符集的码位转换为**字符序列**的一种实现。
+
+* Go 中的字符使用 `rune` 类型表示（与 Rust 中一样，使用 `' '` 表示），rune 是 `int32` 类型，使用无符号 32 位表示是因为一些标准库中会使用 `EOF = -1` 这种表示无效的 unicode 码点或者文件末尾，`int32`（-2^31 到 2^31-1）足以覆盖 unicode 0 到 0x10FFFF 的码点这个范围。
+* 在使用 string 类型的时候，也是 utf-8 编码。（在 Go 中，`[]rune` 和 `[]byte` 用于转化成字符数组以及字节数组）
