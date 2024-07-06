@@ -3,11 +3,9 @@
 设置文件下载的响应标头（[Content-Disposition](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Disposition)）就可以实现文件下载。
 
 ```ts
-import { Server } from 'https://deno.land/std@0.198.0/http/server.ts'
 const port = 3000
 const handler = (req: Request) => {
   const body = `Your user-agent is:\n\n${req.headers.get('user-agent')}`
-
   const headers = new Headers({
     'Content-Disposition': 'attachment; filename=text',
   })
@@ -15,13 +13,6 @@ const handler = (req: Request) => {
     return new Response(body, { headers, status: 200 })
   else return new Response('Not Found', { status: 404 })
 }
-
-const server = new Server({ handler })
-const listener = Deno.listen({ port })
-
-console.log(`Listening on http://localhost:${port}/`)
-
-await server.serve(listener)
 ```
 
 ## 分片下载

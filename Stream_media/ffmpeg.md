@@ -53,13 +53,13 @@
 - **查询信息命令**
   - `-version` 显示版本
   - `-buildconf` 显示编译配置
-  - `-protocols`显示可用的协议
-  - `-formats`显示可用格式（muxers+demuxers）
+  - `-protocols` 显示可用的协议
+  - `-formats` 显示可用格式（muxers+demuxers）
   - `-filters` 显示可用的过滤器
   - `-muxers` 显示可用复用器
   - `-demuxers` 显示可用解复用器
-  - `-codecs`显示可用编解码器（decoders+encoders）
-  - `-decoders`显示可用解码器
+  - `-codecs` 显示可用编解码器（decoders+encoders）
+  - `-decoders` 显示可用解码器
   - `-encoders` 显示可用编码器
   - `-layouts` 显示标准声道名称
   - `-pix_fmts` 显示可用的像素格式
@@ -103,23 +103,17 @@
 - 调整码率（transrating）指的是，改变编码的比特率，一般用来将视频文件的体积变小
 
     ```bash
-    ffmpeg \
-    -i input.mp4 \
-    -minrate 964K -maxrate 3856K -bufsize 2000K \
-    output.mp4
+    ffmpeg -i input.mp4 -minrate 964K -maxrate 3856K -bufsize 2000K output.mp4
     ```
 
     这个例子指定的码率最小为 964k，最大为 3856k，缓冲区大小为 2000k
 
-****改变分辨率****
+改变分辨率
 
 - 下面是改变视频分辨率的例子，将 1080p 转为 480p
 
     ```bash
-    ffmpeg \
-    -i input.mp4 \
-    -vf scale=480:-1 \
-    output.mp4
+    ffmpeg -i input.mp4 -vf scale=480:-1 output.mp4
     ```
 
 提取音频
@@ -127,10 +121,7 @@
 - 从视频里面提取音频
 
     ```bash
-    $ ffmpeg \
-    -i input.mp4 \
-    -vn -c:a copy \
-    output.aac
+    ffmpeg -i input.mp4 -vn -c:a copy output.aac
     ```
 
 添加音轨
@@ -138,9 +129,7 @@
 - 添加音轨（muxing）指的是，将外部音频加入视频，比如添加背景音乐或旁白
 
     ```bash
-    $ ffmpeg \
-    -i input.aac -i input.mp4 \
-    output.mp4
+    ffmpeg -i input.aac -i input.mp4 output.mp4
     ```
 
     上面的例子会将两个输入文件（音频和视频）合成一个文件
@@ -149,32 +138,24 @@
   - 第一个视频的视频流和第一个音频的音频流文件合成
 
     ```bash
-    ffmpeg -i video.mp4 -i audio.mp3  -c copy -map 0:v:0 -map 1:a:0 out.mp4
+    ffmpeg -i video.mp4 -i audio.mp3 -c copy -map 0:v:0 -map 1:a:0 out.mp4
     ```
 
 截图
 
-- 下面的例子是从指定时间开始，连续对1秒钟的视频进行截图
+- 下面的例子是从指定时间开始，连续对 60 秒钟的视频进行截图
 
     ```bash
-    $ ffmpeg \
-    -y \
-    -i input.mp4 \
-    -ss 00:01:24 -t 00:00:01 \
-    output_%3d.jpg
+    ffmpeg -i input.mp4 -vf fps=1/60 output_%03d.jpg
     ```
 
 - 也可以指定只截取一张图
 
     ```bash
-    $ ffmpeg \
-    -ss 01:23:45 \
-    -i input \
-    -vframes 1 -q:v 2 \
-    output.jpg
+    ffmpeg -i input -ss 00:00:10 -frames:v 1 -q:v 2 output.jpg
     ```
 
-  `-vframes 1` 指定只截取一帧，`-q:v 2` 表示输出的图片质量，一般是 1-5之间（1表示最高质量）
+`-vframes 1` 指定只截取一帧，`-q:v 2` 表示输出的图片质量，一般是 1-5之间（1表示最高质量）
 
 裁剪视频
 
@@ -197,14 +178,10 @@
 
 为音频添加封面
 
-- 下面命令中，有两个输入文件，一个是封面图片`cover.jpg`，另一个是音频文件`input.mp3`。`-loop 1`参数表示图片无限循环，`-shortest`参数表示音频文件结束，输出视频就结束。
+- 下面命令中，有两个输入文件，一个是封面图片`cover.jpg`，另一个是音频文件`input.mp3`。`-loop 1`参数表示图片无限循环，`-shortest` 参数表示音频文件结束，输出视频就结束。
 
     ```bash
-    ffmpeg \
-    -loop 1 \
-    -i cover.jpg -i input.mp3 \
-    -c:v libx264 -c:a aac -b:a 192k -shortest \
-    output.mp4
+    ffmpeg -loop 1 -i cover.jpg -i input.mp3 -c:v libx264 -c:a aac -b:a 192k -shortest output.mp4
     ```
 
 创建缩略图
@@ -215,9 +192,7 @@
     ffmpeg -i test.mp4 -vf "fps=1/10,scale=-2:720" thumbnail-%03d.jpg
     ```
 
-    `fps`  代表的是**帧率. `1/10` 表示每 10s 输出一帧画面**
-
-    thumbnail-%03d，表示 `thumbnail` 开头的以 001增序的缩略图
+`fps`  代表的是**帧率。`1/10` 表示每 10s 输出一帧画面**，thumbnail-%03d，表示 `thumbnail` 开头的以 001 增序的缩略图
 
 添加水印
 
@@ -285,16 +260,7 @@ gif 动图
 
 ### 理解预设（-preset）
 
-- 预设参数
-  - ultrafast
-  - superfast
-  - veryfast
-  - faster
-  - fast
-  - medium
-  - slow
-  - slower
-  - veryslow
+- 预设参数：`ultrafast`、`superfast`、`veryfast`、`faster`、`fast`、`medium`、`slow`、`slower`、`veryslow`
 
 ```bash
 ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
@@ -412,7 +378,7 @@ ffmpeg -i test.avi -c:v libx264 -preset xxx out.mp4
      ```
 
   - 添加背景音乐
-    - ffmpeg -i 原始视频文件 -i 背景音乐文件 -filter_complex \[1:a]aloop=loop=-1:size=2e+09[out];\[out]\[0:a]amix -t 视频时间 添加背景音乐后的视频文件
+    - ffmpeg -i 原始视频文件 -i 背景音乐文件 -filter_complex \[1:a]aloop=loop=-1:size=2e+09[out]；\[out]\[0:a]amix -t 视频时间 添加背景音乐后的视频文件
       - -filter_complex：滤镜
       - [1:a]aloop=loop=-1:size=2e+09[out]；将背景音无限循环
       - \[out]\[0:a]amix 将背景音和视频中的音频混合
