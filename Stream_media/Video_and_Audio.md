@@ -10,7 +10,7 @@
         1. 常用的编码格式：H.262、H.264、H.265
         2. 上面的编码格式都是有版权的，但是可以免费使用。此外，还有几种无版权的视频编码格式：VP8、VP9、AV1
         3. 常用的音频编码格式：MP3、AAC
-    - 使用 `ffmpeg -codecs` 可以查看FFmpeg支持的编码格式，包括视频，音频
+    - 使用 `ffmpeg -codecs` 可以查看 FFmpeg 支持的编码格式，包括视频，音频
 3. 编码器
     - 编码器（encoders）是实现某种编码格式的库文件。只有安装了某种格式的编码器，才能实现该格式视频/音频的编码和解码。
         1. FFmpeg 内置的视频编码器：`libx264`：最流行的开源 H.264 编码器；`NVENC`：基于 NVIDIA GPU 的 H.264 编码器；`libx265`：开源的 HEVC 编码器；`libvpx`：谷歌的 VP8 和 VP9 编码器；`libaom`：AV1 编码器
@@ -57,6 +57,9 @@
 8. YUV&RGB
 
     [音视频入门系列-图像篇（YUV 和 RGB）](https://mp.weixin.qq.com/s?__biz=Mzg2MzA0NjM3Ng==&mid=2247483939&idx=1&sn=bd3867f3d0bc0fe0648bbcb349bbcbb4&chksm=ce7fdda4f90854b2136373bc01e8e4de2207c7fd959be1b35ec62e67f402d04c528d24fe6587&scene=21#wechat_redirect)
+
+>[!TIP]
+>对于一些视频在某些软件发送成文件，而不是可以及时播放的视频的问题，例如 Telegram 仅支持 MP4 格式，并且编码只能是 H264 格式的（libx264 编码），如果是其他格式的编码都不能直接播放，只能是文件。
 
 ### video 基础原理
 
