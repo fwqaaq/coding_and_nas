@@ -8,20 +8,11 @@ import (
 )
 
 func Refresh(w http.ResponseWriter, r *http.Request) {
-	c, err := r.Cookie("token")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+	token := r.Header.Get("Authorization")[7:]
 
-	token := c.Value
 	claims := &Claims{}
 
-	err = jwtKey.Decode(token, claims)
+	err := jwtKey.Decode(token, claims)
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -44,9 +35,6 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
-	})
+
+	w.Header().Set("Authorization", "Bearer "+tokenString)
 }

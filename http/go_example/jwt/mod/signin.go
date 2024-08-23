@@ -40,11 +40,6 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: time.Now().Add(5 * time.Minute),
-	})
+	w.Header().Set("Authorization", "Bearer "+tokenString)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Successfully signed in"})
-
 }

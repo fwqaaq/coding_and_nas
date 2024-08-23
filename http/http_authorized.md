@@ -107,9 +107,9 @@ Session：浏览器和服务器是在进行会话，然而比较模糊的就是�
 # sign in
 curl -v -X POST "http://localhost:8080/signin" -d '{"username": "user", "password": "password"}' --header "Content-Type: application/json"
 # welcome 
-curl -b "cookie" http://localhost:8080/welcome
+curl --header "Authorization: Bearer token" http://localhost:8080/welcome
 # refresh（在 30s 之内）
-curl -v -b "cookie" http://localhost:8080/refresh
+curl -v --header "Authorization: Bearer token" http://localhost:8080/refresh
 ```
 
 ### 总结
